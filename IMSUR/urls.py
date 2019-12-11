@@ -9,5 +9,6 @@ from HelloWorld import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index',views.hello),
+    path('index/',views.hello),
+    path('',views.hello),
 ]
