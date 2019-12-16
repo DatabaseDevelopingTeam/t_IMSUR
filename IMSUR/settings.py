@@ -5,31 +5,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = '@t83x!+q+q!g6g8ms*bq2q2(xtr=16tna7(%96su5&$&221#rs'
 
+
 # 环境部署选择
-def hostname():
-    sys = os.name
-    if sys == 'nt':
-        hostname = os.getenv('computername')
-        return hostname
-    elif sys == 'posix':
-        host = os.popen('echo $HOSTNAME')
-        try:
-            hostname = host.read()
-            return hostname
-        finally:
-            host.close()
-    else:
-        raise RuntimeError('Unkwon hostname')
-
-
-if socket.gethostname().lower() == hostname().lower():
-    DEBUG = TEMPLATE_DEBUG = True
-    ALLOWED_HOSTS = []
-else:
-    DEBUG = TEMPLATE_DEBUG = False
-    ALLOWED_HOSTS = [
-        '0.0.0.0',
-    ]
+DEBUG = TEMPLATE_DEBUG = False
+ALLOWED_HOSTS = [
+    '0.0.0.0',
+]
 
 # 应用定义
 INSTALLED_APPS = [
@@ -46,7 +27,7 @@ MY_APPs = [
 ]
 INSTALLED_APPS += MY_APPs
 
-#中间件
+# 中间件
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -57,10 +38,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-#根路由
+# 根路由
 ROOT_URLCONF = 'IMSUR.urls'
 
-#模板配置
+# 模板配置
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
