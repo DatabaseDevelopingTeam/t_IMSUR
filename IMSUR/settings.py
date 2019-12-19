@@ -19,10 +19,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-MY_APPs = [
+MY_APPS = [
     'login',
+    'municipalManagementUI',
+    'patrolManagementUI',
 ]
-INSTALLED_APPS += MY_APPs
+INSTALLED_APPS += MY_APPS
 
 # 中间件
 MIDDLEWARE = [
@@ -104,5 +106,7 @@ STATIC_ROOT = '/home/william/PycharmProjects/IMSUR/IMSUR/static/'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     'login/static',
+    'municipalManagementUI/static',
+    'patrolManagementUI/static'
 )
 # remember to 'manage.py collectstatic'

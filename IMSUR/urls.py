@@ -4,11 +4,12 @@ Information management system of urban road maintenance
 """
 
 from django.contrib import admin
-from django.urls import path
-from login import views
+from django.urls import path, include
+from login import views as loginViews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', views.login),
-    path('', views.login),
+    path('', loginViews.login),
+    path('municipalManagement/',include('municipalManagementUI.urls')),
+    path('patrolManagement/',include('patrolManagementUI.urls')),
 ]
