@@ -9,7 +9,7 @@ SECRET_KEY = '@t83x!+q+q!g6g8ms*bq2q2(xtr=16tna7(%96su5&$&221#rs'
 # 环境部署选择
 DEBUG = TEMPLATE_DEBUG = False
 ALLOWED_HOSTS = [
-    '0.0.0.0',
+    '*',
 ]
 
 # 应用定义
