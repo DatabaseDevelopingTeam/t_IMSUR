@@ -5,12 +5,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = '@t83x!+q+q!g6g8ms*bq2q2(xtr=16tna7(%96su5&$&221#rs'
 
-
 # 环境部署选择
-DEBUG = TEMPLATE_DEBUG = False
-ALLOWED_HOSTS = [
-    '*',
-]
+DEBUG = TEMPLATE_DEBUG = True
+ALLOWED_HOSTS = ['*']
 
 # 应用定义
 INSTALLED_APPS = [
@@ -23,7 +20,7 @@ INSTALLED_APPS = [
 ]
 
 MY_APPs = [
-    'HelloWorld',
+    'login',
 ]
 INSTALLED_APPS += MY_APPs
 
@@ -64,7 +61,7 @@ WSGI_APPLICATION = 'IMSUR.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'web_test',
+        'NAME': 'imsur',
         'USER': 'root',
         'PASSWORD': 'Wxp13620060844.',
         'HOST': '127.0.0.1',
@@ -102,8 +99,10 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
+# 静态文件配置
+STATIC_ROOT = '/home/william/PycharmProjects/IMSUR/IMSUR/static/'
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    'login/static',
+)
+# remember to 'manage.py collectstatic'

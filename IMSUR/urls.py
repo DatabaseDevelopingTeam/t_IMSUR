@@ -5,10 +5,10 @@ Information management system of urban road maintenance
 
 from django.contrib import admin
 from django.urls import path
-from HelloWorld import views
+from login import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/',views.index),
-    path('',views.index),
+    path('index/', views.login),
+    path('', views.login),
 ]
