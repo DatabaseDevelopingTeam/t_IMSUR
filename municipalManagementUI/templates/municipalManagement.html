@@ -1,10 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+{% load static %}
 <head>
-    <meta charset="UTF-8">
-    <title>道理管理</title>
+    <title>市政道路管理</title>
+    <meta charset="utf-8">
+    <link href={% static "css/municipalManagement.css" %} rel="stylesheet">
 </head>
 <body>
-nothing
+<ul id='menu'>
+    <li><a href='#'><img src={% static "images/cd.png" %} width="25" height="25"/></a>
+        <ul class="open">
+            <li><a href='#'>修改个人信息</a>
+            <li><a href='#'>退出</a>
+        </ul>
+    </li>
+</ul>
+
+<div class="transbox"></div>
+<div class="wap">
+    <div class='block1'>
+        <div class='block1text'>
+            姓名：张三<br/>
+            工号：1100000101<br/>
+            职能：市政管理<br/>
+        </div>
+        <div class="block1pc">
+            <img src= {% static "images/tx.png" %} />
+        </div>
+    </div>
+
+    <div class='block2'>
+        <div>
+            <img src= {% static "images/pg.png" %} width="65" height="65"/>
+        </div>
+        <div class='block2text'>
+            查看评估
+        </div>
+    </div>
+
+    <div class='block3'>
+        <div>
+            <img src={% static "images/dl.png" %} width="65" height="65">
+        </div>
+        <div class='block3text'>
+            道路管理
+        </div>
+    </div>
+
+    <div class='block4'>
+        <div>
+            <img src={% static "images/yg.png" %} width="65" height="65">
+        </div>
+        <div class='block4text'>
+            职工管理
+        </div>
+    </div>
+</div>
 </body>
 </html>

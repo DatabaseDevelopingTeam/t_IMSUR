@@ -9,7 +9,8 @@ from login import views as loginViews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', loginViews.login),
+    path('', loginViews.loginUI),
+    path('login/', loginViews.login),
     path('municipalManagement/',include('municipalManagementUI.urls')),
     path('patrolManagement/',include('patrolManagementUI.urls')),
 ]
