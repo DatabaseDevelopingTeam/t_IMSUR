@@ -3,7 +3,21 @@ import time
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+
 from municipalManagementUI.models import 职工
+
+
+@csrf_exempt
+def ajaxIdCheck(request):
+    if request.method == "POST":
+        employee_id = request.POST.get("employee_id")
+        # print('employee_id:'+employee_id)
+        if 职工.objects.filter(工号=employee_id).exists():
+            return HttpResponse("0")
+        else:
+            return HttpResponse("1")
+    return render(request, "login.html")
 
 
 def forwardToLogin(request):
@@ -23,10 +37,10 @@ def login(request):
             else:
                 return redirect('/patrolManagement')
         else:  # 令牌不一致
-            return render(request, 'login.html')
+            return render(request, 'login.html',context={'pwdErrorInfo': ''})
     # cookies失效或者未设置自动登录
     else:
-        return render(request, 'login.html')
+        return render(request, 'login.html',context={'pwdErrorInfo': ''})
 
 
 def trueLogin(request):
@@ -35,7 +49,7 @@ def trueLogin(request):
         employee_id = request.POST.get('employee_id')
         password = request.POST.get('password')
         autoLogin = request.POST.get('autoLogin')
-        print('employee_id:'+str(employee_id))
+        print('employee_id:' + str(employee_id))
         # 查询用户是否在数据库中
         if 职工.objects.filter(工号=employee_id).exists():
             user = 职工.objects.get(工号=employee_id)
@@ -59,7 +73,7 @@ def trueLogin(request):
                     user.save()  # 保存用户数据库
                 return response
             else:
-                return HttpResponse('用户密码错误')
+                return render(request, 'login.html', context={'pwdErrorInfo': '密码错误,请重新输入!','employeeId':employee_id})
         else:
             return HttpResponse('用户不存在')
     pass
