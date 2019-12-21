@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from login.models import 职工
+from .models import 职工
 
 
 def municipalManagementUI(request):

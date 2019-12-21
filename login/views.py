@@ -1,9 +1,9 @@
 import random
 import time
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from login.models import 职工
+from municipalManagementUI.models import 职工
 
 
 def forwardToLogin(request):
@@ -35,6 +35,7 @@ def trueLogin(request):
         employee_id = request.POST.get('employee_id')
         password = request.POST.get('password')
         autoLogin = request.POST.get('autoLogin')
+        print('employee_id:'+str(employee_id))
         # 查询用户是否在数据库中
         if 职工.objects.filter(工号=employee_id).exists():
             user = 职工.objects.get(工号=employee_id)

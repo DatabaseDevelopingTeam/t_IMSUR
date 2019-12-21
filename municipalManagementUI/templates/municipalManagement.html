@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html>
 {% load static %}
 <head>
     <title>市政道路管理</title>
@@ -7,54 +6,47 @@
     <link href={% static "css/municipalManagement.css" %} rel="stylesheet">
 </head>
 <body>
-<ul id='menu'>
-    <li><a href='#'><img src={% static "images/cd.png" %} width="25" height="25"/></a>
-        <ul class="open">
-            <li><a href='#'>修改个人信息</a>
-            <li><a href='#'>退出</a>
-        </ul>
-    </li>
-</ul>
-
-<div class="transbox"></div>
-<div class="wap">
-    <div class='block1'>
-        <div class='block1text'>
-            姓名:{{ name }}<br/>
-            工号：{{ employee_id }}<br/>
-            职能：{{ position }}<br/>
+    <div id="transbox"></div>
+    <div id="wrap">
+        <div class="block" id="block_basic_info">
+            <div id="profile_pic_div">
+                <img id="profile_pic" src={% static "images/tx.png" %}>
+            </div>
+            <div id="block_text">
+                <p>
+                    姓名：{{name}}
+                </p>
+                <p>
+                    工号：{{employee_id}}
+                </p>
+                <p>
+                    职能：{{position}}
+                </p>
+            </div>
         </div>
-        <div class="block1pc">
-            <img src= {% static "images/tx.png" %} />
+
+        <div class="block" id="block_evaluate">
+            <img src={% static "images/pg.png" %}>
+            <p style="margin-top: 55%;">
+                <a href="#" style="color: white;">查看评估</a>
+            </p>
+        </div>
+
+        <div id="block_inline_wrap">
+            <div class="block" id="block_road_management">
+                <img src={% static "images/dl.png" %} >
+                <p>
+                    <a href="/admin" style="">道路管理</a>
+                </p>
+            </div>
+
+            <div class="block" id="block_employee_management">
+                <img src={% static "images/yg.png" %} >
+                <p>
+                    <a href="/admin">职工管理</a>
+                </p>
+            </div>
         </div>
     </div>
-
-    <div class='block2'>
-        <div>
-            <img src= {% static "images/pg.png" %} width="65" height="65"/>
-        </div>
-        <div class='block2text'>
-            <a href="#">查看评估</a>
-        </div>
-    </div>
-
-    <div class='block3'>
-        <div>
-            <img src={% static "images/dl.png" %} width="65" height="65">
-        </div>
-        <div class='block3text'>
-            <a href="http://127.0.0.1:8000/admin">道路管理</a>
-        </div>
-    </div>
-
-    <div class='block4'>
-        <div>
-            <img src={% static "images/yg.png" %} width="65" height="65">
-        </div>
-        <div class='block4text'>
-            <a href="http://127.0.0.1:8000/admin">职工管理</a>
-        </div>
-    </div>
-</div>
 </body>
 </html>
