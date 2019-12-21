@@ -22,6 +22,8 @@ def login(request):
                 return redirect('/municipalManagement')
             else:
                 return redirect('/patrolManagement')
+        else:  # 令牌不一致
+            return render(request, 'login.html')
     # cookies失效或者未设置自动登录
     else:
         return render(request, 'login.html')
@@ -37,7 +39,6 @@ def trueLogin(request):
         if 职工.objects.filter(工号=employee_id).exists():
             user = 职工.objects.get(工号=employee_id)
             position = user.职能
-            print('dbPosition:'+position)
             if user.密码 == password:  # 密码正确
                 # 为用户生成令牌
                 ticket = generateTicket()
