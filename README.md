@@ -7,7 +7,7 @@
 
 [https://www.jianshu.com/p/35e7af7db96a](https://www.jianshu.com/p/35e7af7db96a)
 
-1. python环境配置
+2. python环境配置
 * 安装python3
 
 推荐安装python3.5
@@ -19,7 +19,7 @@ ubuntu16.04及其以上系统使用下面的命令
 ```
 sudo apt install python3-pip
 ```
-1. django环境配置
+3. django环境配置
 
 推荐2.2版本
 
