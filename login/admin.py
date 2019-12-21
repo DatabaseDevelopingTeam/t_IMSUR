@@ -16,6 +16,18 @@ class EmployeeAdmin(admin.ModelAdmin):
     # list_editable = ['姓名', '性别', '职能']
     # 排除字段
     exclude = ['ticket']
+    # 只可读字段
+    # readonly_fields = ['工号', '密码']
+    # list_editable = ['姓名','性别']
+
+    fieldsets = (
+        ('基础信息',
+         {
+             'fields': ('姓名', '性别')
+         }),
+        ('高级选项',
+         dict(classes='collapse', fields=('工号', '密码', '职能')))
+    )
 
 
 admin.site.register(职工, EmployeeAdmin)
