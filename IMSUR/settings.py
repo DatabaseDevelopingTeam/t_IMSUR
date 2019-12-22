@@ -64,9 +64,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'imsur',
-        'USER': 'root',
-        'PASSWORD': 'Wxp13620060844.',
-        'HOST': '127.0.0.1',
+        'USER': 'imsur',
+        'PASSWORD': 'sjkksmysqldbmm.',
+        'HOST': '149.129.62.232',
         'PORT': '3306',
     }
 }
