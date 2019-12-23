@@ -11,3 +11,7 @@ def municipalManagementUI(request):
         'position': '市政道路管理' if user.职能 == '1' else '道路巡查养护'
     }
     return render(request, 'municipalManagement.html', context=user_dict)
+
+
+def roadManagement(request):
+    return render(request,'roadManagement.html')

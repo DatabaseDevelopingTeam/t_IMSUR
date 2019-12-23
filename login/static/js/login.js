@@ -9,7 +9,7 @@ function checkIfIdExists(self) {
         if(xmlhttp.readyState===4 && xmlhttp.status===200){
             var s=xmlhttp.responseText;
             if (s==="1"){
-                document.getElementById("idError").innerHTML="用户名不存在!";
+                document.getElementById("idError").innerHTML="工号不存在!";
                 document.getElementById('submitInput').disabled = true
             }else{
                 document.getElementById("idError").innerHTML="";

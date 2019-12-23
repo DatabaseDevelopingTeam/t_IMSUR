@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<html>
 {% load static %}
 <head>
-    <title>市政道路管理</title>
     <meta charset="utf-8">
     <link href={% static "css/municipalManagement.css" %} rel="stylesheet">
+    <title>市政道路管理</title>
 </head>
 <body>
     <div id="transbox"></div>
@@ -36,14 +37,14 @@
             <div class="block" id="block_road_management">
                 <img src={% static "images/dl.png" %} >
                 <p>
-                    <a href="/admin" style="">道路管理</a>
+                    <a href="/municipalManagement/roadManagement/" style="">道路管理</a>
                 </p>
             </div>
 
             <div class="block" id="block_employee_management">
                 <img src={% static "images/yg.png" %} >
                 <p>
-                    <a href="/admin">职工管理</a>
+                    <a href="/admin/">职工管理</a>
                 </p>
             </div>
         </div>

@@ -3,5 +3,6 @@ from . import views
 
 app_name = 'municipalManagementUI'
 urlpatterns = [
-    path('', views.municipalManagementUI)
+    path('', views.municipalManagementUI),
+    path('roadManagement/',views.roadManagement),
 ]

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% extends "common/base.html" %}
+<html lang="zh">
+{% load static %}
+<head>
+    {% block title %}
+        <title>道路可视化管理</title>
+        <style>
+            html,body{
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    {% endblock %}
+</head>
+
+<body>
+    {% block bodycontent %}
+        <div id="map" style="height: 100%;width: 60%;">
+        </div>
+    {% endblock %}
+
+    {% block privatejs %}
+        <script src={% static "js/roadManagement.js" %}></script>
+    {% endblock %}
+</body>
+</html>

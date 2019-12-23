@@ -23,7 +23,7 @@ div.transbox {
     /* for IE */
     filter: alpha(opacity=60);
     /* CSS3 standard */
-    opacity: 0.8;
+    opacity: 0.9;
     position: relative;
     top: 50%;
     transform: translateY(-50%);
@@ -54,4 +54,5 @@ div.titlesystem {
 	font-size:16px;
 	width:200px;
 	height:35px;
+    opacity: 0.8;
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh">
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+
+{#    <link rel="icon" href={% static "common/images/favicon.ico" %}>#}
+{#    <link rel="bookmark" href={% static "common/images/favicon.ico" %}>#}
+
+    {% block privatecss %}
+    {% endblock %}
+
+    {% block title %}
+    {% endblock %}
+</head>
+<body>
+    {% block bodycontent %}
+    {% endblock %}
+
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+{#    <script src={% static "js/leaflet.ChineseTmsProviders.js" %}></script>#}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+
+    {% block privatejs %}
+    {% endblock %}
+</body>
+</html>
