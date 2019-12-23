@@ -6,6 +6,11 @@ class 路面类型(models.Model):
     路面类型 = models.CharField('路面类型', primary_key=True, max_length=12)
 
 
+class 路面损坏类型(models.Model):
+    路面类型外键 = models.ForeignKey(路面类型, on_delete=models.CASCADE, related_name='rn路面类型')
+    损坏类型 = models.CharField('损坏类型', max_length=40, primary_key=True)
+
+
 class 道路等级(models.Model):
     道路等级 = models.CharField('道路等级', primary_key=True, max_length=4, choices=(
         ('1', '一级'), ('2', '二级'), ('3', '三级'), ('４', '四级')))
