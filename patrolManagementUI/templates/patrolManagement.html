@@ -1,11 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
-    <title>巡查管理</title>
-    {% include "common/logo.html" %}
+    <title>养护人员页面</title>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      html,body{
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    }
+    body{
+      background: url('../static/images/index2.jpg') no-repeat;
+      background-position:center;
+       background-attachment: fixed;
+     background-size: cover;
+     -webkit-background-size: cover;
+    -o-background-size: cover;
+    text-align:center;
+    }
+    div.transbox
+    {
+        height: 300px;
+  	    margin:0 auto;
+  		border: 1px solid white;
+  		background-color: #ffffff;
+  		border: 1px solid white;
+        /* for IE */
+  		filter:alpha(opacity=60);
+        /* CSS3 standard */
+  		opacity:0.3;
+  		position:relative;
+		top:50%;
+		transform:translateY(-50%);
+    }
+    div.peoinf
+    {
+        width:200px;
+        height: 260px;
+  	   margin-left:35%;
+  		background-color: #000033;
+        /* for IE */
+  		filter:alpha(opacity=60);
+        /* CSS3 standard */
+  		opacity:0.8;
+  		position:absolute;
+		top:50%;
+		transform:translateY(-50%);
+		z-index:1;
+    }
+    div.block
+    {
+      width:200px;
+        height: 260px;
+  	   margin-left:35%;
+  		position:absolute;
+		top:50%;
+		transform:translateY(-50%);
+		z-index:1;
+
+    }
+    div.block img{
+    width:100px;
+    height:100px;
+    margin-top:25%;
+    }
+    div.text{color:white;}
+    div.text2{color:white;}
+    div.patrol
+    {
+        width:150px;
+        height: 260px;
+  	   margin-left:48%;
+  		background-color: #144a74;
+        /* for IE */
+  		filter:alpha(opacity=60);
+        /* CSS3 standard */
+  		opacity:0.8;
+  		position:absolute;
+		top:50%;
+		transform:translateY(-50%);
+		z-index:1;
+    }
+    div.block1{
+        position:absolute;
+		top:50%;
+		transform:translateY(-50%);
+		z-index:1;
+}
+div.block2{
+ width:200px;
+        height: 260px;
+  	   margin-left:46.5%;
+  		position:absolute;
+		top:50%;
+		transform:translateY(-50%);
+		z-index:1;
+}
+    div.block2 img{
+    width:50px;
+    height:50px;
+    margin-top:35%;
+    }
+div.today{
+        width:150px;
+        height:130px;
+  	   margin-left:57.7%;
+  		background-color: #11659a;
+        /* for IE */
+  		filter:alpha(opacity=60);
+        /* CSS3 standard */
+  		opacity:0.4;
+  		position:absolute;
+		top:41.5%;
+		transform:translateY(-50%);
+		z-index:1;}
+div.block3{ position:absolute;
+		top:50%;
+		transform:translateY(-50%);
+		z-index:1;}
+div.block4{
+		width:200px;
+        height: 130px;
+  	   margin-left:57%;
+  		position:absolute;
+		top:33%;
+		transform:translateY(-50%);
+		z-index:1;
+		}
+
+ div.block4 img{
+    width:55px;
+    height:55px;
+    margin-top:35%;
+    }
+    div.text3{
+    color:white;
+    }
+    div.ontime{ width:150px;
+        height:130px;
+  	   margin-left:57.7%;
+  		background-color: #11659a;
+        /* for IE */
+  		filter:alpha(opacity=60);
+        /* CSS3 standard */
+  		opacity:0.9;
+  		position:absolute;
+		top:58.5%;
+		transform:translateY(-50%);
+		z-index:1;}
+	div.block5{
+	position:absolute;
+		top:50%;
+		transform:translateY(-50%);
+		z-index:1;
+		}
+	div.block6{
+	   width:200px;
+        height: 130px;
+  	   margin-left:57%;
+  		position:absolute;
+		top:60%;
+		transform:translateY(-50%);
+		z-index:1;
+		}
+		div.block6 img
+		{ width:50px;
+    height:50px;
+    margin-top:16%;
+    }
+    div.text4{color:white;}
+
+    </style>
 </head>
 <body>
+<div class="transbox"></div>
+<div class="peoinf"></div>
+        <div class="block">
+        <img src="../static/images/people1.jpg"><br/>
+            <br>
+            <div class="text">
+        姓名：{{name}}<br/>
+        工号：{{employee_id}}<br/>
+        职能：{{position}}<br/>
+            </div>
+        </div>
 
+<div class="patrol"></div>
+    <div class="block1"></div>
+    <a href="/patrolManagement"><div class="block2">
+        <img src="../static/images/ptrol.png"><br/>
+        <br>
+        <div class="text2">
+          巡查管理<br/>
+        </div>
+    </div></a>
+<div class="today"></div>
+<div class="block3"></div>
+<a href=""><div class="block4">
+    <img src="../static/images/今日任务.png">
+    <br>
+    <div class="text3">
+    今日任务<br>
+    </div>
+</div></a>
+<div class="ontime"></div>
+<div class="block5"></div>
+<a href="/admin"><div class="block6">
+    <img src="../static/images/定期任务.png">
+    <br>
+    <div class="text4">
+        定期任务<br>
+    </div>
+</div></a>
 </body>
 </html>
