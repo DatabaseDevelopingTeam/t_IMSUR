@@ -2,6 +2,12 @@ from django.contrib import admin
 from . import models
 
 
+@admin.register(models.道路等级)
+class RoadLevelAdmin(admin.ModelAdmin):
+    list_display = ['道路等级']
+    list_display_links = ['道路等级']
+
+
 @admin.register(models.路面类型)
 class RoadTypeAdmin(admin.ModelAdmin):
     list_display_links = ['路面类型']
@@ -23,7 +29,7 @@ class RoadWayAdmin(admin.ModelAdmin):
 @admin.register(models.道路基本档案)
 class RoadBasicArchiveAdmin(admin.ModelAdmin):
     list_display_links = ['道路名称']
-    list_display = ['道路名称']
+    list_display = ['道路名称','道路编号']
 
 
 @admin.register(models.职工)

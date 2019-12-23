@@ -29,7 +29,7 @@
 
     //创建地图实例
     var map = L.map("map", {
-        center: [31.59, 120.29],
+        center: [29.487967,106.57036],
         zoom: 18,
         layers: [oms],
         scrollWheelZoom: false
@@ -68,62 +68,129 @@
         //     });
         // })
 
-        var popupContent = '<form class="container" id="popupForm" style="width: 200px;">\
-        <p><input name = "roadId" type="text" class="form-control" placeholder="道路编号" required autofocus></p>\
-        <p><input name = "roadName" type="text" class="form-control" placeholder="道路名称" required autofocus></p>\
-        <p>\
-            <select name = "roadType" class="form-control">\
-                <option>沥青路面</option>\
-                <option>混凝土路面</option>\
-            </select><\
-        /p>\
-        <p><input id="addRoadBasicInfoSubmit" class="form-control center-block" type="submit" value="提交" style="width: 50%;"></p>\
-    </form>';
+        //添加道路的pop框
+        var popupContent = '<form "class="container" id="popupForm" style="width: 200px;">\
+            <p><input name = "roadId" id="roadId" type="text" onchange="onCheckIfRoadIdExists()" class="form-control" placeholder="道路编号" required autofocus></p>\
+            <span style="color: red; margin: 0;padding: 0;" id="wrongInfo"></span>\
+            <p><input name = "roadName" id="roadName" type="text" class="form-control" placeholder="道路名称" required autofocus></p>\
+            <p>\
+                <select class="form-control" id="roadLevel" name="roadLevel" >\
+                    <option value="1">一级</option>\
+                    <option value="2">二级</option>\
+                    <option value="3">三级</option>\
+                </select> \
+            </p>\
+            <p>\
+                <select name = "roadType" id="roadType" class="form-control">\
+                    <option>沥青路面</option>\
+                    <option>混凝土路面</option>\
+                </select>\
+            </p>\
+            <p><input onclick="addRoadBasicInfo();return false;" class="form-control center-block" type="button" value="提交" style="width: 50%;"></p>\
+        </form>';
 
-    	var onPopupSubmit = function () {
+        //异步请求道路编号是否重复
+        function onCheckIfRoadIdExists(){
+            var roadId = $("[name='roadId']").val();
+            // console.log(roadId);
+             $.ajax({
+                type:"POST",
+                url:"/municipalManagement/roadManagement/checkIfRoadIdExists/",
+                async:true,
+                cache:false,
+                data:{
+                    roadId:roadId,
+                },
+                success:function (data) {
+                    if (data === '1'){
+                        $("#wrongInfo").text('');
+                        $("[value='提交']").attr("disabled",false);
+                    }
+                    else{
+                        $("#wrongInfo").text('编号已存在!');
+                        $("[value='提交']").attr("disabled",true);
+                    }
 
-    	}
+                },
+                error:function () {
+                    console.log("服务器错误!");
+                }
+            });
+        }
+        //异步添加道路信息到服务器
+        function addRoadBasicInfo() {
 
-    	var displayMarker = function(e){
-    		// var marker = L.marker([e.latlng.lat,e.latlng.lng])
-            // .addTo(map);
+            //bootstrap自动判空
+
+            $.ajax({
+                type:"POST",
+                url:"/municipalManagement/roadManagement/addRoadBasicInfo/",
+                async:true,
+                cache:true,
+                data:{
+                    roadId:$("#roadId").val(),
+                    roadName:$("#roadName").val(),
+                    roadLevel:$("#roadLevel option:selected").val(),
+
+                    // roadType:$("#roadType option:selected").val(),
+                },
+                success:addMarker,
+                error:function () {
+                    console.log("添加失败!");
+                }
+            });
+        }
+
+        var addMarker = function (data,status) {
+            // L.marker(currentLatLng).addTo(map);
+        };
+
+
+        var currentLatLng;
+    	var addRoad = function(e){
+    		currentLatLng = [e.latlng.lat,e.latlng.lng];
+    		// console.log(currentLatLng);
             var popupOptions = {
             	autoClose:true,
             	closeOnEscapeKey:false,
-            	closeOnClick:false,
+            	closeOnClick:true,
             }
-            L.popup(popupOptions)
-            .setLatLng([e.latlng.lat,e.latlng.lng])
-            .setContent(popupContent)
-            .openOn(map);
 
+            L.marker([e.latlng.lat,e.latlng.lng]).addTo(map)
+                .bindPopup(popupContent)
+                .openPopup();
+            // L.popup(popupOptions)
+            // .setLatLng([e.latlng.lat,e.latlng.lng])
+            // .setContent(popupContent)
+            // .openOn(map);
+
+            // $("#addRoadBasicInfoSubmit").click(function () {
+            //     $.ajax({
+            //         type:"POST",
+            //         url:"/municipalManagement/roadManagement/addRoadBasicInfo/",
+            //         async:true,
+            //         cache:false,
+            //         data:{
+            //             roadId:$("#roadId").val(),
+            //             roadName:$("#roadName").val(),
+            //             roadLevel:$("#roadLevel option:selected").val(),
+            //         },
+            //         success:function (data) {
+            //             console.log(data);
+            //         },
+            //         error:function (xmlhttpRequest,data) {
+            //             console.log(data);
+            //         }
+            //
+            // });
+            //
+            //
+            //  });
             // var popUp = marker.bindPopup()
             // .openPopup();
     	}
 
 
-        map.on('click',displayMarker);
+        map.on('click',addRoad);
 
     /*事件监听*/
-
-    /*道路添加*/
-    function createXMLHttpRequest() {
-        let xmlHttp;
-        try{
-            xmlHttp = new XMLHttpRequest();
-        }
-        catch (e) {
-            try {
-                // 适用于IE6
-                xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
-            }catch (e) {
-                try {
-                    // 适用于IE5.5，以及IE更早版本
-                    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }catch (e) {
-
-                }
-            }
-        }
-        return xmlHttp;
-    }
