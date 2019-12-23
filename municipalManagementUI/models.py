@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.forms import ModelForm
 
 
 class 路面类型(models.Model):
@@ -11,7 +12,7 @@ class 路面类型(models.Model):
 
 
 class 路面损坏类型(models.Model):
-    路面类型外键 = models.ForeignKey(路面类型, on_delete=models.CASCADE, related_name='rn路面类型')
+    要引用的路面类型 = models.ForeignKey(路面类型, on_delete=models.CASCADE, related_name='rn路面类型')
     损坏类型 = models.CharField('损坏类型', max_length=40, primary_key=True)
 
     class Meta:
@@ -21,7 +22,7 @@ class 路面损坏类型(models.Model):
 
 class 道路等级(models.Model):
     道路等级 = models.CharField('道路等级', primary_key=True, max_length=4, choices=(
-        ('1', '一级'), ('2', '二级'), ('3', '三级'), ('４', '四级')))
+        ('1', '一级'), ('2', '二级'), ('3', '三级'), ('4', '四级')))
 
     class Meta:
         verbose_name_plural = '道路等级'
@@ -32,29 +33,38 @@ class 道路等级(models.Model):
 class 道路基本档案(models.Model):
     道路编号 = models.CharField('道路编号', primary_key=True, max_length=100)
     # 车行道 = models.OneToOneField(车行道, on_delete=models.CASCADE)
-    道路等级 = models.ForeignKey(道路等级, on_delete=models.CASCADE, verbose_name='道路等级', default='1')
+    道路等级 = models.ForeignKey(道路等级, on_delete=models.CASCADE, verbose_name='道路等级', default='1', null=False)
     道路名称 = models.CharField('道路名称', max_length=100, null=False)
-    道路走向 = models.CharField('道路走向', max_length=100, null=False)
-    起点 = models.CharField('起点', max_length=100, null=False)
-    终点 = models.CharField('终点', max_length=100, null=False)
-    设计单位 = models.CharField('设计单位', max_length=100, null=False)
-    施工单位 = models.CharField('施工单位', max_length=100, null=False)
-    路面等级 = models.CharField('路面等级', max_length=10, null=False)
-    设计时速 = models.IntegerField('设计时速', null=False)
-    路幅宽度范围 = models.CharField('路幅宽度范围', max_length=100, null=False)
-    道路长度 = models.FloatField('道路长度', null=False)
-    道路面积 = models.FloatField('道路面积', null=False)
-    AADT = models.FloatField('AADT', null=False)
-    交通量等级 = models.CharField('交通量等级', max_length=4, null=False)
-    所属乡镇 = models.CharField('所属乡镇', max_length=100, null=False)
-    管理分类 = models.CharField('管理分类', max_length=50, null=False)
-    管理单位 = models.CharField('管理单位', max_length=50, null=False)
-    养护单位 = models.CharField('养护单位', max_length=50, null=False)
-    建造年月 = models.DateField('建造年月', null=False)
+
+    经纬度 = models.CharField('经纬度', max_length=50, null=True)
+
+    路面等级 = models.CharField('路面等级', max_length=10, null=True)
+    道路走向 = models.CharField('道路走向', max_length=100, null=True)
+    起点 = models.CharField('起点', max_length=100, null=True)
+    终点 = models.CharField('终点', max_length=100, null=True)
+    设计单位 = models.CharField('设计单位', max_length=100, null=True)
+    施工单位 = models.CharField('施工单位', max_length=100, null=True)
+    设计时速 = models.IntegerField('设计时速', null=True)
+    路幅宽度范围 = models.CharField('路幅宽度范围', max_length=100, null=True)
+    道路长度 = models.FloatField('道路长度', null=True)
+    道路面积 = models.FloatField('道路面积', null=True)
+    AADT = models.FloatField('AADT', null=True)
+    交通量等级 = models.CharField('交通量等级', max_length=4, null=True)
+    所属乡镇 = models.CharField('所属乡镇', max_length=100, null=True)
+    管理分类 = models.CharField('管理分类', max_length=50, null=True)
+    管理单位 = models.CharField('管理单位', max_length=50, null=True)
+    养护单位 = models.CharField('养护单位', max_length=50, null=True)
+    建造年月 = models.DateField('建造年月', null=True)
 
     class Meta:
         verbose_name_plural = '道路基本档案'
         verbose_name = '道路基本档案'
+
+
+class RoadForm(ModelForm):
+    class Meta:
+        model = 道路基本档案
+        fields = ['道路编号', '道路名称', '道路等级']
 
 
 class 车行道(models.Model):

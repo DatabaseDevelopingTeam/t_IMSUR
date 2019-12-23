@@ -9,7 +9,7 @@ from municipalManagementUI.models import 职工
 
 
 @csrf_exempt
-def ajaxIdCheck(request):
+def ajaxEmployeeIdCheck(request):
     if request.method == "POST":
         employee_id = request.POST.get("employee_id")
         # print('employee_id:'+employee_id)
