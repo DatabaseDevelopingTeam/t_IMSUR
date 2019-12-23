@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>map</title>
+    <meta charset="utf-8">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=8dNyoBTP9lfOghZYh8LM7FRg0UUuc6Iu"></script>
+    //<script type="text/javascript" src="./GeoUtils.js"></script>
+
+</head>
+<style>
+*{
+    padding: 0;
+    margin: 0;
+}
+#allmap{
+    height:900px;
+}
+#nav{
+    display:inline-block;
+    background-color:#292C36;
+    /*width: 1000px;*/
+    width:100px;
+    height: 40px;
+    position:relative;
+    top:-900px;
+    float:right;
+    opacity:0.8;
+}
+
+ul{
+    list-style: none;
+}
+ul li{
+    float: center;
+    text-align: left;/*导航条文字垂直居中*/
+    line-height: 40px;
+    position: relative;/*相对定位使得二级菜单在对应的一级菜单下显示*/
+}
+a{
+    text-decoration: none;
+    color:#8890a4;
+    display: block;/*配合padding使用，让a块状占满整个li*/
+    padding:0 10px;
+}
+
+a:hover{
+    background-color:#292C36;
+    color:#fff;
+}
+ul li ul li{
+    float: none;/*取消二级菜单的浮动，使其恢复竖向显示*/
+    background-color:#292C36;
+    /*margin-top: 1px;*/
+    white-space: nowrap;/*强制二级菜单长度超过父级时候不换行，如果是英文或者数字则不需要*/
+}
+ul li ul{
+    position: absolute;/*以浏览器为（0,0）位置进行定位,且不会因为二级菜单过长而撑开一级菜单*/
+    left:0;
+    top: 40px;
+    display: none;/*使得初始时候二级菜单隐藏*/
+}
+ul li:hover ul{
+    display: block;/*使得鼠标经过一级菜单时候二级菜单显示*/
+}
+
+#menu li{
+    display:inline-block;
+    width:80px;
+    padding-left:20px;
+}
+</style>
+<body>
+<div class="row">
+  <div class="col-xs-6 col-md-4 table-responsive">
+      <table class="table table-bordered table table-hover" width="200px">
+          <tr>
+<th width="30px">道路编号</th>
+<th width="30px">道路名称</th>
+</tr>
+<tr>
+<td>R0001</td>
+<td>明德路</td>
+</tr>
+<tr>
+<td>R0002</td>
+<td>向阳路</td>
+</tr>
+          <tr>
+<td>R0003</td>
+<td>新宇路</td>
+</tr>
+           <tr>
+<td>R0004</td>
+<td>西彭路</td>
+</tr>
+           <tr>
+<td>R0004</td>
+<td>小V路</td>
+</tr>
+           <tr>
+<td>R0005</td>
+<td>振宁路</td>
+</tr>
+           <tr>
+<td>R0006</td>
+<td>哈哈路</td>
+</tr>
+           <tr>
+<td>R0007</td>
+<td>嘻嘻路</td>
+</tr>
+           <tr>
+<td>R0008</td>
+<td>胖宇路</td>
+</tr> <tr>
+<td>R0009</td>
+<td>南美路</td>
+</tr>
+           <tr>
+<td>R0010</td>
+<td>刘君路</td>
+</tr>
+           <tr>
+<td>R0011/td>
+<td>王勇路</td>
+</tr>
+           <tr>
+<td>R0012</td>
+<td>家伟路</td>
+</tr>
+           <tr>
+<td>R0013</td>
+<td>明明路</td>
+</tr>
+      </table>
+  </div>
+  <div class="col-xs-12 col-md-8">
+    <div id="allmap"></div>
+    <div id="nav">
+        <ul>
+            <li><a href="#">地图样式</a>
+                <ul id="menu">
+                    <li><a href="#" onclick="map.setMapStyleV2({styleId:'1a6fc4ea6b400a04cbf796806661163c'})">恶 魔</a></li>
+                    <li><a href="#" onclick="map.setMapStyleV2({styleId:'a38d7030315f905c8a2494083be55b83'})">人 </a></li>
+                    <li><a href="#" onclick="map.setMapStyleV2({styleId:'473b3d51f4b80b1c90148d82bf21c483'})">天 使</a></li>
+                    <li><a href="#" onclick="map.setMapStyleV2({styleId:'b79eae890ad7e87e4f2567b118e65351'})">普 通</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+</div>
+
+</body>
+</html>
+
+<script type="text/javascript">
+"use strict";
+
+var QWebChannelMessageTypes = {
+    signal: 1,
+    propertyUpdate: 2,
+    init: 3,
+    idle: 4,
+    debug: 5,
+    invokeMethod: 6,
+    connectToSignal: 7,
+    disconnectFromSignal: 8,
+    setProperty: 9,
+    response: 10,
+};
+
+var QWebChannel = function(transport, initCallback)
+{
+    if (typeof transport !== "object" || typeof transport.send !== "function") {
+        console.error("The QWebChannel expects a transport object with a send function and onmessage callback property." +
+                      " Given is: transport: " + typeof(transport) + ", transport.send: " + typeof(transport.send));
+        return;
+    }
+
+    var channel = this;
+    this.transport = transport;
+
+    this.send = function(data)
+    {
+        if (typeof(data) !== "string") {
+            data = JSON.stringify(data);
+        }
+        channel.transport.send(data);
+    }
+
+    this.transport.onmessage = function(message)
+    {
+        var data = message.data;
+        if (typeof data === "string") {
+            data = JSON.parse(data);
+        }
+        switch (data.type) {
+            case QWebChannelMessageTypes.signal:
+                channel.handleSignal(data);
+                break;
+            case QWebChannelMessageTypes.response:
+                channel.handleResponse(data);
+                break;
+            case QWebChannelMessageTypes.propertyUpdate:
+                channel.handlePropertyUpdate(data);
+                break;
+            default:
+                console.error("invalid message received:", message.data);
+                break;
+        }
+    }
+
+    this.execCallbacks = {};
+    this.execId = 0;
+    this.exec = function(data, callback)
+    {
+        if (!callback) {
+            // if no callback is given, send directly
+            channel.send(data);
+            return;
+        }
+        if (channel.execId === Number.MAX_VALUE) {
+            // wrap
+            channel.execId = Number.MIN_VALUE;
+        }
+        if (data.hasOwnProperty("id")) {
+            console.error("Cannot exec message with property id: " + JSON.stringify(data));
+            return;
+        }
+        data.id = channel.execId++;
+        channel.execCallbacks[data.id] = callback;
+        channel.send(data);
+    };
+
+    this.objects = {};
+
+    this.handleSignal = function(message)
+    {
+        var object = channel.objects[message.object];
+        if (object) {
+            object.signalEmitted(message.signal, message.args);
+        } else {
+            console.warn("Unhandled signal: " + message.object + "::" + message.signal);
+        }
+    }
+
+    this.handleResponse = function(message)
+    {
+        if (!message.hasOwnProperty("id")) {
+            console.error("Invalid response message received: ", JSON.stringify(message));
+            return;
+        }
+        channel.execCallbacks[message.id](message.data);
+        delete channel.execCallbacks[message.id];
+    }
+
+    this.handlePropertyUpdate = function(message)
+    {
+        for (var i in message.data) {
+            var data = message.data[i];
+            var object = channel.objects[data.object];
+            if (object) {
+                object.propertyUpdate(data.signals, data.properties);
+            } else {
+                console.warn("Unhandled property update: " + data.object + "::" + data.signal);
+            }
+        }
+        channel.exec({type: QWebChannelMessageTypes.idle});
+    }
+
+    this.debug = function(message)
+    {
+        channel.send({type: QWebChannelMessageTypes.debug, data: message});
+    };
+
+    channel.exec({type: QWebChannelMessageTypes.init}, function(data) {
+        for (var objectName in data) {
+            var object = new QObject(objectName, data[objectName], channel);
+        }
+        // now unwrap properties, which might reference other registered objects
+        for (var objectName in channel.objects) {
+            channel.objects[objectName].unwrapProperties();
+        }
+        if (initCallback) {
+            initCallback(channel);
+        }
+        channel.exec({type: QWebChannelMessageTypes.idle});
+    });
+};
+
+function QObject(name, data, webChannel)
+{
+    this.__id__ = name;
+    webChannel.objects[name] = this;
+
+    // List of callbacks that get invoked upon signal emission
+    this.__objectSignals__ = {};
+
+    // Cache of all properties, updated when a notify signal is emitted
+    this.__propertyCache__ = {};
+
+    var object = this;
+
+    // ----------------------------------------------------------------------
+
+    this.unwrapQObject = function(response)
+    {
+        if (response instanceof Array) {
+            // support list of objects
+            var ret = new Array(response.length);
+            for (var i = 0; i < response.length; ++i) {
+                ret[i] = object.unwrapQObject(response[i]);
+            }
+            return ret;
+        }
+        if (!response
+            || !response["__QObject*__"]
+            || response.id === undefined) {
+            return response;
+        }
+
+        var objectId = response.id;
+        if (webChannel.objects[objectId])
+            return webChannel.objects[objectId];
+
+        if (!response.data) {
+            console.error("Cannot unwrap unknown QObject " + objectId + " without data.");
+            return;
+        }
+
+        var qObject = new QObject( objectId, response.data, webChannel );
+        qObject.destroyed.connect(function() {
+            if (webChannel.objects[objectId] === qObject) {
+                delete webChannel.objects[objectId];
+                // reset the now deleted QObject to an empty {} object
+                // just assigning {} though would not have the desired effect, but the
+                // below also ensures all external references will see the empty map
+                // NOTE: this detour is necessary to workaround QTBUG-40021
+                var propertyNames = [];
+                for (var propertyName in qObject) {
+                    propertyNames.push(propertyName);
+                }
+                for (var idx in propertyNames) {
+                    delete qObject[propertyNames[idx]];
+                }
+            }
+        });
+        // here we are already initialized, and thus must directly unwrap the properties
+        qObject.unwrapProperties();
+        return qObject;
+    }
+
+    this.unwrapProperties = function()
+    {
+        for (var propertyIdx in object.__propertyCache__) {
+            object.__propertyCache__[propertyIdx] = object.unwrapQObject(object.__propertyCache__[propertyIdx]);
+        }
+    }
+
+    function addSignal(signalData, isPropertyNotifySignal)
+    {
+        var signalName = signalData[0];
+        var signalIndex = signalData[1];
+        object[signalName] = {
+            connect: function(callback) {
+                if (typeof(callback) !== "function") {
+                    console.error("Bad callback given to connect to signal " + signalName);
+                    return;
+                }
+
+                object.__objectSignals__[signalIndex] = object.__objectSignals__[signalIndex] || [];
+                object.__objectSignals__[signalIndex].push(callback);
+
+                if (!isPropertyNotifySignal && signalName !== "destroyed") {
+                    // only required for "pure" signals, handled separately for properties in propertyUpdate
+                    // also note that we always get notified about the destroyed signal
+                    webChannel.exec({
+                        type: QWebChannelMessageTypes.connectToSignal,
+                        object: object.__id__,
+                        signal: signalIndex
+                    });
+                }
+            },
+            disconnect: function(callback) {
+                if (typeof(callback) !== "function") {
+                    console.error("Bad callback given to disconnect from signal " + signalName);
+                    return;
+                }
+                object.__objectSignals__[signalIndex] = object.__objectSignals__[signalIndex] || [];
+                var idx = object.__objectSignals__[signalIndex].indexOf(callback);
+                if (idx === -1) {
+                    console.error("Cannot find connection of signal " + signalName + " to " + callback.name);
+                    return;
+                }
+                object.__objectSignals__[signalIndex].splice(idx, 1);
+                if (!isPropertyNotifySignal && object.__objectSignals__[signalIndex].length === 0) {
+                    // only required for "pure" signals, handled separately for properties in propertyUpdate
+                    webChannel.exec({
+                        type: QWebChannelMessageTypes.disconnectFromSignal,
+                        object: object.__id__,
+                        signal: signalIndex
+                    });
+                }
+            }
+        };
+    }
+
+    /**
+     * Invokes all callbacks for the given signalname. Also works for property notify callbacks.
+     */
+    function invokeSignalCallbacks(signalName, signalArgs)
+    {
+        var connections = object.__objectSignals__[signalName];
+        if (connections) {
+            connections.forEach(function(callback) {
+                callback.apply(callback, signalArgs);
+            });
+        }
+    }
+
+    this.propertyUpdate = function(signals, propertyMap)
+    {
+        // update property cache
+        for (var propertyIndex in propertyMap) {
+            var propertyValue = propertyMap[propertyIndex];
+            object.__propertyCache__[propertyIndex] = propertyValue;
+        }
+
+        for (var signalName in signals) {
+            // Invoke all callbacks, as signalEmitted() does not. This ensures the
+            // property cache is updated before the callbacks are invoked.
+            invokeSignalCallbacks(signalName, signals[signalName]);
+        }
+    }
+
+    this.signalEmitted = function(signalName, signalArgs)
+    {
+        invokeSignalCallbacks(signalName, this.unwrapQObject(signalArgs));
+    }
+
+    function addMethod(methodData)
+    {
+        var methodName = methodData[0];
+        var methodIdx = methodData[1];
+        object[methodName] = function() {
+            var args = [];
+            var callback;
+            for (var i = 0; i < arguments.length; ++i) {
+                var argument = arguments[i];
+                if (typeof argument === "function")
+                    callback = argument;
+                else if (argument instanceof QObject && webChannel.objects[argument.__id__] !== undefined)
+                    args.push({
+                        "id": argument.__id__
+                    });
+                else
+                    args.push(argument);
+            }
+
+            webChannel.exec({
+                "type": QWebChannelMessageTypes.invokeMethod,
+                "object": object.__id__,
+                "method": methodIdx,
+                "args": args
+            }, function(response) {
+                if (response !== undefined) {
+                    var result = object.unwrapQObject(response);
+                    if (callback) {
+                        (callback)(result);
+                    }
+                }
+            });
+        };
+    }
+
+    function bindGetterSetter(propertyInfo)
+    {
+        var propertyIndex = propertyInfo[0];
+        var propertyName = propertyInfo[1];
+        var notifySignalData = propertyInfo[2];
+        // initialize property cache with current value
+        // NOTE: if this is an object, it is not directly unwrapped as it might
+        // reference other QObject that we do not know yet
+        object.__propertyCache__[propertyIndex] = propertyInfo[3];
+
+        if (notifySignalData) {
+            if (notifySignalData[0] === 1) {
+                // signal name is optimized away, reconstruct the actual name
+                notifySignalData[0] = propertyName + "Changed";
+            }
+            addSignal(notifySignalData, true);
+        }
+
+        Object.defineProperty(object, propertyName, {
+            configurable: true,
+            get: function () {
+                var propertyValue = object.__propertyCache__[propertyIndex];
+                if (propertyValue === undefined) {
+                    // This shouldn't happen
+                    console.warn("Undefined value in property cache for property \"" + propertyName + "\" in object " + object.__id__);
+                }
+
+                return propertyValue;
+            },
+            set: function(value) {
+                if (value === undefined) {
+                    console.warn("Property setter for " + propertyName + " called with undefined value!");
+                    return;
+                }
+                object.__propertyCache__[propertyIndex] = value;
+                var valueToSend = value;
+                if (valueToSend instanceof QObject && webChannel.objects[valueToSend.__id__] !== undefined)
+                    valueToSend = { "id": valueToSend.__id__ };
+                webChannel.exec({
+                    "type": QWebChannelMessageTypes.setProperty,
+                    "object": object.__id__,
+                    "property": propertyIndex,
+                    "value": valueToSend
+                });
+            }
+        });
+
+    }
+
+    // ----------------------------------------------------------------------
+
+    data.methods.forEach(addMethod);
+
+    data.properties.forEach(bindGetterSetter);
+
+    data.signals.forEach(function(signal) { addSignal(signal, false); });
+
+    for (var name in data.enums) {
+        object[name] = data.enums[name];
+    }
+}
+
+//required for use with nodejs
+if (typeof module === 'object') {
+    module.exports = {
+        QWebChannel: QWebChannel
+    };
+}
+
+</script>
+
+<script type="text/javascript">
+    var map = new BMap.Map("allmap");
+    map.centerAndZoom(new BMap.Point(106.55429,29.554912),10);
+    //map.enableScrollWheelZoom(true);
+    var topLeftNavigationControl = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_RIGHT,type:BMAP_NAVIGATION_CONTROL_ZOOM});
+    map.addControl(topLeftNavigationControl);
+    map.setMapStyleV2({styleId:'473b3d51f4b80b1c90148d82bf21c483'});
+
+    new QWebChannel(qt.webChannelTransport,function(channel){
+        window.webContent = channel.objects.webContent;
+        window.mainWindow = channel.objects.mainWindow;
+    });
+
+    map.addEventListener("mousemove",function (e){
+        window.webContent.setCoordinates(e.point.lng,e.point.lat);
+        window.mainWindow.setCoordinate(' 经度:'+e.point.lng+' 纬度:'+e.point.lat);
+    });
+
+    map.addEventListener('rightclick',function(e){
+        map.removeOverlay(currentMarker);
+    });
+
+    function clearDrawingResults(){
+        drivingRoute.clearResults();
+    }
+
+    var currentMarker;
+    map.addEventListener("click",function(e){
+        var markerOpts={
+            offset:new BMap.Size(-30,-40),
+            icon:new BMap.Icon(('./accident.png'),{})
+        };
+        if(typeof(currentMarker)=='undefined'){
+            currentMarker = new BMap.Marker(new BMap.Point(e.point.lng,e.point.lat),markerOpts);
+            map.addOverlay(currentMarker);
+            window.webContent.setCurrentAccidentMarker('['+e.point.lng+','+e.point.lat+",2,1,'事故点事故点','','']");
+        }
+        else{
+            //window.policeMarkers.remove(window.policeMarkers.length-1);
+            //window.hospitalMarkers.remove(window.hospitalMarkers.length-1);
+            map.removeOverlay(currentMarker);
+            currentMarker = new BMap.Marker(new BMap.Point(e.point.lng,e.point.lat),markerOpts);
+            map.addOverlay(currentMarker);
+            window.webContent.setCurrentAccidentMarker('['+e.point.lng+','+e.point.lat+"2,1,'事故点事故点','','']");
+        }
+    });
+
+    window.polylines=[];//全局路线(Polyline)数组,方便显示路线
+    window.policeMarkers=[];//全局BMap.Marker数组，方便隐藏麻点
+    window.hospitalMarkers=[];
+    function addMarker(markerArray){
+        var markerOpts={
+            offset:new BMap.Size(0,0),//-30,-40
+            icon:new BMap.Icon(markerArray[2]==1?'./hospital.png':(markerArray[2]==0?'./police.png':'./accident.png'),new BMap.Size(60,60),{})//1:hospital 0:police(service station) 2:accident
+        };
+        var marker = new BMap.Marker(new BMap.Point(markerArray[0],markerArray[1]),markerOpts);
+        markerArray[2]==1?window.hospitalMarkers.push(marker):window.policeMarkers.push(marker);
+
+        var htmlContent='<p>' + markerArray[4] + '</p><ul><li>经纬度:';
+        var lng = markerArray[0].toString();
+        var lat = markerArray[1].toString();
+        var coordinateStr = lng + ',' + lat;
+        var htmlContent1 = coordinateStr + '</li><li>地址:';
+        htmlContent1 = htmlContent1 + markerArray[5];
+        htmlContent1 = htmlContent1 + '</li>';
+        htmlContent1 = htmlContent1 + '<li>可用性:';
+        var vailability = markerArray[3]==1?'可用':'不可用';
+        htmlContent1 = htmlContent1 + vailability;
+        htmlContent1 = htmlContent1 + '</li></ul>';
+        htmlContent = htmlContent + htmlContent1;
+
+        marker.addEventListener('mouseover',function(e){
+            this.openInfoWindow(new BMap.InfoWindow(htmlContent,{}));
+        });
+        marker.addEventListener('mouseout',function(e){
+            this.closeInfoWindow();
+        });
+
+        map.addOverlay(marker);
+    }
+
+    var globalMarkersLength;
+    function addMarkers(markers){
+        globalMarkersLength=typeof(currentMarker)=='undefined'?markers.length:markers.length-1;
+        console.log("globalMarkersLength:"+globalMarkersLength);
+        for(i=0;i<globalMarkersLength;i++){
+            addMarker(markers[i]);
+        }
+    }
+   // addMarkers([[106.177337,29.077175,1],[106.808918,28.608061,0],[108.994693,28.517232,1],[107.778845,29.336483,1],[109.374892,31.034769,0],]);
+
+    function removeMarkers(){
+      if(currentPointType==1){//移除哪种类型的marker 1:hospital 0:police
+        for(i =0;i<window.hospitalMarkers.length;i++){
+            map.removeOverlay(window.hospitalMarkers[i]);
+        }
+        window.hospitalMarkers=[];
+      }
+      else{
+          for(i =0;i<window.policeMarkers.length;i++){
+              map.removeOverlay(window.policeMarkers[i]);
+          }
+          window.policeMarkers=[];
+      }
+    }
+
+    function getDistance(array1,array2){
+        var point1=new BMap.Point(array1[0],array1[1]);
+        var point2=new BMap.Point(array2[0],array2[1]);
+        var number = map.getDistance(point1,point2);
+        window.webContent.setDistance(number);
+    }
+
+    function curosrClick(){
+        var ul = document.getElementsByTagName('ul');
+        ul[0].style.display=='block'?ul[0].style.display='none':ul[0].style.display='block';
+    }
+
+
+    function addPolyline(polyline){
+        map.addOverlay(polyline);
+    }
+
+    function addPolylines(){
+        for(i=0;i<window.polylines.length;i++){
+            map.addOverlay(window.polylines[i]);
+
+        }
+        console.log("window.polylines.length:"+window.polylines.length);
+    }
+
+    function removePolyline(polyline){
+        map.removeOverlay(polyline);
+    }
+
+    function removePolylines(){
+        for(i=0;i<window.polylines.length;i++){
+            map.removeOverlay(window.polylines[i]);
+        }
+    }
+
+
+    var tempInfoWindowText=[];//don't ask why
+    var count=0;//
+    var count1=0;
+    var drivingRoute = new BMap.DrivingRoute(
+        map,
+        {
+            renderOptions:{
+                map:map,
+                autoViewport:false
+            },
+            policy:BMAP_DRIVING_POLICY_FIRST_HIGHWAYS,
+            onSearchComplete:function(results){//检索路线完成后的回调函数，功能是将路线的距离传递给c++服务端
+                var firstRoutePlan = results.getPlan(0);//第一个路线计划
+                var firstRoute = firstRoutePlan.getRoute(0);//第一个路线计划的第一条路线
+                var firstRouteDistance = firstRoute.getDistance(false);//返回路线距离，当format为false时仅返回数值
+                window.webContent.setRouteDistance(firstRouteDistance);
+                //tempInfoWindowText[count] =tempInfoWindowText[count] + firstRouteDistance+'m';
+                window.mainWindow.getCurrentRouteDistance();
+
+            }
+            /*onPolylinesSet:function(routes){//绘制路线  (没用ya)
+                var route = routes[0];
+                var routePolyline = route.getPolyline();
+                window.polylines.push(routePolyline);
+                addPolyline(window.polylines[window.polylines.length-1]);
+            }*/
+        }
+    );
+
+
+    var distances=[];
+
+    drivingRoute.setPolylinesSetCallback(function(routes){
+        var route = routes[0];
+        var str='';
+        //window.mainWindow.outputStringFromJs(route.getDistance(false));
+
+        var distance = route.getDistance(false);
+        distances.push((distance>=150000)?(-1):(distance));
+        //console.log('distance:'+distance);
+        tempInfoWindowText[count] =tempInfoWindowText[count] + distance.toString() +'m';
+
+        //for test
+        /*window.mainWindow.outputStringFromJs('pointA length:'+pointA.length);
+        for(i=0;i<pointA.length;i++){
+            window.mainWindow.outputStringFromJs('*********pointA:'+pointA[i].lng+',' + pointA[i].lat);
+        }
+        window.mainWindow.outputStringFromJs('pointB length:'+pointB.length);
+        for(i=0;i<pointB.length;i++){
+            window.mainWindow.outputStringFromJs('*********pointB:'+ pointB[i].lng+',' + pointB[i].lat);
+        }*/
+
+
+
+        if(distance<=150000 && distance>1){
+            var routePolyline = route.getPolyline();
+            str=str+' <=150000m,';
+            routePolyline.setStrokeWeight(7);//路线折线加粗
+
+
+            window.polylines.push(routePolyline);
+            addPolyline(window.polylines[window.polylines.length-1]);
+            str=str+'added';
+
+
+            //window.mainWindow.outputStringFromJs('pointA[count]:'+pointA[count].lng+','+pointA[count].lat+' pointB[count]:'+pointB[count1].lng+','+pointB[count].lat);
+            var onBounds=false;
+/*
+            var typeMarkers=currentPointType==0?(policeMarkers):(hospitalMarkers);
+            for(i=0;i<typeMarkers.length;i++){
+                if(!typeMarkers[i].getPosition().equals(pointA[count]) && !typeMarkers[i].getPosition().equals(pointB[count])){
+
+                    var bounds = routePolyline.getBounds();
+                    //onBounds = bounds.containsPoint(policeMarkers[i].getPosition());//是否在路线上(第二个过滤条件)
+                    onBounds = BMapLib.GeoUtils.isPointInRect(typeMarkers[i].getPosition(), bounds);
+                    console.log(onBounds);
+                    if(onBounds==true){
+                        //console.log('break');
+                        break;
+                    }
+                }
+            }
+            if(onBounds==true)
+            {
+                 str=str + '但中间有其它点,abandoned';
+            }
+            else if(onBounds==false){
+                window.polylines.push(routePolyline);
+                addPolyline(window.polylines[window.polylines.length-1]);
+                str=str+'且中间无其它点,added';
+            }
+*/
+        }else{
+            str=str+' >150000m,abandoned';
+        }
+
+        //window.mainWindow.outputStringFromJs('count'+count.toString()+':'+tempInfoWindowText[count] + str);
+        window.mainWindow.addTextToInfoWindow('\n'+tempInfoWindowText[count] + str+'\n');
+        count++;//重要，关键代码
+        //drivingRoute.clearResults();
+    });
+
+
+    function getPolylinesDistancesArray(){
+        /*var wholeDistances=new Array();
+        var length=globalMarkersLength;
+        wholeDistances=new Array();
+        for(var i=0;i<length+1;i++){//多加的1是事故点
+            wholeDistances[i]=new Array();
+            for(var j=0;j<length+1;j++){
+                if(i==j){
+                    wholeDistances[i][j]=0;
+                }
+                else{
+                    wholeDistances[i][j]=-1;
+                }
+            }
+        }
+        */
+        for(var i=0;i<distances.length;i++){
+            window.webContent.setEdgeWeight(distances[i]);
+        }
+
+    }
+
+
+    function countingRoute(point1,point2){
+        drivingRoute.search(point1,point2);
+    }
+
+    var pointA=[];
+    var pointB=[];
+    var currentPointType;//0:police 1:hospital
+
+    function countingRoutes(markers){
+        markers[0][2]==1?(currentPointType=1):(currentPointType=0);
+
+        for(i=0;i<markers.length;i++){
+            var point1=new BMap.Point(markers[i][0],markers[i][1]);
+            pointA.push(point1);
+            for(j=i+1;j<markers.length;j++){//for(j=i+1;j<markers.length;j++){
+
+                var point2=new BMap.Point(markers[j][0],markers[j][1]);
+                var nameStr =markers[i][4] + '->' + markers[j][4] + ':';
+                tempInfoWindowText.push(nameStr);
+                pointB.push(point2);
+                countingRoute(point1,point2);
+            }
+        }
+        window.webContent.setMarkersNumber(markers.length);
+        drivingRoute.clearResults();
+    }
+</script>
+<script type="text/javascript">
+/**
+ * @fileoverview GeoUtils类提供若干几何算法，用来帮助用户判断点与矩形、
+ * 圆形、多边形线、多边形面的关系,并提供计算折线长度和多边形的面积的公式。
+ * 主入口类是<a href="symbols/BMapLib.GeoUtils.html">GeoUtils</a>，
+ * 基于Baidu Map API 1.2。
+ *
+ * @author Baidu Map Api Group
+ * @version 1.2
+ */
+
+/**
+ * @namespace BMap的所有library类均放在BMapLib命名空间下
+ */
+var BMapLib = window.BMapLib = BMapLib || {};
+(function() {
+
+    /**
+     * 地球半径
+     */
+    var EARTHRADIUS = 6370996.81;
+
+    /**
+     * @exports GeoUtils as BMapLib.GeoUtils
+     */
+    var GeoUtils =
+    /**
+     * GeoUtils类，静态类，勿需实例化即可使用
+     * @class GeoUtils类的<b>入口</b>。
+     * 该类提供的都是静态方法，勿需实例化即可使用。
+     */
+    BMapLib.GeoUtils = function(){
+
+    }
+
+    /**
+     * 判断点是否在矩形内
+     * @param {Point} point 点对象
+     * @param {Bounds} bounds 矩形边界对象
+     * @returns {Boolean} 点在矩形内返回true,否则返回false
+     */
+    GeoUtils.isPointInRect = function(point, bounds){
+        //检查类型是否正确
+        if (!(point instanceof BMap.Point) ||
+            !(bounds instanceof BMap.Bounds)) {
+            return false;
+        }
+        var sw = bounds.getSouthWest(); //西南脚点
+        var ne = bounds.getNorthEast(); //东北脚点
+        return (point.lng >= sw.lng && point.lng <= ne.lng && point.lat >= sw.lat && point.lat <= ne.lat);
+    }
+
+    /**
+     * 判断点是否在圆形内
+     * @param {Point} point 点对象
+     * @param {Circle} circle 圆形对象
+     * @returns {Boolean} 点在圆形内返回true,否则返回false
+     */
+    GeoUtils.isPointInCircle = function(point, circle){
+        //检查类型是否正确
+        if (!(point instanceof BMap.Point) ||
+            !(circle instanceof BMap.Circle)) {
+            return false;
+        }
+
+        //point与圆心距离小于圆形半径，则点在圆内，否则在圆外
+        var c = circle.getCenter();
+        var r = circle.getRadius();
+
+        var dis = GeoUtils.getDistance(point, c);
+        if(dis <= r){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 判断点是否在折线上
+     * @param {Point} point 点对象
+     * @param {Polyline} polyline 折线对象
+     * @returns {Boolean} 点在折线上返回true,否则返回false
+     */
+    GeoUtils.isPointOnPolyline = function(point, polyline){
+        //检查类型
+        if(!(point instanceof BMap.Point) ||
+            !(polyline instanceof BMap.Polyline)){
+            return false;
+        }
+
+        //首先判断点是否在线的外包矩形内，如果在，则进一步判断，否则返回false
+        var lineBounds = polyline.getBounds();
+        if(!this.isPointInRect(point, lineBounds)){
+            return false;
+        }
+
+        //判断点是否在线段上，设点为Q，线段为P1P2 ，
+        //判断点Q在该线段上的依据是：( Q - P1 ) × ( P2 - P1 ) = 0，且 Q 在以 P1，P2为对角顶点的矩形内
+        var pts = polyline.getPath();
+        for(var i = 0; i < pts.length - 1; i++){
+            var curPt = pts[i];
+            var nextPt = pts[i + 1];
+            //首先判断point是否在curPt和nextPt之间，即：此判断该点是否在该线段的外包矩形内
+            if (point.lng >= Math.min(curPt.lng, nextPt.lng) && point.lng <= Math.max(curPt.lng, nextPt.lng) &&
+                point.lat >= Math.min(curPt.lat, nextPt.lat) && point.lat <= Math.max(curPt.lat, nextPt.lat)){
+                //判断点是否在直线上公式
+                var precision = (curPt.lng - point.lng) * (nextPt.lat - point.lat) -
+                    (nextPt.lng - point.lng) * (curPt.lat - point.lat);
+                if(precision < 2e-10 && precision > -2e-10){//实质判断是否接近0
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 判断点是否多边形内
+     * @param {Point} point 点对象
+     * @param {Polyline} polygon 多边形对象
+     * @returns {Boolean} 点在多边形内返回true,否则返回false
+     */
+    GeoUtils.isPointInPolygon = function(point, polygon){
+        //检查类型
+        if(!(point instanceof BMap.Point) ||
+            !(polygon instanceof BMap.Polygon)){
+            return false;
+        }
+
+        //首先判断点是否在多边形的外包矩形内，如果在，则进一步判断，否则返回false
+        var polygonBounds = polygon.getBounds();
+        if(!this.isPointInRect(point, polygonBounds)){
+            return false;
+        }
+
+        var pts = polygon.getPath();//获取多边形点
+
+        //下述代码来源：http://paulbourke.net/geometry/insidepoly/，进行了部分修改
+        //基本思想是利用射线法，计算射线与多边形各边的交点，如果是偶数，则点在多边形外，否则
+        //在多边形内。还会考虑一些特殊情况，如点在多边形顶点上，点在多边形边上等特殊情况。
+
+        var N = pts.length;
+        var boundOrVertex = true; //如果点位于多边形的顶点或边上，也算做点在多边形内，直接返回true
+        var intersectCount = 0;//cross points count of x
+        var precision = 2e-10; //浮点类型计算时候与0比较时候的容差
+        var p1, p2;//neighbour bound vertices
+        var p = point; //测试点
+
+        p1 = pts[0];//left vertex
+        for(var i = 1; i <= N; ++i){//check all rays
+            if(p.equals(p1)){
+                return boundOrVertex;//p is an vertex
+            }
+
+            p2 = pts[i % N];//right vertex
+            if(p.lat < Math.min(p1.lat, p2.lat) || p.lat > Math.max(p1.lat, p2.lat)){//ray is outside of our interests
+                p1 = p2;
+                continue;//next ray left point
+            }
+
+            if(p.lat > Math.min(p1.lat, p2.lat) && p.lat < Math.max(p1.lat, p2.lat)){//ray is crossing over by the algorithm (common part of)
+                if(p.lng <= Math.max(p1.lng, p2.lng)){//x is before of ray
+                    if(p1.lat == p2.lat && p.lng >= Math.min(p1.lng, p2.lng)){//overlies on a horizontal ray
+                        return boundOrVertex;
+                    }
+
+                    if(p1.lng == p2.lng){//ray is vertical
+                        if(p1.lng == p.lng){//overlies on a vertical ray
+                            return boundOrVertex;
+                        }else{//before ray
+                            ++intersectCount;
+                        }
+                    }else{//cross point on the left side
+                        var xinters = (p.lat - p1.lat) * (p2.lng - p1.lng) / (p2.lat - p1.lat) + p1.lng;//cross point of lng
+                        if(Math.abs(p.lng - xinters) < precision){//overlies on a ray
+                            return boundOrVertex;
+                        }
+
+                        if(p.lng < xinters){//before ray
+                            ++intersectCount;
+                        }
+                    }
+                }
+            }else{//special case when ray is crossing through the vertex
+                if(p.lat == p2.lat && p.lng <= p2.lng){//p crossing over p2
+                    var p3 = pts[(i+1) % N]; //next vertex
+                    if(p.lat >= Math.min(p1.lat, p3.lat) && p.lat <= Math.max(p1.lat, p3.lat)){//p.lat lies between p1.lat & p3.lat
+                        ++intersectCount;
+                    }else{
+                        intersectCount += 2;
+                    }
+                }
+            }
+            p1 = p2;//next ray left point
+        }
+
+        if(intersectCount % 2 == 0){//偶数在多边形外
+            return false;
+        } else { //奇数在多边形内
+            return true;
+        }
+    }
+
+    /**
+     * 将度转化为弧度
+     * @param {degree} Number 度
+     * @returns {Number} 弧度
+     */
+    GeoUtils.degreeToRad =  function(degree){
+        return Math.PI * degree/180;
+    }
+
+    /**
+     * 将弧度转化为度
+     * @param {radian} Number 弧度
+     * @returns {Number} 度
+     */
+    GeoUtils.radToDegree = function(rad){
+        return (180 * rad) / Math.PI;
+    }
+
+    /**
+     * 将v值限定在a,b之间，纬度使用
+     */
+    function _getRange(v, a, b){
+        if(a != null){
+          v = Math.max(v, a);
+        }
+        if(b != null){
+          v = Math.min(v, b);
+        }
+        return v;
+    }
+
+    /**
+     * 将v值限定在a,b之间，经度使用
+     */
+    function _getLoop(v, a, b){
+        while( v > b){
+          v -= b - a
+        }
+        while(v < a){
+          v += b - a
+        }
+        return v;
+    }
+
+    /**
+     * 计算两点之间的距离,两点坐标必须为经纬度
+     * @param {point1} Point 点对象
+     * @param {point2} Point 点对象
+     * @returns {Number} 两点之间距离，单位为米
+     */
+    GeoUtils.getDistance = function(point1, point2){
+        //判断类型
+        if(!(point1 instanceof BMap.Point) ||
+            !(point2 instanceof BMap.Point)){
+            return 0;
+        }
+
+        point1.lng = _getLoop(point1.lng, -180, 180);
+        point1.lat = _getRange(point1.lat, -74, 74);
+        point2.lng = _getLoop(point2.lng, -180, 180);
+        point2.lat = _getRange(point2.lat, -74, 74);
+
+        var x1, x2, y1, y2;
+        x1 = GeoUtils.degreeToRad(point1.lng);
+        y1 = GeoUtils.degreeToRad(point1.lat);
+        x2 = GeoUtils.degreeToRad(point2.lng);
+        y2 = GeoUtils.degreeToRad(point2.lat);
+
+        return EARTHRADIUS * Math.acos((Math.sin(y1) * Math.sin(y2) + Math.cos(y1) * Math.cos(y2) * Math.cos(x2 - x1)));
+    }
+
+    /**
+     * 计算折线或者点数组的长度
+     * @param {Polyline|Array<Point>} polyline 折线对象或者点数组
+     * @returns {Number} 折线或点数组对应的长度
+     */
+    GeoUtils.getPolylineDistance = function(polyline){
+        //检查类型
+        if(polyline instanceof BMap.Polyline ||
+            polyline instanceof Array){
+            //将polyline统一为数组
+            var pts;
+            if(polyline instanceof BMap.Polyline){
+                pts = polyline.getPath();
+            } else {
+                pts = polyline;
+            }
+
+            if(pts.length < 2){//小于2个点，返回0
+                return 0;
+            }
+
+            //遍历所有线段将其相加，计算整条线段的长度
+            var totalDis = 0;
+            for(var i =0; i < pts.length - 1; i++){
+                var curPt = pts[i];
+                var nextPt = pts[i + 1]
+                var dis = GeoUtils.getDistance(curPt, nextPt);
+                totalDis += dis;
+            }
+
+            return totalDis;
+
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * 计算多边形面或点数组构建图形的面积,注意：坐标类型只能是经纬度，且不适合计算自相交多边形的面积
+     * @param {Polygon|Array<Point>} polygon 多边形面对象或者点数组
+     * @returns {Number} 多边形面或点数组构成图形的面积
+     */
+    GeoUtils.getPolygonArea = function(polygon){
+        //检查类型
+        if(!(polygon instanceof BMap.Polygon) &&
+            !(polygon instanceof Array)){
+            return 0;
+        }
+        var pts;
+        if(polygon instanceof BMap.Polygon){
+            pts = polygon.getPath();
+        }else{
+            pts = polygon;
+        }
+
+        if(pts.length < 3){//小于3个顶点，不能构建面
+            return 0;
+        }
+
+        var totalArea = 0;//初始化总面积
+        var LowX = 0.0;
+        var LowY = 0.0;
+        var MiddleX = 0.0;
+        var MiddleY = 0.0;
+        var HighX = 0.0;
+        var HighY = 0.0;
+        var AM = 0.0;
+        var BM = 0.0;
+        var CM = 0.0;
+        var AL = 0.0;
+        var BL = 0.0;
+        var CL = 0.0;
+        var AH = 0.0;
+        var BH = 0.0;
+        var CH = 0.0;
+        var CoefficientL = 0.0;
+        var CoefficientH = 0.0;
+        var ALtangent = 0.0;
+        var BLtangent = 0.0;
+        var CLtangent = 0.0;
+        var AHtangent = 0.0;
+        var BHtangent = 0.0;
+        var CHtangent = 0.0;
+        var ANormalLine = 0.0;
+        var BNormalLine = 0.0;
+        var CNormalLine = 0.0;
+        var OrientationValue = 0.0;
+        var AngleCos = 0.0;
+        var Sum1 = 0.0;
+        var Sum2 = 0.0;
+        var Count2 = 0;
+        var Count1 = 0;
+        var Sum = 0.0;
+        var Radius = EARTHRADIUS; //6378137.0,WGS84椭球半径
+        var Count = pts.length;
+        for (var i = 0; i < Count; i++) {
+            if (i == 0) {
+                LowX = pts[Count - 1].lng * Math.PI / 180;
+                LowY = pts[Count - 1].lat * Math.PI / 180;
+                MiddleX = pts[0].lng * Math.PI / 180;
+                MiddleY = pts[0].lat * Math.PI / 180;
+                HighX = pts[1].lng * Math.PI / 180;
+                HighY = pts[1].lat * Math.PI / 180;
+            }
+            else if (i == Count - 1) {
+                LowX = pts[Count - 2].lng * Math.PI / 180;
+                LowY = pts[Count - 2].lat * Math.PI / 180;
+                MiddleX = pts[Count - 1].lng * Math.PI / 180;
+                MiddleY = pts[Count - 1].lat * Math.PI / 180;
+                HighX = pts[0].lng * Math.PI / 180;
+                HighY = pts[0].lat * Math.PI / 180;
+            }
+            else {
+                LowX = pts[i - 1].lng * Math.PI / 180;
+                LowY = pts[i - 1].lat * Math.PI / 180;
+                MiddleX = pts[i].lng * Math.PI / 180;
+                MiddleY = pts[i].lat * Math.PI / 180;
+                HighX = pts[i + 1].lng * Math.PI / 180;
+                HighY = pts[i + 1].lat * Math.PI / 180;
+            }
+            AM = Math.cos(MiddleY) * Math.cos(MiddleX);
+            BM = Math.cos(MiddleY) * Math.sin(MiddleX);
+            CM = Math.sin(MiddleY);
+            AL = Math.cos(LowY) * Math.cos(LowX);
+            BL = Math.cos(LowY) * Math.sin(LowX);
+            CL = Math.sin(LowY);
+            AH = Math.cos(HighY) * Math.cos(HighX);
+            BH = Math.cos(HighY) * Math.sin(HighX);
+            CH = Math.sin(HighY);
+            CoefficientL = (AM * AM + BM * BM + CM * CM) / (AM * AL + BM * BL + CM * CL);
+            CoefficientH = (AM * AM + BM * BM + CM * CM) / (AM * AH + BM * BH + CM * CH);
+            ALtangent = CoefficientL * AL - AM;
+            BLtangent = CoefficientL * BL - BM;
+            CLtangent = CoefficientL * CL - CM;
+            AHtangent = CoefficientH * AH - AM;
+            BHtangent = CoefficientH * BH - BM;
+            CHtangent = CoefficientH * CH - CM;
+            AngleCos = (AHtangent * ALtangent + BHtangent * BLtangent + CHtangent * CLtangent) / (Math.sqrt(AHtangent * AHtangent + BHtangent * BHtangent + CHtangent * CHtangent) * Math.sqrt(ALtangent * ALtangent + BLtangent * BLtangent + CLtangent * CLtangent));
+            AngleCos = Math.acos(AngleCos);
+            ANormalLine = BHtangent * CLtangent - CHtangent * BLtangent;
+            BNormalLine = 0 - (AHtangent * CLtangent - CHtangent * ALtangent);
+            CNormalLine = AHtangent * BLtangent - BHtangent * ALtangent;
+            if (AM != 0)
+                OrientationValue = ANormalLine / AM;
+            else if (BM != 0)
+                OrientationValue = BNormalLine / BM;
+            else
+                OrientationValue = CNormalLine / CM;
+            if (OrientationValue > 0) {
+                Sum1 += AngleCos;
+                Count1++;
+            }
+            else {
+                Sum2 += AngleCos;
+                Count2++;
+            }
+        }
+        var tempSum1, tempSum2;
+        tempSum1 = Sum1 + (2 * Math.PI * Count2 - Sum2);
+        tempSum2 = (2 * Math.PI * Count1 - Sum1) + Sum2;
+        if (Sum1 > Sum2) {
+            if ((tempSum1 - (Count - 2) * Math.PI) < 1)
+                Sum = tempSum1;
+            else
+                Sum = tempSum2;
+        }
+        else {
+            if ((tempSum2 - (Count - 2) * Math.PI) < 1)
+                Sum = tempSum2;
+            else
+                Sum = tempSum1;
+        }
+        totalArea = (Sum - (Count - 2) * Math.PI) * Radius * Radius;
+
+        return totalArea; //返回总面积
+    }
+
+})();//闭包结束
+</script>
+

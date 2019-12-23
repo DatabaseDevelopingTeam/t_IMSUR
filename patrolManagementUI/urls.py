@@ -3,5 +3,6 @@ from . import views
 
 app_name = 'patrolManagementUI'
 urlpatterns = [
-    path('', views.patrolManagementUI)
+    path('', views.patrolManagementUI),
+    path('patrolManagementUI/',views.patrolManagement),
 ]
