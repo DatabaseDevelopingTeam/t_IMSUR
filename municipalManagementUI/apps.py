@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
 
-class MunicipalmanagementuiConfig(AppConfig):
-    name = '市政管理'
+class MunicipalManagementUIConfig(AppConfig):
+    name = 'municipalManagementUI'
+    verbose_name = '市政信息管理'

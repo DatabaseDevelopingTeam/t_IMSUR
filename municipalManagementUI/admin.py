@@ -1,16 +1,40 @@
 from django.contrib import admin
-from .models import 职工
+from . import models
 
 
-@admin.register(职工)
+@admin.register(models.路面类型)
+class RoadTypeAdmin(admin.ModelAdmin):
+    list_display_links = ['路面类型']
+    list_display = ['路面类型']
+
+
+@admin.register(models.路面损坏类型)
+class RoadDamageTypeAdmin(admin.ModelAdmin):
+    list_display_links = ['损坏类型']
+    list_display = ['损坏类型']
+
+
+@admin.register(models.车行道)
+class RoadWayAdmin(admin.ModelAdmin):
+    list_display_links = ['车行道编号']
+    list_display = ['车行道编号']
+
+
+@admin.register(models.道路基本档案)
+class RoadBasicArchiveAdmin(admin.ModelAdmin):
+    list_display_links = ['道路名称']
+    list_display = ['道路名称']
+
+
+@admin.register(models.职工)
 class EmployeeAdmin(admin.ModelAdmin):
     # 要展示的字段
-    list_display = [id,'工号', '姓名', '性别', '职能']
+    list_display = [id, '工号', '姓名', '性别', '职能']
     # 可以点击的字段
     list_display_links = ['工号']
-    list_filter = ['性别','职能']
+    list_filter = ['性别', '职能']
     # 可以搜索的字段
-    search_fields = ['工号','姓名']
+    search_fields = ['工号', '姓名']
     # 可以在全表中直接修改的字段
     # list_editable = ['姓名', '性别', '职能']
     # 排除字段

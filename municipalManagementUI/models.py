@@ -5,6 +5,19 @@ from django.db import models
 class 路面类型(models.Model):
     路面类型 = models.CharField('路面类型', primary_key=True, max_length=12)
 
+    class Meta:
+        verbose_name_plural = '路面类型'
+        verbose_name = '路面类型'
+
+
+class 路面损坏类型(models.Model):
+    路面类型外键 = models.ForeignKey(路面类型, on_delete=models.CASCADE, related_name='rn路面类型')
+    损坏类型 = models.CharField('损坏类型', max_length=40, primary_key=True)
+
+    class Meta:
+        verbose_name_plural = '路面损坏类型'
+        verbose_name = '路面损坏类型'
+
 
 class 道路等级(models.Model):
     道路等级 = models.CharField('道路等级', primary_key=True, max_length=4, choices=(
@@ -39,6 +52,10 @@ class 道路基本档案(models.Model):
     养护单位 = models.CharField('养护单位', max_length=50, null=False)
     建造年月 = models.DateField('建造年月', null=False)
 
+    class Meta:
+        verbose_name_plural = '道路基本档案'
+        verbose_name = '道路基本档案'
+
 
 class 车行道(models.Model):
     车行道编号 = models.AutoField('车行道编号', primary_key=True)
@@ -57,6 +74,10 @@ class 车行道(models.Model):
     侧石长度 = models.FloatField('侧石长度', null=False)
     平石类型 = models.CharField('平石类型', max_length=12, null=False)
     平石长度 = models.FloatField('平石长度', null=False)
+
+    class Meta:
+        verbose_name_plural = '道路的车行道档案'
+        verbose_name = '道路的车行道档案'
 
 
 class 职工(models.Model):
