@@ -20,10 +20,36 @@ body {
     padding: 0;
 }
 
+.block:hover{
+    box-shadow: 0 15px 30px rgba(119,119,119,.3);
+    transition-duration: .5s;
+}
+
+#block_basic_info:hover{
+    transform:translateY(-5px);
+}
+
+#block_evaluate:hover{
+    transform:translateY(5px);
+}
+
+#block_road_management:hover{
+    transform:translateY(-5px);
+}
+
+#block_employee_management:hover{
+    transform:translateY(5px);
+}
+
 a{
     text-decoration: none;
     /*text-align: center;    */
     font-size: 1.1em;
+}
+
+a:hover{
+    text-decoration: none;
+    font-size: 1.2em;
 }
 
 .transform{

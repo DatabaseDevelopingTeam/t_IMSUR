@@ -29,7 +29,7 @@
 
     //创建地图实例
     var map = L.map("map", {
-        center: [31.59, 120.29],
+        center: [29.487967,106.57036],
         zoom: 18,
         layers: [oms],
         scrollWheelZoom: false
@@ -72,11 +72,18 @@
         <p><input name = "roadId" type="text" class="form-control" placeholder="道路编号" required autofocus></p>\
         <p><input name = "roadName" type="text" class="form-control" placeholder="道路名称" required autofocus></p>\
         <p>\
+            <select class="form-control" name="roadLevel" >\
+                <option value="1">一级</option>\
+                <option value="2">二级</option>\
+                <option value="3">三级</option>\
+            </select> \
+        </p>\
+        <p>\
             <select name = "roadType" class="form-control">\
                 <option>沥青路面</option>\
                 <option>混凝土路面</option>\
-            </select><\
-        /p>\
+            </select>\
+        </p>\
         <p><input id="addRoadBasicInfoSubmit" class="form-control center-block" type="submit" value="提交" style="width: 50%;"></p>\
     </form>';
 
