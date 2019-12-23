@@ -8,7 +8,7 @@ class 道路等级(models.Model):
 
     class Meta:
         verbose_name_plural = '道路等级'
-        verbose_name: str = '道路等级'
+        verbose_name = '道路等级'
 
 
 # Create your models here.
