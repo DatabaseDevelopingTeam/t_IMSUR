@@ -2,4 +2,5 @@ from django.apps import AppConfig
 
 
 class PatrolmanagementuiConfig(AppConfig):
-    name = '巡查管理'
+    name = 'patrolManagementUI'
+    verbose_name='巡查信息管理'
