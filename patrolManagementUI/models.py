@@ -6,7 +6,7 @@ from municipalManagementUI import models as model_municipalManagementUI
 
 class 定期任务(models.Model):
     巡查日期=models.DateField('巡查日期')
-    道路基本档案=models.ForeignKey(model_municipalManagementUI.道路基本档案,on_delete=models.CASCADE)
+    道路基本档案=models.ForeignKey(model_municipalManagementUI.道路基本档案,on_delete=models.CASCADE,null=True)
 
     class Meta:
         verbose_name = '定期任务'
