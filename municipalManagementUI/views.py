@@ -15,3 +15,7 @@ def municipalManagementUI(request):
 
 def roadManagement(request):
     return render(request,'roadManagement.html')
+
+
+def addRoadBasicInfo(request):
+    return

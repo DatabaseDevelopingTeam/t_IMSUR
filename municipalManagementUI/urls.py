@@ -4,5 +4,6 @@ from . import views
 app_name = 'municipalManagementUI'
 urlpatterns = [
     path('', views.municipalManagementUI),
-    path('roadManagement/',views.roadManagement),
+    path('roadManagement/', views.roadManagement),
+    path('roadManagement/addRoadBasicInfo/', views.addRoadBasicInfo)
 ]

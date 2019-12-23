@@ -1,4 +1,4 @@
- /*地图层*/
+    /*地图层*/
         //高德地图
         // var Gaode = L.tileLayer.chinaProvider('GaoDe.Normal.Map', {
         //     maxZoom: 18,
@@ -68,15 +68,17 @@
         //     });
         // })
 
-        var popupContent = '<div class="container" id="popup" style="width: 200px;">\
-        <p><input type="text" class="form-control" placeholder="道路编号" required autofocus></p>\
-        <p><input type="text" class="form-control" placeholder="道路名称" required autofocus></p>\
-        <p><select class="form-control">\
-              <option>沥青路面</option>\
-              <option>混凝土路面</option>\
-        </select></p>\
-        <p><input class="form-control center-block" type="submit" value="提交" style="width: 50%;"></p>\
-    </div>';
+        var popupContent = '<form class="container" id="popupForm" style="width: 200px;">\
+        <p><input name = "roadId" type="text" class="form-control" placeholder="道路编号" required autofocus></p>\
+        <p><input name = "roadName" type="text" class="form-control" placeholder="道路名称" required autofocus></p>\
+        <p>\
+            <select name = "roadType" class="form-control">\
+                <option>沥青路面</option>\
+                <option>混凝土路面</option>\
+            </select><\
+        /p>\
+        <p><input id="addRoadBasicInfoSubmit" class="form-control center-block" type="submit" value="提交" style="width: 50%;"></p>\
+    </form>';
 
     	var onPopupSubmit = function () {
 
@@ -103,3 +105,25 @@
         map.on('click',displayMarker);
 
     /*事件监听*/
+
+    /*道路添加*/
+    function createXMLHttpRequest() {
+        let xmlHttp;
+        try{
+            xmlHttp = new XMLHttpRequest();
+        }
+        catch (e) {
+            try {
+                // 适用于IE6
+                xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+            }catch (e) {
+                try {
+                    // 适用于IE5.5，以及IE更早版本
+                    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }catch (e) {
+
+                }
+            }
+        }
+        return xmlHttp;
+    }
