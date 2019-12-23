@@ -3,20 +3,21 @@
     padding: 0;
 }
 
+
 html {
     width: 100%;
     height: 100%;
 }
 
 body {
+    background: url('../images/cq1.jpg') no-repeat fixed center;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
     width: 100%;
     height: 100%;
-    position: absolute;
-    /*background-size: cover;*/
-    /*-webkit-background-size: cover;*/
-    /*-o-background-size: cover;*/
-    background: url("../images/cq1.jpg") no-repeat fixed center;
-
+    margin: 0;
+    padding: 0;
 }
 
 a{
@@ -25,15 +26,15 @@ a{
     font-size: 1.1em;
 }
 
-#transbox{
-    width: 50%;
+.transform{
+    width: 100%;
     height: 43%;
     position: fixed;
-    left: 25%;
+    /*left: 25%;*/
     top: 20%;
     /*margin: 0 auto;*/
     background: white;
-    opacity: 0.5;
+    opacity: 0;
 }
 
 #wrap {
