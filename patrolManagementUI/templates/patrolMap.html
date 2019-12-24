@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% extends "common/base.html" %}
+<html lang="zh">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>可视化巡查管理</title>
+
+    {% block privatecss %}
+        <link href={% static "css/GeoUtilsManagement.css" %} rel="stylesheet" type="text/css">
+        <link href={% static "css/map.css" %} rel="stylesheet" type="text/css">
+    {% endblock %}
+<style>
+    html,body{
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+</head>
+<body>
+    {% block bodycontent %}
+    <div class="leftroad">
+     <div class="row">
+     <div class="col-xs-6 col-md-4 table-responsive">
+      <table class="table table-bordered table table-hover" width="200px">
+          <tr>
+        <th width="30px">道路编号</th>
+        <th width="30px">道路名称</th>
+        </tr>
+        <tr>
+        <td>R0001</td>
+        <td>明德路</td>
+        </tr>
+         </table>
+     </div>
+     </div>
+    </div>
+        <div id="rightmap">
+        </div>
+    {% endblock %}
+
+    {% block privatejs %}
+        <script src={% static "js/map.js" %}></script>
+    {% endblock %}
+</body>
+</html>

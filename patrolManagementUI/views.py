@@ -12,4 +12,4 @@ def patrolManagementUI(request):
     }
     return render(request,'patrolManagement.html',context=user_dict)
 def patrolManagement(request):
-    return render(request,'map.html')
+    return render(request,'patrolMap.html')
