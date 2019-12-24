@@ -17,7 +17,7 @@
         var baseLayers = {
             // "高德地图": Gaode,
             "OMS":oms
-        }
+        };
     /*地图图层*/
 
 
@@ -29,7 +29,7 @@
 
     //创建地图实例
     var map = L.map("map", {
-        center: [29.487967,106.57036],
+        center: [29.507165702686823, 106.55347824096681],
         zoom: 18,
         layers: [oms],
         scrollWheelZoom: false
@@ -69,8 +69,8 @@
         // })
 
         //添加道路的pop框
-        var popupContent = '<form "class="container" id="popupForm" style="width: 200px;">\
-            <p><input name = "roadId" id="roadId" type="text" onchange="onCheckIfRoadIdExists()" class="form-control" placeholder="道路编号" required autofocus></p>\
+    const popupContent = '<form "class="container" id="popupForm" style="width: 200px;">\
+            <p><input onchange="onCheckIfRoadIdExists()" name = "roadId" id="roadId" type="text" class="form-control" placeholder="道路编号" required autofocus></p>\
             <span style="color: red; margin: 0;padding: 0;" id="wrongInfo"></span>\
             <p><input name = "roadName" id="roadName" type="text" class="form-control" placeholder="道路名称" required autofocus></p>\
             <p>\
@@ -89,7 +89,7 @@
             <p><input onclick="addRoadBasicInfo();return false;" class="form-control center-block" type="button" value="提交" style="width: 50%;"></p>\
         </form>';
 
-        //异步请求道路编号是否重复
+    //异步请求道路编号是否重复
         function onCheckIfRoadIdExists(){
             var roadId = $("[name='roadId']").val();
             // console.log(roadId);
@@ -134,35 +134,49 @@
 
                     // roadType:$("#roadType option:selected").val(),
                 },
-                success:addMarker,
-                error:function () {
+                success:function(data,status){
+                    currentMarker.closePopup();
+                    // addMarker(currentLatLng);
+                    // currentPopup.openPopup();
+                    // $(".leaflet-popup-close-button").trigger("click");
+                },
+                error:function (xmlHttpRequest,data,status) {
                     console.log("添加失败!");
+                    currentMarker.remove();
                 }
             });
         }
 
-        var addMarker = function (data,status) {
-            // L.marker(currentLatLng).addTo(map);
+        var addMarker = function (latlng) {
+            return L.marker(latlng).addTo(map);
         };
 
 
         var currentLatLng;
+        var currentPopup;
+        var currentMarker;
     	var addRoad = function(e){
     		currentLatLng = [e.latlng.lat,e.latlng.lng];
-    		// console.log(currentLatLng);
+    		console.log(currentLatLng);
             var popupOptions = {
-            	autoClose:true,
-            	closeOnEscapeKey:false,
-            	closeOnClick:true,
+            	// autoClose:false,
+            	// closeOnEscapeKey:false,
+            	// closeOnClick:true,
             }
 
-            L.marker([e.latlng.lat,e.latlng.lng]).addTo(map)
+            currentMarker = L.marker([e.latlng.lat,e.latlng.lng]).addTo(map)
                 .bindPopup(popupContent)
                 .openPopup();
-            // L.popup(popupOptions)
+
+            currentMarker.on("popupclose",function () {
+                currentMarker.remove();
+            })
+
+            // currentPopup = L.popup(popupOptions)
             // .setLatLng([e.latlng.lat,e.latlng.lng])
             // .setContent(popupContent)
             // .openOn(map);
+
 
             // $("#addRoadBasicInfoSubmit").click(function () {
             //     $.ajax({
@@ -182,13 +196,14 @@
             //             console.log(data);
             //         }
             //
-            // });
+            //     });
             //
             //
             //  });
+
             // var popUp = marker.bindPopup()
             // .openPopup();
-    	}
+    	};
 
 
         map.on('click',addRoad);
