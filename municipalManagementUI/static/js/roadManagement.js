@@ -135,6 +135,7 @@
                     // roadType:$("#roadType option:selected").val(),
                 },
                 success:function(data,status){
+                    closePopupFlag = false;
                     currentMarker.closePopup();
                     // addMarker(currentLatLng);
                     // currentPopup.openPopup();
@@ -142,6 +143,7 @@
                 },
                 error:function (xmlHttpRequest,data,status) {
                     console.log("添加失败!");
+                    closePopupFlag = true;
                     currentMarker.remove();
                 }
             });
@@ -152,12 +154,13 @@
         };
 
 
+        var closePopupFlag;
         var currentLatLng;
         var currentPopup;
         var currentMarker;
     	var addRoad = function(e){
     		currentLatLng = [e.latlng.lat,e.latlng.lng];
-    		console.log(currentLatLng);
+    		// console.log(currentLatLng);
             var popupOptions = {
             	// autoClose:false,
             	// closeOnEscapeKey:false,
@@ -169,7 +172,8 @@
                 .openPopup();
 
             currentMarker.on("popupclose",function () {
-                currentMarker.remove();
+                if(closePopupFlag)
+                    currentMarker.remove();
             })
 
             // currentPopup = L.popup(popupOptions)
