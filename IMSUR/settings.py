@@ -102,7 +102,7 @@ USE_L10N = True
 
 USE_TZ = True
 # 静态文件配置
-STATIC_ROOT = '/home/william/PycharmProjects/IMSUR/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'static/')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     'IMSUR/static',

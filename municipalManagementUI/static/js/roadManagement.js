@@ -17,7 +17,7 @@
         var baseLayers = {
             // "高德地图": Gaode,
             "OMS":oms
-        }
+        };
     /*地图图层*/
 
 
@@ -29,7 +29,7 @@
 
     //创建地图实例
     var map = L.map("map", {
-        center: [29.487967,106.57036],
+        center: [29.507165702686823, 106.55347824096681],
         zoom: 18,
         layers: [oms],
         scrollWheelZoom: false
@@ -157,7 +157,7 @@
         var currentMarker;
     	var addRoad = function(e){
     		currentLatLng = [e.latlng.lat,e.latlng.lng];
-    		// console.log(currentLatLng);
+    		console.log(currentLatLng);
             var popupOptions = {
             	// autoClose:false,
             	// closeOnEscapeKey:false,
