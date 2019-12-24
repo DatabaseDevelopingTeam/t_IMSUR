@@ -10,7 +10,7 @@ html {
 }
 
 body {
-    background: url('../images/cq1.jpg') no-repeat fixed center;
+    background: url('../images/back.jpg') no-repeat fixed center;
     background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
