@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from municipalManagementUI import models
+from patrolManagementUI import models as model2
+import datetime
+
 
 # Create your views here.
 def patrolManagementUI(request):
@@ -11,5 +14,9 @@ def patrolManagementUI(request):
         'position': '市政道路管理' if user.职能 == '1' else '道路巡查养护'
     }
     return render(request,'patrolManagement.html',context=user_dict)
+
+
 def patrolManagement(request):
+    today=datetime.date.today();
+    Tasks=model2.日常巡查.objects.get(巡查日期=today)
     return render(request,'patrolMap.html')

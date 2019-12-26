@@ -21,23 +21,22 @@
 <body>
     {% block bodycontent %}
     <div class="leftroad">
-     <div class="row">
-     <div class="col-xs-6 col-md-4 table-responsive">
-      <table class="table table-bordered table table-hover" width="200px">
-          <tr>
-        <th width="30px">道路编号</th>
-        <th width="30px">道路名称</th>
-        </tr>
-        <tr>
-        <td>R0001</td>
-        <td>明德路</td>
-        </tr>
-         </table>
-     </div>
-     </div>
-    </div>
-        <div id="rightmap">
+        <div class="row" style="width: 100%;">
+            <div class="col-xs-6 col-md-4 table-responsive" style="width: 100%;">
+                <table class="table table-bordered table table-hover" width="100%">
+                      <tr>
+                        <th width="50%">道路编号</th>
+                        <th width="50%">道路名称</th>
+                     </tr>
+                    <tr>
+                    <td>R0001</td>
+                    <td>明德路</td>
+                    </tr>
+                </table>
+             </div>
         </div>
+    </div>
+    <div id="rightmap"></div>
     {% endblock %}
 
     {% block privatejs %}

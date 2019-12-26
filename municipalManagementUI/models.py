@@ -23,10 +23,14 @@ class 路面损坏类型(models.Model):
 class 道路等级(models.Model):
     道路等级 = models.CharField('道路等级', primary_key=True, max_length=4, choices=(
         ('1', '一级'), ('2', '二级'), ('3', '三级'), ('4', '四级')))
+    备注 = models.CharField('备注', max_length=100, null=True)
 
     class Meta:
         verbose_name_plural = '道路等级'
         verbose_name = '道路等级'
+
+    def __unicode__(self):
+        return 'nothing'
 
 
 # Create your models here.
@@ -36,7 +40,8 @@ class 道路基本档案(models.Model):
     道路等级 = models.ForeignKey(道路等级, on_delete=models.CASCADE, verbose_name='道路等级', default='1', null=False)
     道路名称 = models.CharField('道路名称', max_length=100, null=False)
 
-    经纬度 = models.CharField('经纬度', max_length=50, null=True)
+    经度 = models.FloatField('经度', null=True)
+    纬度 = models.FloatField('纬度', null=True)
 
     路面等级 = models.CharField('路面等级', max_length=10, null=True)
     道路走向 = models.CharField('道路走向', max_length=100, null=True)
@@ -59,6 +64,25 @@ class 道路基本档案(models.Model):
     class Meta:
         verbose_name_plural = '道路基本档案'
         verbose_name = '道路基本档案'
+
+    def getDict(self):
+        return {
+            'roadId': self.道路编号,
+            'roadName': self.道路名称,
+            'roadLevel': self.道路等级.道路等级,
+            'latlng': [self.纬度, self.经度]
+        }
+
+    def getLatlng(self):
+        return [self.纬度, self.经度]
+
+
+'''
+    share/hadoop/common/*.jar
+    share/hadoop/common/lib/*.jar
+    share/hadoop/hdfs/*.jar
+    share/hadoop/hdfs/lib/*.jar
+'''
 
 
 class RoadForm(ModelForm):

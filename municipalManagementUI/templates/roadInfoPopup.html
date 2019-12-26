@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% extends 'common/base.html' %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+   {% block bodycontent %}
+       <ul class="list-group container" style="width: 200px;height: 100px;text-align: center;">
+          <li class="list-group-item">{{ roadId }}</li>
+          <li class="list-group-item">{{roadName}}</li>
+          <li class="list-group-item">{{roadLevel}}</li>
+    {#      <li class="list-group-item">{{}}</li>#}
+       </ul>
+   {% endblock %}
+</body>
+</html>
