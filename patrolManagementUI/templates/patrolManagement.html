@@ -1,12 +1,19 @@
 <!DOCTYPE html>
+{% extends "common/base.html" %}
 <html>
 {% load static %}
 <head>
     <meta charset="utf-8">
-    <link href={% static "css/Management.css" %} rel="stylesheet">
-    <title>养护人员管理</title>
+    {% block privatecss %}
+        <link href={% static "css/Management.css" %} rel="stylesheet">
+    {% endblock %}
+
+    {% block title %}
+        <title>养护人员管理</title>
+    {% endblock %}
 </head>
 <body>
+    {% block bodycontent %}
     <div class="transform"></div>
     <div id="wrap">
         <div class="block" id="block_basic_info">
@@ -26,18 +33,24 @@
             </div>
         </div>
 
-<div class="patrol"></div>
-    <div class="block1"></div>
-    <a href="/patrolManagement/map/"><div class="block2">
-        <img src="../static/images/ptrol.png"><br/>
-        <br>
-        <div class="text2">
-          巡查管理<br/>
-=======
+{#        <div class="patrol"></div>#}
+{#        <div class="block1"></div>#}
+
+{#        <a href="/patrolManagement/map/">#}
+{#             <div class="block2">#}
+{#                <img src="../static/images/ptrol.png" width="64px" height="64px" ><br/>#}
+{#                <br>#}
+{#                <div class="text2">#}
+{#                  巡查管理<br/>#}
+{#                </div>#}
+{#             </div>#}
+{#        </a>#}
+
+
         <div class="block" id="block_evaluate">
             <img src={% static "images/记录.png" %}>
             <p style="margin-top: 55%;">
-                <a href="#" style="color:white;text-align:center;">巡查管理</a>
+                <a href="/patrolManagement/map/" style="color:white;text-align:center;">巡查管理</a>
             </p>
         </div>
 
@@ -56,8 +69,10 @@
                     <a href="/admin/">定期任务</a>
                 </p>
             </div>
->>>>>>> a6c6308e28ecb45d7674fed6aaa336e1173ca8ba
         </div>
+
     </div>
+    {% endblock %}
+
 </body>
 </html>
