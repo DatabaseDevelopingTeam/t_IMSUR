@@ -8,7 +8,7 @@ from .models import 日常巡查
 @admin.register(定期巡查)
 class RegularTaskAdmin(admin.ModelAdmin):
     # 要展示的字段
-    list_display = [id, '巡查日期']
+    list_display = [id, '巡查日期','巡查道路']
     # 可以点击的字段
     list_display_links = ['巡查日期']
     list_filter = ['巡查日期']
@@ -19,7 +19,7 @@ class RegularTaskAdmin(admin.ModelAdmin):
 @admin.register(日常巡查)
 class DailyTaskAdmin(admin.ModelAdmin):
     #要展示的字段
-    list_display=[id,'巡查日期']
+    list_display=[id,'巡查日期','巡查道路']
     #可以点击的字段
     list_display_links=['巡查日期']
     list_filter=['巡查日期']
