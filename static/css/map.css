@@ -1,0 +1,22 @@
+html,
+body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.leftroad {
+    width: 20%;
+    float:left;
+    height: 100%;
+    border: 1px solid #3B6273;
+}
+
+#rightmap {
+    width: 80%;
+    height: 100%;
+    float:right;
+    border: 1px solid #3B6273;
+    margin-right:-4px
+}
