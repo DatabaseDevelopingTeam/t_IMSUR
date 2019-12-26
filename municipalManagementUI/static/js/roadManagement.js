@@ -67,6 +67,23 @@
                      //添加道路麻点
                     latlng = data[i]['latlng'];
                     var marker = addMarker(latlng);
+                    ////绑定popup信息框
+                     $.ajax({
+                        type:"POST",
+                        url:"/municipalManagement/roadManagement/getRoadInfoPopup/",
+                         async:false,
+                        cache:true,
+                        data:{
+                            roadId:roadId,
+                            },
+                        success:function(data,status){
+                            console.log("bind");
+                            marker.bindPopup(data);
+                        },
+                        error:function () {
+
+                        }
+                    });
                 }
             },
             error:function () {
@@ -74,7 +91,7 @@
             }
         })
 
-        //绑定popup信息框
+
     };
 
     loadAllRoads();
@@ -220,7 +237,7 @@
             	// autoClose:false,
             	// closeOnEscapeKey:false,
             	// closeOnClick:true,
-            }
+            };
 
             currentMarker = L.marker([e.latlng.lat,e.latlng.lng]).addTo(map)
                 .bindPopup(roadAddPopupContent)
