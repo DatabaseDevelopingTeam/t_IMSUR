@@ -51,7 +51,33 @@
     /*添加控件*/
 
 
+    var loadAllRoads = function () {
+        //得到经纬度与道路编号
+        $.ajax({
+          type:"POST",
+            url:"/municipalManagement/roadManagement/getAllRoadsLatLng/",
+            async:true,
+            cache:true,
+            data:{
 
+            },
+            success:function (data) {
+                for(var i =0;i<data.length;i++){
+                    roadId = data[i]['roadId'];
+                     //添加道路麻点
+                    latlng = data[i]['latlng'];
+                    var marker = addMarker(latlng);
+                }
+            },
+            error:function () {
+                console.log("服务器错误!");
+            }
+        })
+
+        //绑定popup信息框
+    };
+
+    loadAllRoads();
 
 
     /*事件监听*/
@@ -69,7 +95,7 @@
         // })
 
         //添加道路的pop框
-    const popupContent = '<form "class="container" id="popupForm" style="width: 200px;">\
+    const roadAddPopupContent = '<form "class="container" id="popupForm" style="width: 200px;">\
             <p><input onchange="onCheckIfRoadIdExists()" name = "roadId" id="roadId" type="text" class="form-control" placeholder="道路编号" required autofocus></p>\
             <span style="color: red; margin: 0;padding: 0;" id="wrongInfo"></span>\
             <p><input name = "roadName" id="roadName" type="text" class="form-control" placeholder="道路名称" required autofocus></p>\
@@ -88,6 +114,13 @@
             </p>\
             <p><input onclick="addRoadBasicInfo();return false;" class="form-control center-block" type="button" value="提交" style="width: 50%;"></p>\
         </form>';
+
+    //显示道路信息的pop框
+    var roadInfoPopupContent = '<html>' +
+        '<body>' +
+        '<p>nothing at all</p>' +
+        '</body>' +
+        '</html>';
 
     //异步请求道路编号是否重复
         function onCheckIfRoadIdExists(){
@@ -131,17 +164,41 @@
                     roadId:$("#roadId").val(),
                     roadName:$("#roadName").val(),
                     roadLevel:$("#roadLevel option:selected").val(),
+                    lng :currentLatLng[1],
+                    lat:currentLatLng[0],
+
 
                     // roadType:$("#roadType option:selected").val(),
                 },
                 success:function(data,status){
+                    closePopupFlag = false;
                     currentMarker.closePopup();
+                    currentMarker.unbindPopup();
+
+                    $.ajax({
+                        type:"POST",
+                        url:"/municipalManagement/roadManagement/getRoadInfoPopup/",
+                         async:true,
+                        cache:true,
+                        data:{
+                            roadId:$("#roadId").val(),
+                            },
+                        success:function(data,status){
+                           currentMarker.bindPopup(data);
+                        },
+                        error:function () {
+
+                        }
+                    });
+
+
                     // addMarker(currentLatLng);
                     // currentPopup.openPopup();
                     // $(".leaflet-popup-close-button").trigger("click");
                 },
                 error:function (xmlHttpRequest,data,status) {
                     console.log("添加失败!");
+                    closePopupFlag = true;
                     currentMarker.remove();
                 }
             });
@@ -152,12 +209,13 @@
         };
 
 
+        var closePopupFlag=true;
         var currentLatLng;
         var currentPopup;
         var currentMarker;
     	var addRoad = function(e){
     		currentLatLng = [e.latlng.lat,e.latlng.lng];
-    		console.log(currentLatLng);
+    		// console.log(currentLatLng);
             var popupOptions = {
             	// autoClose:false,
             	// closeOnEscapeKey:false,
@@ -165,16 +223,19 @@
             }
 
             currentMarker = L.marker([e.latlng.lat,e.latlng.lng]).addTo(map)
-                .bindPopup(popupContent)
+                .bindPopup(roadAddPopupContent)
                 .openPopup();
 
             currentMarker.on("popupclose",function () {
-                currentMarker.remove();
+                if(closePopupFlag){
+                    currentMarker.remove();
+                }
+
             })
 
             // currentPopup = L.popup(popupOptions)
             // .setLatLng([e.latlng.lat,e.latlng.lng])
-            // .setContent(popupContent)
+            // .setContent(roadAddPopupContent)
             // .openOn(map);
 
 

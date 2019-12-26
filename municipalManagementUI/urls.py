@@ -6,5 +6,7 @@ urlpatterns = [
     path('', views.municipalManagementUI),
     path('roadManagement/', views.roadManagement),
     path('roadManagement/addRoadBasicInfo/', views.addRoadBasicInfo),
-    path('roadManagement/checkIfRoadIdExists/',views.checkIfRoadIdExists),
+    path('roadManagement/checkIfRoadIdExists/', views.checkIfRoadIdExists),
+    path('roadManagement/getRoadInfoPopup/', views.getRoadInfoPopup),
+    path('roadManagement/getAllRoadsLatLng/', views.getAllRoadsLatLng),
 ]
