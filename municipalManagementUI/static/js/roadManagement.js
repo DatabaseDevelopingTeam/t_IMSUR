@@ -233,16 +233,19 @@
             // closeOnClick:true,
         };
 
-        currentMarker = L.marker([e.latlng.lat,e.latlng.lng]).addTo(map)
-            .bindPopup(roadAddPopupContent)
-            .openPopup();
+        // currentMarker = L.marker([e.latlng.lat,e.latlng.lng]).addTo(map)
+        //     .bindPopup(roadAddPopupContent)
+        //     .openPopup();
+        currentPopup = L.popup()
+            .setLatLng(currentLatLng)
+            .setContent(roadAddPopupContent)
+            .openOn(map);
 
-        currentMarker.on("popupclose",function () {
-            if(closePopupFlag){
-                currentMarker.remove();
-            }
-
-        })
+        // currentMarker.on("popupclose",function () {
+        //     if(cl.osePopupFlag){
+        //         currentMarker.remove();
+        //     }
+        // });
     };
     map.on('click',addRoad);
 

@@ -66,8 +66,7 @@ class 道路基本档案(models.Model):
         verbose_name = '道路基本档案'
 
     def __str__(self):
-        return self.道路编号+'  ' + self.道路名称
-
+        return self.道路编号 + '  ' + self.道路名称
 
     def getDict(self):
         return {
@@ -79,14 +78,6 @@ class 道路基本档案(models.Model):
 
     def getLatlng(self):
         return [self.纬度, self.经度]
-
-
-'''
-    share/hadoop/common/*.jar
-    share/hadoop/common/lib/*.jar
-    share/hadoop/hdfs/*.jar
-    share/hadoop/hdfs/lib/*.jar
-'''
 
 
 class RoadForm(ModelForm):
