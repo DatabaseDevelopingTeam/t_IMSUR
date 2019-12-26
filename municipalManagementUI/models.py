@@ -65,6 +65,10 @@ class 道路基本档案(models.Model):
         verbose_name_plural = '道路基本档案'
         verbose_name = '道路基本档案'
 
+    def __str__(self):
+        return self.道路编号+'  ' + self.道路名称
+
+
     def getDict(self):
         return {
             'roadId': self.道路编号,

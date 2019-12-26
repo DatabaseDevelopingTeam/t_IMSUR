@@ -178,23 +178,22 @@
     };
 
     //调整道路麻点图标
-    var adjustMarkerIcon = function (marker,level) {
-        var iconOptions = {
-            iconUrl: '/static/images/level1.png',
-            iconSize: [80, 80],
-            iconAnchor: [22, 94],
-            popupAnchor: [-3, -76],
-        };
+  var iconOptions = {
+        iconUrl: '',
+        iconSize: [16*4, 19*4],
+        iconAnchor: [16*4-31,19*4],
+        popupAnchor: [0,-19*4],
+    };
+  var adjustMarkerIcon = function (marker,level) {
 
-      if(level==='1'){
+      iconUrl = level==='1'?'/static/images/1.png':(level==='2'?'/static/images/2.png':'/static/images/3.png');
 
-      }else if (level==='2'){
-        iconOptions['iconUrl'] = "/static/images/level2.png";
-      }else if(level === '3'){
-        iconOptions['iconUrl'] = "/static/images/level3.png";
-      }
-      var myIcon = L.icon(iconOptions);
-      marker.setIcon(myIcon);
+      marker.setIcon(L.icon({
+        iconUrl: iconUrl,
+        iconSize: [16*4, 19*4],
+        iconAnchor: [16*4-31,19*4],
+        popupAnchor: [0,-19*4],
+      }));
     };
 
     //获取道路添加pop框
