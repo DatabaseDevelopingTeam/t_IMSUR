@@ -9,4 +9,5 @@ urlpatterns = [
     path('roadManagement/checkIfRoadIdExists/', views.checkIfRoadIdExists),
     path('roadManagement/getRoadInfoPopup/', views.getRoadInfoPopup),
     path('roadManagement/getAllRoadsLatLng/', views.getAllRoadsLatLng),
+    path('roadManagement/getRoadAddPopupContent/',views.getRoadAddPopupContent),
 ]

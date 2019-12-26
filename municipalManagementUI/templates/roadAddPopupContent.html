@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form class="container" id="popupForm" style="width: 200px;">
+     <p>
+        <input onchange="onCheckIfRoadIdExists()" name = "roadId" id="roadId" type="text" class="form-control" placeholder="道路编号" required autofocus>
+    </p>
+    <span style="color: red; margin: 0;padding: 0;" id="wrongInfo"></span>
+
+    <p>
+        <input name = "roadName" id="roadName" type="text" class="form-control" placeholder="道路名称" required autofocus>
+    </p>
+
+    <p>
+        <select class="form-control" id="roadLevel" name="roadLevel" >
+            <option value="1">一级</option>
+            <option value="2">二级</option>
+            <option value="3">三级</option>
+        </select>
+    </p>
+
+    <p>
+        <select name = "roadType" id="roadType" class="form-control">
+            <option>沥青路面</option>
+            <option>混凝土路面</option>
+        </select>
+    </p>
+
+    <p>
+        <input onclick="addRoadBasicInfo();return false;" class="form-control center-block" type="button" value="提交" style="width: 50%;">
+    </p>
+</form>
+</body>
+</html>

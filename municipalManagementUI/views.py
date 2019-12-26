@@ -57,5 +57,10 @@ def getAllRoadsLatLng(request):
     latlngs = []
     for singleRoad in models.道路基本档案.objects.all():
         latlngs.append({'roadId': singleRoad.道路编号,
-                        'latlng': singleRoad.getLatlng()})
+                        'latlng': singleRoad.getLatlng(),
+                        'roadLevel': singleRoad.道路等级.道路等级, })
     return JsonResponse(latlngs, safe=False)
+
+
+def getRoadAddPopupContent(request):
+    return render(request, 'roadAddPopupContent.html')

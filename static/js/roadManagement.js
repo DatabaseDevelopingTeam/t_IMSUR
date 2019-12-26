@@ -50,7 +50,7 @@
         // }).addTo(map);
     /*添加控件*/
 
-
+    //初始化地图
     var loadAllRoads = function () {
         //得到经纬度与道路编号
         $.ajax({
@@ -64,9 +64,28 @@
             success:function (data) {
                 for(var i =0;i<data.length;i++){
                     roadId = data[i]['roadId'];
-                     //添加道路麻点
                     latlng = data[i]['latlng'];
+                    roadLevel = data[i]['roadLevel'];
+                    //添加道路麻点
                     var marker = addMarker(latlng);
+                    ////绑定popup信息框
+                     $.ajax({
+                        type:"POST",
+                        url:"/municipalManagement/roadManagement/getRoadInfoPopup/",
+                         async:false,
+                        cache:true,
+                        data:{
+                            roadId:roadId,
+                            },
+                        success:function(data,status){
+                            marker.bindPopup(data);
+                             //更换图标
+                           adjustMarkerIcon(marker,roadLevel);
+                        },
+                        error:function () {
+
+                        }
+                    });
                 }
             },
             error:function () {
@@ -74,7 +93,7 @@
             }
         })
 
-        //绑定popup信息框
+
     };
 
     loadAllRoads();
@@ -185,6 +204,8 @@
                             },
                         success:function(data,status){
                            currentMarker.bindPopup(data);
+                           //更换图标
+                           adjustMarkerIcon(currentMarker,$("#roadLevel option:selected").val());
                         },
                         error:function () {
 
@@ -208,6 +229,25 @@
             return L.marker(latlng).addTo(map);
         };
 
+        //调整道路麻点图标
+        var adjustMarkerIcon = function (marker,level) {
+            var iconOptions = {
+                iconUrl: '/static/images/level1.png',
+                iconSize: [80, 80],
+                iconAnchor: [22, 94],
+                popupAnchor: [-3, -76],
+            };
+
+          if(level==='1'){
+
+          }else if (level==='2'){
+            iconOptions['iconUrl'] = "/static/images/level2.png";
+          }else if(level === '3'){
+            iconOptions['iconUrl'] = "/static/images/level3.png";
+          }
+          var myIcon = L.icon(iconOptions);
+          marker.setIcon(myIcon);
+        };
 
         var closePopupFlag=true;
         var currentLatLng;
@@ -220,7 +260,7 @@
             	// autoClose:false,
             	// closeOnEscapeKey:false,
             	// closeOnClick:true,
-            }
+            };
 
             currentMarker = L.marker([e.latlng.lat,e.latlng.lng]).addTo(map)
                 .bindPopup(roadAddPopupContent)
