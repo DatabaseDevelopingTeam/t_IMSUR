@@ -1,61 +1,52 @@
-    /*地图层*/
-        //高德地图
-        // var Gaode = L.tileLayer.chinaProvider('GaoDe.Normal.Map', {
-        //     maxZoom: 18,
-        //     minZoom: 12
-        // });
-        //OMS地图
-        var oms = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-            minZoom: 14,
-            maxZoom: 19,
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            id: 'mapbox.streets'
-        });
-        //地图选择图层
-        var baseLayers = {
-            // "高德地图": Gaode,
-            "OMS":oms
-        };
-    /*地图图层*/
-
-
-    /*引入高德api*/
-
-    /*引入高德api*/
-
-
-
-    //创建地图实例
-    var map = L.map("map", {
-        center: [29.507165702686823, 106.55347824096681],
-        zoom: 18,
-        layers: [oms],
-        scrollWheelZoom: false
+/*变量*/
+    //OMS地图
+    var oms = L.tileLayer(
+        'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' +
+        'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
+        {
+        minZoom: 14,
+        maxZoom: 19,
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        id: 'mapbox.streets'
     });
+    var baseLayers = {
+            "OMS":oms
+        };//地图选择图层
 
+    var map = L.map("map", {
+            center: [29.507165702686823, 106.55347824096681],
+            zoom: 18,
+            layers: [oms],
+            scrollWheelZoom: false
+        });//创建地图实例
 
+    var iconOptions = {
+        iconUrl: '',
+        iconSize: [16*4, 19*4],
+        iconAnchor: [16*4-31,19*4],
+        popupAnchor: [0,-19*4],
+    };
 
+    var closePopupFlag=true;
+    var currentLatLng;
+    var currentPopup;
+    var currentMarker;
+    var roadAddPopupContent = 0;
+    var cachedRoadsLatlng;
 
-
-
-    /*添加控件*/
-        //图层切换控件
-        L.control.layers(baseLayers, null).addTo(map);
-        //缩放控件
-        // L.control.zoom({
-        //     zoomInTitle: '放大',
-        //     zoomOutTitle: '缩小'
-        // }).addTo(map);
-    /*添加控件*/
-
+/*函数*/
+    //重设中心点
+    var resetCenterCoordinate = function (latlngCoordinate) {
+        map.flyTo(latlngCoordinate);
+    };
     //初始化地图
     var loadAllRoads = function () {
         //得到经纬度与道路编号
         $.ajax({
           type:"POST",
-            url:"/municipalManagement/roadManagement/getAllRoadsLatLng/",
+            url:"/municipalManagement/roadManagement/getAllRoadsBasicInfo/",
             async:true,
             cache:true,
             data:{
@@ -95,54 +86,8 @@
 
 
     };
-
-    loadAllRoads();
-
-
-    /*事件监听*/
-        // map.on('click',function outputLngLat(e){
-        //     var gps = [e.latlng.lng,e.latlng.lat];
-        //     console.log(gps);
-        //     AMap.convertFrom(gps, 'gps', function (status, result) {
-        //       console.log(status);
-        //       console.log(result);
-        //       if (result.info != 'ok') {
-        //         var lnglats = result.locations; // Array.<LngLat>
-        //         console.log(lnglats);
-        //       }
-        //     });
-        // })
-
-        //添加道路的pop框
-    const roadAddPopupContent = '<form "class="container" id="popupForm" style="width: 200px;">\
-            <p><input onchange="onCheckIfRoadIdExists()" name = "roadId" id="roadId" type="text" class="form-control" placeholder="道路编号" required autofocus></p>\
-            <span style="color: red; margin: 0;padding: 0;" id="wrongInfo"></span>\
-            <p><input name = "roadName" id="roadName" type="text" class="form-control" placeholder="道路名称" required autofocus></p>\
-            <p>\
-                <select class="form-control" id="roadLevel" name="roadLevel" >\
-                    <option value="1">一级</option>\
-                    <option value="2">二级</option>\
-                    <option value="3">三级</option>\
-                </select> \
-            </p>\
-            <p>\
-                <select name = "roadType" id="roadType" class="form-control">\
-                    <option>沥青路面</option>\
-                    <option>混凝土路面</option>\
-                </select>\
-            </p>\
-            <p><input onclick="addRoadBasicInfo();return false;" class="form-control center-block" type="button" value="提交" style="width: 50%;"></p>\
-        </form>';
-
-    //显示道路信息的pop框
-    var roadInfoPopupContent = '<html>' +
-        '<body>' +
-        '<p>nothing at all</p>' +
-        '</body>' +
-        '</html>';
-
     //异步请求道路编号是否重复
-        function onCheckIfRoadIdExists(){
+    function onCheckIfRoadIdExists(){
             var roadId = $("[name='roadId']").val();
             // console.log(roadId);
              $.ajax({
@@ -169,8 +114,8 @@
                 }
             });
         }
-        //异步添加道路信息到服务器
-        function addRoadBasicInfo() {
+     //异步添加道路信息到服务器
+    function addRoadBasicInfo() {
 
             //bootstrap自动判空
 
@@ -185,15 +130,8 @@
                     roadLevel:$("#roadLevel option:selected").val(),
                     lng :currentLatLng[1],
                     lat:currentLatLng[0],
-
-
-                    // roadType:$("#roadType option:selected").val(),
                 },
                 success:function(data,status){
-                    closePopupFlag = false;
-                    currentMarker.closePopup();
-                    currentMarker.unbindPopup();
-
                     $.ajax({
                         type:"POST",
                         url:"/municipalManagement/roadManagement/getRoadInfoPopup/",
@@ -203,19 +141,16 @@
                             roadId:$("#roadId").val(),
                             },
                         success:function(data,status){
-                           currentMarker.bindPopup(data);
+                            var marker = L.marker(currentLatLng).addTo(map);
+                           marker.bindPopup(data);
                            //更换图标
-                           adjustMarkerIcon(currentMarker,$("#roadLevel option:selected").val());
+                           adjustMarkerIcon(marker,$("#roadLevel option:selected").val());
+                           currentPopup.removeFrom(map);
                         },
                         error:function () {
 
                         }
                     });
-
-
-                    // addMarker(currentLatLng);
-                    // currentPopup.openPopup();
-                    // $(".leaflet-popup-close-button").trigger("click");
                 },
                 error:function (xmlHttpRequest,data,status) {
                     console.log("添加失败!");
@@ -224,89 +159,82 @@
                 }
             });
         }
+    //向地图添加麻点
+    var addMarker = function (latlng) {
+        return L.marker(latlng).addTo(map);
+    };
+    //调整道路麻点图标
+    var adjustMarkerIcon = function (marker,level) {
 
-        var addMarker = function (latlng) {
-            return L.marker(latlng).addTo(map);
-        };
+      iconUrl = level==='1'?'/static/images/1.png':(level==='2'?'/static/images/2.png':'/static/images/3.png');
 
-        //调整道路麻点图标
-        var adjustMarkerIcon = function (marker,level) {
-            var iconOptions = {
-                iconUrl: '/static/images/level1.png',
-                iconSize: [80, 80],
-                iconAnchor: [22, 94],
-                popupAnchor: [-3, -76],
-            };
-
-          if(level==='1'){
-
-          }else if (level==='2'){
-            iconOptions['iconUrl'] = "/static/images/level2.png";
-          }else if(level === '3'){
-            iconOptions['iconUrl'] = "/static/images/level3.png";
-          }
-          var myIcon = L.icon(iconOptions);
-          marker.setIcon(myIcon);
-        };
-
-        var closePopupFlag=true;
-        var currentLatLng;
-        var currentPopup;
-        var currentMarker;
-    	var addRoad = function(e){
-    		currentLatLng = [e.latlng.lat,e.latlng.lng];
-    		// console.log(currentLatLng);
-            var popupOptions = {
-            	// autoClose:false,
-            	// closeOnEscapeKey:false,
-            	// closeOnClick:true,
-            };
-
-            currentMarker = L.marker([e.latlng.lat,e.latlng.lng]).addTo(map)
-                .bindPopup(roadAddPopupContent)
-                .openPopup();
-
-            currentMarker.on("popupclose",function () {
-                if(closePopupFlag){
-                    currentMarker.remove();
+      marker.setIcon(L.icon({
+        iconUrl: iconUrl,
+        iconSize: [16*4, 19*4],
+        iconAnchor: [16*4-31,19*4],
+        popupAnchor: [0,-19*4],
+      }));
+    };
+    //获取道路添加pop框
+    var getAddRoadPopContent = function () {
+        if(roadAddPopupContent === 0)
+        {
+             $.ajax({
+                type:"GET",
+                url:"/municipalManagement/roadManagement/getRoadAddPopupContent/",
+                 async:false,
+                cache:true,
+                data:{},
+                success:function(data,status){
+                    roadAddPopupContent = data;
+                },
+                error:function () {
                 }
+            });
+        }
 
-            })
+        return roadAddPopupContent;
+    };
+    //添加道路到数据库
+    var addRoad = function(e){
+        currentLatLng = [e.latlng.lat,e.latlng.lng];
+        var popupOptions = {
+            // autoClose:false,
+            // closeOnEscapeKey:false,
+            // closeOnClick:true,
+        };
 
-            // currentPopup = L.popup(popupOptions)
-            // .setLatLng([e.latlng.lat,e.latlng.lng])
-            // .setContent(roadAddPopupContent)
-            // .openOn(map);
+        currentPopup = L.popup()
+            .setLatLng(currentLatLng)
+            .setContent(roadAddPopupContent)
+            .openOn(map);
+    };
+    //缓存所有道路经纬度信息
+    var cacheRoadsLatlng = function () {
+        $.ajax({
+            url:"/municipalManagement/roadManagement/getRoadsLatlng/",
+            type:"POST",
+            async:true,
+            cache:true,
+            data:{},
+            success:function (data) {
+                cachedRoadsLatlng = data;
+            }
+        })
+    };
 
+    //
+    var addOnRoadRowClick = function(){
+        $("tbody tr").onclick(function () {
+            var roadId=$(this).firstElementChild.val();
+            console.log(road);
+        })
+    };
 
-            // $("#addRoadBasicInfoSubmit").click(function () {
-            //     $.ajax({
-            //         type:"POST",
-            //         url:"/municipalManagement/roadManagement/addRoadBasicInfo/",
-            //         async:true,
-            //         cache:false,
-            //         data:{
-            //             roadId:$("#roadId").val(),
-            //             roadName:$("#roadName").val(),
-            //             roadLevel:$("#roadLevel option:selected").val(),
-            //         },
-            //         success:function (data) {
-            //             console.log(data);
-            //         },
-            //         error:function (xmlhttpRequest,data) {
-            //             console.log(data);
-            //         }
-            //
-            //     });
-            //
-            //
-            //  });
-
-            // var popUp = marker.bindPopup()
-            // .openPopup();
-    	};
-
-
-        map.on('click',addRoad);
-
-    /*事件监听*/
+/*函数调用*/
+getAddRoadPopContent();//获取添加道路的html框文档
+loadAllRoads();//预先加载数据库中所有的道路信息
+map.on('click',addRoad);//地图点击事件
+// L.control.layers(baseLayers, null).addTo(map);//添加图层切换控件
+cacheRoadsLatlng();
+addOnRoadRowClick();

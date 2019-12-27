@@ -10,13 +10,13 @@ def municipalManagementUI(request):
     user_dict = {
         'name': user.姓名,
         'employee_id': user.工号,
-        'position': '市政道路管理' if user.职能 == '1' else '道路巡查养护'
+        'position': '市政道路管理' if user.职能 == '1' else '道路巡查养护',
     }
     return render(request, 'municipalManagement.html', context=user_dict)
 
 
 def roadManagement(request):
-    return render(request, 'roadManagement.html')
+    return render(request, 'roadManagement.html', context={'roads': models.道路基本档案.objects.all()})
 
 
 @csrf_exempt
@@ -53,14 +53,23 @@ def getRoadInfoPopup(request):
 
 
 @csrf_exempt
-def getAllRoadsLatLng(request):
-    latlngs = []
+def getAllRoadsBasicInfo(request):
+    roads = []
     for singleRoad in models.道路基本档案.objects.all():
-        latlngs.append({'roadId': singleRoad.道路编号,
-                        'latlng': singleRoad.getLatlng(),
-                        'roadLevel': singleRoad.道路等级.道路等级, })
-    return JsonResponse(latlngs, safe=False)
+        roads.append({'roadId': singleRoad.道路编号,
+                      'roadName': singleRoad.道路名称,
+                      'latlng': singleRoad.getLatlng(),
+                      'roadLevel': singleRoad.道路等级.道路等级, })
+    return JsonResponse(roads, safe=False)
 
 
 def getRoadAddPopupContent(request):
     return render(request, 'roadAddPopupContent.html')
+
+
+@csrf_exempt
+def getRoadsLatlng(request):
+    roadsLatlng = {}
+    for singleRoad in models.道路基本档案.objects.all():
+        roadsLatlng[singleRoad.道路编号] = singleRoad.getLatlng()
+    return JsonResponse(roadsLatlng, safe=False)

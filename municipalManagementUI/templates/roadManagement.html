@@ -16,8 +16,31 @@
 
 <body>
     {% block bodycontent %}
-        <div id="map" style="height: 100%;width: 100%;">
+        <div id="map" style="height: 100%;width: 80%;float: right;">
         </div>
+
+        <div style="width: 20%;height: 100%;">
+            <table id="roadTable" class="table table-bordered table-hover .table-striped">
+                <thread>
+                    <tr>
+                        <th>道路编号</th>
+                        <th>道路名称</th>
+                        <th>道路等级</th>
+                    </tr>
+                </thread>
+                <tbody>
+                    {% for road in roads %}
+                        <tr onclick="onRoadRowClick(this);">
+                            <th>{{ road.道路编号 }}</th>
+                            <th>{{ road.道路名称 }}</th>
+                            <th>{{ road.道路等级.道路等级 }}</th>
+                        </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+        </div>
+
     {% endblock %}
 
     {% block privatejs %}

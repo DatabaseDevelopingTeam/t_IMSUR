@@ -8,6 +8,7 @@ urlpatterns = [
     path('roadManagement/addRoadBasicInfo/', views.addRoadBasicInfo),
     path('roadManagement/checkIfRoadIdExists/', views.checkIfRoadIdExists),
     path('roadManagement/getRoadInfoPopup/', views.getRoadInfoPopup),
-    path('roadManagement/getAllRoadsLatLng/', views.getAllRoadsLatLng),
-    path('roadManagement/getRoadAddPopupContent/',views.getRoadAddPopupContent),
+    path('roadManagement/getAllRoadsBasicInfo/', views.getAllRoadsBasicInfo),
+    path('roadManagement/getRoadAddPopupContent/', views.getRoadAddPopupContent),
+    path('roadManagement/getRoadsLatlng/', views.getRoadsLatlng),
 ]
