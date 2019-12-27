@@ -24,14 +24,20 @@
         <div class="row" style="width: 100%;">
             <div class="col-xs-6 col-md-4 table-responsive" style="width: 100%;">
                 <table class="table table-bordered table table-hover" width="100%">
-                      <tr>
-                        <th width="50%">道路编号</th>
-                        <th width="50%">道路名称</th>
-                     </tr>
                     <tr>
-                    <td>R0001</td>
-                    <td>明德路</td>
+                        <th style="text-align:center; vertical-align:middle!important;">今日巡查道路</th>
                     </tr>
+                    {% for task in Tasks %}
+                        <tr>
+                            <td align="center">{{task.巡查道路}}</td>
+                        </tr>
+                    {%  endfor %}
+{#                        <th width="50%">道路名称</th>#}
+{#                     </tr>#}
+{#                    <tr>#}
+{#                    <td>R0001</td>#}
+{#                    <td>明德路</td>#}
+{#                    </tr>#}
                 </table>
              </div>
         </div>
