@@ -20,9 +20,6 @@ def patrolManagementUI(request):
 def patrolMap(request):
     today = datetime.date.today()
     Tasks = model2.日常巡查.objects.filter(巡查日期=today, 巡查状态='未巡查')
-    for task in Tasks:
-        task.道路名称 = task.巡查道路.split("  ")[0]
-        task.道路编号 = task.巡查道路.split("  ")[1]
     return render(request, 'patrolMap.html', {'Tasks': Tasks})
 
 
@@ -35,7 +32,7 @@ def getRoadsLatlng(request):
     today = datetime.date.today()
     TodayTasks = model2.日常巡查.objects.filter(巡查日期=today, 巡查状态='未巡查')
     for ToadyTask in TodayTasks:
-        Roads = models.道路基本档案.objects.filter(道路编号=ToadyTask.道路编号)
+        Roads = models.道路基本档案.objects.filter(道路编号=ToadyTask.巡查道路.道路编号)
     for singleRoad in Roads:
         roadsLatlng[singleRoad.道路编号] = singleRoad.getLatlng()
     return JsonResponse(roadsLatlng, safe=False)
