@@ -37,7 +37,7 @@ var cacheRoadsLatlng = function () {
     };
 
 //道路表点击事件,获取道路信息
-    var GetRoadBasicInfo = function(self){
+    var LocateRoad = function(self){
         var roadId = self.firstElementChild.innerHTML;
         var latlng = cachedRoadsLatlng[roadId];     //根据id获取位置信息
         if(typeof(latlng) == "undefined"){
@@ -54,7 +54,6 @@ var cacheRoadsLatlng = function () {
 
 
     //初始化地图
-//初始化地图
     var loadAllRoads = function () {
         //得到经纬度与道路编号
         $.ajax({
@@ -86,7 +85,7 @@ var cacheRoadsLatlng = function () {
                             adjustMarkerIcon(marker, roadLevel);
                         },
                         error: function () {
-
+                            console.log("绑定POP失败！");
                         }
                     });
                 }
@@ -120,3 +119,8 @@ var cacheRoadsLatlng = function () {
     function Beginpatrol(){
 
     }
+
+
+//函数调用
+loadAllRoads();             //初始化地图，显示麻点
+cacheRoadsLatlng();         //缓存道路位置信息
