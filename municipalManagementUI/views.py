@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import response, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from municipalManagementUI import models
