@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@t83x!+q+q!g6g8ms*bq2q2(xtr=16tna7(%96su5&$&221#rs'
 
 # 环境部署选择
-DEBUG = TEMPLATE_DEBUG = False
+DEBUG = TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # 应用定义
