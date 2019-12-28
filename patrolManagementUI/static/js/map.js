@@ -115,3 +115,8 @@ var cacheRoadsLatlng = function () {
         popupAnchor: [0,-19*4],
       }));
     };
+
+    //开始巡查函数
+    function Beginpatrol(){
+
+    }
