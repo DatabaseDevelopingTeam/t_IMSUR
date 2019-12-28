@@ -117,5 +117,3 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
-handler404 = 'IMSUR.views.page_not_found'
