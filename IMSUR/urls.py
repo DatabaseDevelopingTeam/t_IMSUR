@@ -26,5 +26,3 @@ urlpatterns = [
         }),
 
 ]
-
-handler404 = 'IMSUR.views.page_not_found'
