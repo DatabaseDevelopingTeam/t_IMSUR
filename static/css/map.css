@@ -6,17 +6,17 @@ body{
     padding: 0;
 }
 
-.leftroad {
+#leftroad {
     width: 20%;
-    float:left;
+    float: left;
     height: 100%;
     border: 1px solid #3B6273;
 }
 
-#rightmap {
+.rightmap {
     width: 80%;
     height: 100%;
-    float:right;
+    float: right;
     border: 1px solid #3B6273;
-    margin-right:-4px
+
 }

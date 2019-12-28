@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% extends "common/base.html" %}
-<html>
 {% load static %}
+<html>
 <head>
     <meta charset="utf-8">
     {% block privatecss %}
@@ -30,23 +30,11 @@
                 <p>
                     职能：{{position}}
                 </p>
+                <p>
+                    <a class="btn btn-default" href="/logout/">注销</a>
+                </p>
             </div>
         </div>
-
-{#        <div class="patrol"></div>#}
-{#        <div class="block1"></div>#}
-
-{#        <a href="/patrolManagement/map/">#}
-{#             <div class="block2">#}
-{#                <img src="../static/images/ptrol.png" width="64px" height="64px" ><br/>#}
-{#                <br>#}
-{#                <div class="text2">#}
-{#                  巡查管理<br/>#}
-{#                </div>#}
-{#             </div>#}
-{#        </a>#}
-
-
         <div class="block" id="block_evaluate">
             <img src={% static "images/记录.png" %}>
             <p style="margin-top: 55%;">

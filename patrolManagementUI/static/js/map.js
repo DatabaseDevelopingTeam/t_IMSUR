@@ -124,3 +124,4 @@ var cacheRoadsLatlng = function () {
 //函数调用
 loadAllRoads();             //初始化地图，显示麻点
 cacheRoadsLatlng();         //缓存道路位置信息
+

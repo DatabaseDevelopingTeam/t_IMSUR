@@ -16,7 +16,4 @@ body{
 #rightmap {
     width: 80%;
     height: 100%;
-    float:right;
-    border: 1px solid #3B6273;
-    margin-right:-4px
 }

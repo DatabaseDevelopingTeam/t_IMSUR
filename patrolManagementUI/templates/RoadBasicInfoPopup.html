@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
 	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {% block privatecss %}
+        <link href={% static "css/map.css" %} rel="stylesheet" type="text/css">
+    {% endblock %}
 </head>
 <body>
    {% block bodycontent %}
@@ -25,7 +28,7 @@
             </tbody>
        </table>
       <button style="background-color: #4CAF50;color: white;width: 100%;"
-              onclick="Beginpatrol()">道路巡查</button>
+              data-toggle="modal" data-target="#myModal">道路巡查</button>
    {% endblock %}
     {% block privatejs %}
         <script src={% static "js/map.js" %}></script>

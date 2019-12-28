@@ -7,39 +7,58 @@
     <title>可视化巡查管理</title>
 
     {% block privatecss %}
-{#        <link href={% static "css/GeoUtilsManagement.css" %} rel="stylesheet" type="text/css">#}
         <link href={% static "css/map.css" %} rel="stylesheet" type="text/css">
     {% endblock %}
-<style>
-    html,body{
-        width: 100%;
-        height: 100%;
-    }
-</style>
 </head>
 <body>
     {% block bodycontent %}
     <div class="leftroad">
-        <div class="row" style="width: 100%;">
-            <div class="col-xs-6 col-md-4 table-responsive" style="width: 100%;">
-                <table class="table table-bordered table table-hover" style="width: 100%;">
-                    <tr>
-                        <th style="text-align:center; vertical-align:middle!important;">道路编号</th>
-                        <th style="text-align: center;vertical-align:middle!important;">道路名称</th>
-                        <th style="text-align: center;vertical-align:middle!important;">道路等级</th>
+        <table class="table table-bordered table table-hover" style="width: 100%;float: left">
+            <thead>
+                <tr style="width: 100%;">
+                    <th style="text-align:center; vertical-align:middle!important;">道路编号</th>
+                    <th style="text-align: center;vertical-align:middle!important;">道路名称</th>
+                    <th style="text-align: center;vertical-align:middle!important;">道路等级</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in Tasks %}
+                    <tr onclick="LocateRoad(this);">
+                        <td align="center">{{task.巡查道路.道路编号}}</td>
+                        <td align="center">{{task.巡查道路.道路名称}}</td>
+                        <td align="center">{{task.巡查道路.道路等级.道路等级}}</td>
                     </tr>
-                    {% for task in Tasks %}
-                        <tr onclick="LocateRoad(this);">
-                            <td align="center">{{task.巡查道路.道路编号}}</td>
-                            <td align="center">{{task.巡查道路.道路名称}}</td>
-                            <td align="center">{{task.巡查道路.道路等级.道路等级}}</td>
-                        </tr>
-                    {%  endfor %}
-                </table>
-             </div>
-        </div>
+                {%  endfor %}
+            </tbody>
+        </table>
     </div>
     <div id="rightmap"></div>
+        <!-- 模态框 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" align="center">
+                        道路巡查
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <div style="padding-left: 25%;float: left">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal"> 关 闭 </button>
+                    </div>
+                    <div style="padding-right: 25%;">
+                        <button type="button" class="btn btn-primary"> 提 交 </button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
     {% endblock %}
 
     {% block privatejs %}
