@@ -4,5 +4,6 @@ from . import views
 app_name = 'patrolManagementUI'
 urlpatterns = [
     path('', views.patrolManagementUI),
-    path('patrolMap/',views.patrolManagement),
+    path('patrolMap/',views.patrolMap),
+    path('patrolMap/getRoadsLatlng/',views.getRoadsLatlng)
 ]

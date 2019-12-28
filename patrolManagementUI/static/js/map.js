@@ -19,3 +19,27 @@ var map = L.map("rightmap", {
         layers: [oms],
         scrollWheelZoom: false
     });
+
+//缓存今日巡查任务的道路经纬度信息
+var cacheRoadsLatlng = function () {
+        $.ajax({
+            url:"/patrolManagementUI/patrolMap/getRoadsLatlng/",
+            type:"POST",
+            async:true,
+            cache:true,
+            data:{},
+            success:function (data) {
+                cachedRoadsLatlng = data;
+            }
+        })
+    };
+
+//道路表点击事件,获取道路信息
+    var GetRoadBasicInfo = function(self){
+        var roadId = self.firstElementChild.innerHTML;
+        var latlng = cachedRoadsLatlng[roadId];
+        if(typeof(latlng) == "undefined"){
+            cacheRoadsLatlng();
+        }
+        resetCenterCoordinate(latlng);
+    };
