@@ -1,17 +1,24 @@
-{#<!DOCTYPE html>#}
-{#{% extends 'common/base.html' %}#}
-{#{% load static %}#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#</head>#}
-{#<body>#}
-{#   {% block bodycontent %}#}
-{#       <ul class="list-group container" style="width: 200px;height: 100px;text-align: center;">#}
-{#          <li class="list-group-item">{{ roadId }}</li>#}
-{#          <li class="list-group-item">{{roadName}}</li>#}
-{#          <li class="list-group-item">{{roadLevel}}</li>#}
-{#       </ul>#}
-{#   {% endblock %}#}
-{#</body>#}
-{#</html>#}
+<!DOCTYPE html>
+{% extends 'common/base.html' %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+   {% block bodycontent %}
+       <ul class="list-group container" style="width: 200px;height: 100px;text-align: center;">
+          <li class="list-group-item">{{ roadId }}</li>
+          <li class="list-group-item">{{roadName}}</li>
+          <li class="list-group-item">{{roadLevel}}</li>
+          <li style="width: 50%;margin-left: 25%;">
+              <button style="background-color: #4CAF50;color: white;padding: 15px 32px;"
+                      onclick="Beginpatrol()">道路巡查</button>
+          </li>
+       </ul>
+   {% endblock %}
+    {% block privatejs %}
+        <script src={% static "js/map.js" %}></script>
+    {% endblock %}
+</body>
+</html>

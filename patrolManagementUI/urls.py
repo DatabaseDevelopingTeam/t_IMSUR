@@ -5,5 +5,6 @@ app_name = 'patrolManagementUI'
 urlpatterns = [
     path('', views.patrolManagementUI),
     path('patrolMap/',views.patrolMap),
-    path('patrolMap/getRoadsLatlng/',views.getRoadsLatlng)
+    path('patrolMap/getRoadsLatlng/',views.getRoadsLatlng),
+    path('/patrolMap/getTodayRoadsBasicInfo/',views.getTodayRoadsBasicInfo),
 ]
