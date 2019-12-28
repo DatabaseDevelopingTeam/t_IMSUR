@@ -18,11 +18,7 @@ urlpatterns = [
     path('trueLogin/', loginViews.trueLogin),  # 提交表单登录
     path('municipalManagement/', include('municipalManagementUI.urls')),
     path('patrolManagement/', include('patrolManagementUI.urls')),
-    re_path(r'^static/(?P<path>.*)$', serve, {
-        'document_root': settings.STATIC_ROOT,
-    }),  # 解决500错误
-    re_path(r'^media/(?P<path>.*)$', serve, {
-            'document_root': settings.MEDIA_ROOT,
-        }),
-
 ]
+
+handler404 = views.page_not_found
+handler500 = views.page_error
