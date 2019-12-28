@@ -46,10 +46,41 @@
                     </h4>
                 </div>
                 <div class="modal-body">
-
+                    <div class="form-inline">
+                        <div class="form-group" style="padding-left: 2%;padding-right: 2%;">
+                            <label for="inspectors">巡查人员：</label>
+                            <input type="text" class="form-control" id="inspectors" placeholder="巡查人员">
+                        </div>
+                        <div class="form-group"style="padding-right: 2% ">
+                            <label for="roadId">道路编号：</label>
+                            <input type="email" class="form-control" id="roadId" placeholder="道路编号">
+                        </div>
+                        <div class="form-group"style="padding-left: 2%;padding-right: 2%;">
+                            <label for="roadName">道路名称：</label>
+                            <input type="email" class="form-control" id="roadName" placeholder="道路名称">
+                        </div>
+                        <div class="form-group"style="padding-right: 2%;">
+                            <label>损害类型：</label>
+                            <select name="damageType" class="form-control">
+                                <option value="xl">线裂</option>
+                                <option value="wl">网裂</option>
+                                <option value="gl">龟裂</option>
+                                <option value="yb">拥包</option>
+                                <option value="cz">车辙</option>
+				            </select>
+                        </div>
+                        <div class="form-group"style="padding-left: 2%;padding-right: 2%;">
+                            <label for="damageDetail">损坏描述：</label>
+                            <input type="email" class="form-control" id="damageDetail" placeholder="损坏位置及情况描述">
+                        </div>
+                        <div class="form-group"style="padding-right: 2%;">
+                            <label for="note">备&#12288&#12288注：</label>
+                            <input type="email" class="form-control" id="nite" placeholder="备注">
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <div style="padding-left: 25%;float: left">
+                    <div style="padding-left: 25%;float: left;">
                         <button type="button" class="btn btn-warning" data-dismiss="modal"> 关 闭 </button>
                     </div>
                     <div style="padding-right: 25%;">
