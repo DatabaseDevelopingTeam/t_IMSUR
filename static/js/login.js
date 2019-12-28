@@ -1,4 +1,5 @@
 function checkIfEmployeeIdExists(self) {
+    //ajax async js async xmlhttprequest
     var employee_id=self.value;
     var xmlhttp=createXMLHttpRequest();
     xmlhttp.open("POST","/ajaxEmployeeIdCheck/",true);

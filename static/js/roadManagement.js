@@ -34,7 +34,7 @@
     var currentPopup;
     var currentMarker;
     var roadAddPopupContent = 0;
-    var cachedRoadsLatlng;
+    var cachedRoadsLatlng={};
 
 /*函数*/
     //重设中心点
@@ -116,18 +116,22 @@
         }
      //异步添加道路信息到服务器
     function addRoadBasicInfo() {
-
             //bootstrap自动判空
 
+            var roadId=$("#roadId").val();
+            var roadName=$("#roadName").val();
+            var roadLevel=$("#roadLevel option:selected").val();
+            //将道路编号与经纬度加入缓存
+            cachedRoadsLatlng[roadId]=currentLatLng;
             $.ajax({
                 type:"POST",
                 url:"/municipalManagement/roadManagement/addRoadBasicInfo/",
                 async:true,
                 cache:true,
                 data:{
-                    roadId:$("#roadId").val(),
-                    roadName:$("#roadName").val(),
-                    roadLevel:$("#roadLevel option:selected").val(),
+                    roadId:roadId,
+                    roadName:roadName,
+                    roadLevel:roadLevel,
                     lng :currentLatLng[1],
                     lat:currentLatLng[0],
                 },
@@ -138,13 +142,16 @@
                          async:true,
                         cache:true,
                         data:{
-                            roadId:$("#roadId").val(),
+                            roadId:roadId,
                             },
                         success:function(data,status){
+                            //将道路信息添加到表中
+                            addToRoadTable([roadId,roadName,roadLevel]);
+                            //为新增道路添加麻点,绑定信息框
                             var marker = L.marker(currentLatLng).addTo(map);
                            marker.bindPopup(data);
                            //更换图标
-                           adjustMarkerIcon(marker,$("#roadLevel option:selected").val());
+                           adjustMarkerIcon(marker,roadLevel);
                            currentPopup.removeFrom(map);
                         },
                         error:function () {
@@ -199,9 +206,6 @@
     var addRoad = function(e){
         currentLatLng = [e.latlng.lat,e.latlng.lng];
         var popupOptions = {
-            // autoClose:false,
-            // closeOnEscapeKey:false,
-            // closeOnClick:true,
         };
 
         currentPopup = L.popup()
@@ -222,13 +226,25 @@
             }
         })
     };
-
-    //
-    var addOnRoadRowClick = function(){
-        $("tbody tr").onclick(function () {
-            var roadId=$(this).firstElementChild.val();
-            console.log(road);
-        })
+    //道路表点击事件
+    var onRoadRowClick = function(self){
+        var roadId = self.firstElementChild.innerHTML;
+        var latlng = cachedRoadsLatlng[roadId];
+        if(typeof(latlng) == "undefined"){
+            cacheRoadsLatlng();
+        }
+        resetCenterCoordinate(latlng);
+    };
+    //根据道路编号将道路信息添加到表中
+    var addToRoadTable = function(roadInfo){
+        var roadTable = document.getElementById("roadTable");
+        var newRow = roadTable.insertRow();
+        newRow.setAttribute("onclick","onRoadRowClick(this);");
+        for(var i = 0;i<3;i++){
+            var newCell = newRow.insertCell();
+            newCell.innerHTML="<th>"+roadInfo[i]+"</th>";
+        }
+        // newRow.addEventListener('click',onRoadRowClick(newRow),false);
     };
 
 /*函数调用*/
@@ -237,4 +253,3 @@ loadAllRoads();//预先加载数据库中所有的道路信息
 map.on('click',addRoad);//地图点击事件
 // L.control.layers(baseLayers, null).addTo(map);//添加图层切换控件
 cacheRoadsLatlng();
-addOnRoadRowClick();
