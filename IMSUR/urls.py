@@ -4,8 +4,10 @@ Information management system of urban road maintenance
 """
 from . import views
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from login import views as loginViews
+from . import settings
+from django.views.static import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -16,6 +18,13 @@ urlpatterns = [
     path('trueLogin/', loginViews.trueLogin),  # 提交表单登录
     path('municipalManagement/', include('municipalManagementUI.urls')),
     path('patrolManagement/', include('patrolManagementUI.urls')),
-]
-handler404 = 'IMSUR.views.page_not_found'
+    re_path(r'^static/(?P<path>.*)$', serve, {
+        'document_root': settings.STATIC_ROOT,
+    }),  # 解决500错误
+    re_path(r'^media/(?P<path>.*)$', serve, {
+            'document_root': settings.MEDIA_ROOT,
+        }),
 
+]
+
+handler404 = 'IMSUR.views.page_not_found'

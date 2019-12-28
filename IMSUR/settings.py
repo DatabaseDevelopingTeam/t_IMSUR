@@ -115,4 +115,7 @@ STATICFILES_DIRS = (
 )
 # remember to 'manage.py collectstatic'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 handler404=views.page_not_found
