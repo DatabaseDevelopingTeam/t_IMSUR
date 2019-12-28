@@ -15,7 +15,6 @@ class RegularTaskAdmin(admin.ModelAdmin):
     # 可以搜索的字段
     search_fields = ['巡查日期','巡查道路']
 
-
 @admin.register(日常巡查)
 class DailyTaskAdmin(admin.ModelAdmin):
     #要展示的字段
