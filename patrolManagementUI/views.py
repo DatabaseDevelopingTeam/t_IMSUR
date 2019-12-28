@@ -18,5 +18,5 @@ def patrolManagementUI(request):
 
 def patrolManagement(request):
     today=datetime.date.today()
-    Tasks=model2.日常巡查.objects.filter(巡查日期=today)
+    Tasks=model2.日常巡查.objects.filter(巡查日期=today,巡查状态='未巡查')
     return render(request,'patrolMap.html',{'Tasks':Tasks})

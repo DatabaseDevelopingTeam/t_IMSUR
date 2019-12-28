@@ -8,20 +8,20 @@ from .models import 日常巡查
 @admin.register(定期巡查)
 class RegularTaskAdmin(admin.ModelAdmin):
     # 要展示的字段
-    list_display = [id, '巡查日期','巡查道路']
+    list_display = [id, '巡查日期','巡查道路','巡查状态']
     # 可以点击的字段
     list_display_links = ['巡查日期']
-    list_filter = ['巡查日期']
+    list_filter = ['巡查日期','巡查状态']
     # 可以搜索的字段
-    search_fields = ['巡查日期']
+    search_fields = ['巡查日期','巡查道路']
 
 
 @admin.register(日常巡查)
 class DailyTaskAdmin(admin.ModelAdmin):
     #要展示的字段
-    list_display=[id,'巡查日期','巡查道路']
+    list_display=[id,'巡查日期','巡查道路','巡查状态']
     #可以点击的字段
     list_display_links=['巡查日期']
-    list_filter=['巡查日期']
+    list_filter=['巡查日期','巡查状态']
     #可以搜索的字段
-    search_fields=['巡查日期']
+    search_fields=['巡查日期','巡查道路']
