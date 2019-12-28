@@ -6,5 +6,6 @@ urlpatterns = [
     path('', views.patrolManagementUI),
     path('patrolMap/',views.patrolMap),
     path('patrolMap/getRoadsLatlng/',views.getRoadsLatlng),
-    path('/patrolMap/getTodayRoadsBasicInfo/',views.getTodayRoadsBasicInfo),
+    path('patrolMap/getTodayRoadsBasicInfo/',views.getTodayRoadsBasicInfo),
+    path('patrolMap/getRoadInfoPopup/',views.getRoadInfoPopup),
 ]

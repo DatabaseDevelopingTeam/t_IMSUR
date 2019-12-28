@@ -25,7 +25,7 @@ var map = L.map("rightmap", {
 //缓存今日巡查任务的道路经纬度信息
 var cacheRoadsLatlng = function () {
         $.ajax({
-            url:"/patrolManagementUI/patrolMap/getRoadsLatlng/",
+            url:"/patrolManagement/patrolMap/getRoadsLatlng/",
             type:"POST",
             async:true,
             cache:true,
@@ -59,7 +59,7 @@ var cacheRoadsLatlng = function () {
         //得到经纬度与道路编号
         $.ajax({
             type: "POST",
-            url: "/patrolMap/getTodayRoadsBasicInfo/",
+            url: "/patrolManagement/patrolMap/getTodayRoadsBasicInfo/",
             async: true,
             cache: true,
             data: {},
@@ -74,7 +74,7 @@ var cacheRoadsLatlng = function () {
                     ////绑定popup信息框
                     $.ajax({
                         type: "POST",
-                        url: "/municipalManagement/roadManagement/getRoadInfoPopup/",
+                        url: "/patrolManagement/patrolMap/getRoadInfoPopup/",
                         async: false,
                         cache: true,
                         data: {
