@@ -11,6 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', loginViews.forwardToLogin),  # 重定向到登录页面
     path('login/', loginViews.login),  # 登录验证
+    path('logout/', loginViews.logout),
     path('ajaxEmployeeIdCheck/', loginViews.ajaxEmployeeIdCheck),  # 静态检测工号是否存在
     # path('ajaxPwdCheck/', loginViews.ajaxPwdCheck),  # 静态检测工号是否存在
     path('trueLogin/', loginViews.trueLogin),  # 提交表单登录

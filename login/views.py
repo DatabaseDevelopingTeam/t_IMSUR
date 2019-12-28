@@ -1,7 +1,7 @@
 import random
 import time
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
@@ -37,10 +37,10 @@ def login(request):
             else:
                 return redirect('/patrolManagement')
         else:  # 令牌不一致
-            return render(request, 'login.html',context={'pwdErrorInfo': ''})
+            return render(request, 'login.html', context={'pwdErrorInfo': ''})
     # cookies失效或者未设置自动登录
     else:
-        return render(request, 'login.html',context={'pwdErrorInfo': ''})
+        return render(request, 'login.html', context={'pwdErrorInfo': ''})
 
 
 def trueLogin(request):
@@ -73,7 +73,7 @@ def trueLogin(request):
                     user.save()  # 保存用户数据库
                 return response
             else:
-                return render(request, 'login.html', context={'pwdErrorInfo': '密码错误,请重新输入!','employeeId':employee_id})
+                return render(request, 'login.html', context={'pwdErrorInfo': '密码错误,请重新输入!', 'employeeId': employee_id})
         else:
             return HttpResponse('用户不存在')
     pass
@@ -89,3 +89,10 @@ def generateTicket():
     now_time = int(time.time())
     ticket = 'TK' + ticket + str(now_time)
     return ticket
+
+
+def logout(request):
+    response = HttpResponseRedirect('/login/')
+    response.delete_cookie('employee_id')
+    response.delete_cookie('ticket')
+    return response
