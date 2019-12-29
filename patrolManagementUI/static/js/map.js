@@ -52,7 +52,6 @@ var cacheRoadsLatlng = function () {
         map.flyTo(latlngCoordinate);
     };
 
-
     //初始化地图
     var loadAllRoads = function () {
         //得到经纬度与道路编号
@@ -96,7 +95,6 @@ var cacheRoadsLatlng = function () {
         })
     };
 
-
     //向地图添加麻点
     var addMarker = function (latlng) {
         return L.marker(latlng).addTo(map);
@@ -115,13 +113,32 @@ var cacheRoadsLatlng = function () {
       }));
     };
 
-    //开始巡查函数
-    function Beginpatrol(){
-
-    }
-
-
 //函数调用
 loadAllRoads();             //初始化地图，显示麻点
 cacheRoadsLatlng();         //缓存道路位置信息
+
+
+//模态框展示函数
+$('#myModal').on('show.bs.modal',function(e)
+{
+    var button=$(e.relatedTarget);
+    var roadId=button.data('roadid');
+    $("#damageType").empty();
+    $.ajax({
+                        type: "POST",
+                        url: "/patrolManagement/patrolMap/setupModalView/",
+                        async: false,
+                        cache: true,
+                        data: {
+                            roadId: roadId,
+                        },
+                        success: function (data, status) {
+                            $("#damageType").append("<option>哈哈哈</option>")
+                        },
+                        error: function () {
+                            console.log("服务器异常");
+                        }
+                    });
+    console.log(roadId)
+})
 

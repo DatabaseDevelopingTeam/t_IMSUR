@@ -56,5 +56,20 @@ def getRoadsLatlng(request):
 @csrf_exempt
 def getRoadInfoPopup(request):
     roadId = request.POST.get('roadId')
-    dictRoad = models.道路基本档案.objects.get(道路编号=roadId).getDict()
-    return render(request, 'RoadBasicInfoPopup.html', context=dictRoad)
+    #dictRoad = models.道路基本档案.objects.get(道路编号=roadId).getDict()
+    dicRoad=models.道路基本档案.objects.get(道路编号=roadId)
+    return render(request, 'RoadBasicInfoPopup.html', {'Road':dicRoad})
+
+@csrf_exempt
+def setupModalView(request):
+    Info = {}
+    roadId=request.POST.get('roadId')
+    Road=models.道路基本档案.objects.get(道路编号=roadId)
+    # CarRoad=Road
+    # Roadtype=models.路面类型.objects.get(路面类型=CarRoad.路面类型.路面类型)
+    # DamageType=Roadtype.rn路面类型.all()
+    # print(DamageType)
+    Info['roadId']=Road.道路编号
+    Info['roadName']=Road.道路名称
+    #Info['']=CarRoad.路面类型
+    return JsonResponse(Info,safe=False)

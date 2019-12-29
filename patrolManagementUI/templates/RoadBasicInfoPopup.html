@@ -22,13 +22,13 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ roadId }}</td>
-                    <td>{{ roadName }}</td>
+                    <td>{{ Road.道路编号 }}</td>
+                    <td>{{ Road.道路名称 }}</td>
                 </tr>
             </tbody>
        </table>
-      <button style="background-color: #4CAF50;color: white;width: 100%;"
-              data-toggle="modal" data-target="#myModal">道路巡查</button>
+      <button style="background-color: #4CAF50;color: white;width: 100%;" data-toggle="modal" data-target="#myModal"
+      data-roadId={{ Road.道路编号 }}>道路巡查</button>
    {% endblock %}
     {% block privatejs %}
         <script src={% static "js/map.js" %}></script>
