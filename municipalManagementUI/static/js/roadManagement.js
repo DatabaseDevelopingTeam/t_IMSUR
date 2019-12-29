@@ -121,6 +121,7 @@
             var roadId=$("#roadId").val();
             var roadName=$("#roadName").val();
             var roadLevel=$("#roadLevel option:selected").val();
+            var roadType = $("#roadType option:selected").val();
             //将道路编号与经纬度加入缓存
             cachedRoadsLatlng[roadId]=currentLatLng;
             $.ajax({
@@ -134,6 +135,7 @@
                     roadLevel:roadLevel,
                     lng :currentLatLng[1],
                     lat:currentLatLng[0],
+                    roadType:roadType,
                 },
                 success:function(data,status){
                     $.ajax({
