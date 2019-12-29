@@ -24,7 +24,7 @@ class RoadDamageTypeAdmin(admin.ModelAdmin):
 @admin.register(models.车行道)
 class RoadWayAdmin(admin.ModelAdmin):
     list_display_links = ['车行道编号']
-    list_display = ['车行道编号']
+    list_display = ['道路编号', '车行道编号', '路面类型']
 
 
 @admin.register(models.道路基本档案)

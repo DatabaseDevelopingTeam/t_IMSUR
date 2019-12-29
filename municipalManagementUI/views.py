@@ -27,12 +27,17 @@ def addRoadBasicInfo(request):
     roadLevel = request.POST.get('roadLevel')
     lat = request.POST.get('lat')
     lng = request.POST.get('lng')
+    roadType = request.POST.get('roadType')
+
     road = models.道路基本档案(道路名称=roadName,
                          道路等级=models.道路等级.objects.get(道路等级=roadLevel),
                          道路编号=roadId,
                          经度=float(lng), 纬度=float(lat))
 
     road.save()
+    # 保存一对一的车行道信息
+    路面类型 = models.路面类型.objects.get(路面类型=roadType)
+    models.车行道(道路编号=road, 路面类型=路面类型).save()
     return HttpResponse('添加成功')
     # return HttpResponse('表单异常!', status=403)
 
@@ -73,3 +78,36 @@ def getRoadsLatlng(request):
     for singleRoad in models.道路基本档案.objects.all():
         roadsLatlng[singleRoad.道路编号] = singleRoad.getLatlng()
     return JsonResponse(roadsLatlng, safe=False)
+
+
+'''技术指标计算'''
+
+
+# 计算RQI
+def countingRQI(IRI):
+    RQI = 4.98 - 0.34 * IRI
+    return RQI if RQI >= 0 else 0
+
+
+# 根据RQI和道路等级给出路面行驶质量等级
+def getLevelByRQI(RQI, roadLevel):
+    # (roadLevel,(RQIRange,level))
+    evaluationCriteria = {
+        '1': {(4.10, 4.98): 'A', (): 'B', (): 'C', (): 'D', },
+        '2': {(4.10, 4.98): 'A', (): 'B', (): 'C', (): 'D', },
+        '3': {(4.10, 4.98): 'A', (): 'B', (): 'C', (): 'D', },
+        '4': {(4.10, 4.98): 'A', (): 'B', (): 'C', (): 'D', }
+    }
+
+
+def inRQIRange(RQI, rangeTuple):
+    if rangeTuple[0] <= RQI <= rangeTuple[1]:
+        return True
+    return False
+
+
+def findRQIRangeByRQI(RQI, dic):
+    for key in dic.keys:
+        if inRQIRange(RQI, key):
+            return key
+    return 0, 0

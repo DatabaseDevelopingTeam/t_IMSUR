@@ -18,7 +18,7 @@ class 路面类型(models.Model):
 
 
 class 路面损坏类型(models.Model):
-    要引用的路面类型 = models.ForeignKey(路面类型, on_delete=models.CASCADE, related_name='rn路面类型',verbose_name='路面类型')
+    要引用的路面类型 = models.ForeignKey(路面类型, on_delete=models.CASCADE, related_name='rn路面类型', verbose_name='路面类型')
     损坏类型 = models.CharField(verbose_name='损坏类型', max_length=40, primary_key=True)
 
     class Meta:
@@ -105,23 +105,29 @@ class 车行道(models.Model):
     车行道编号 = models.AutoField('车行道编号', primary_key=True)
     道路编号 = models.OneToOneField(道路基本档案, on_delete=models.CASCADE)
     路面类型 = models.ForeignKey(路面类型, on_delete=models.CASCADE, verbose_name='路面类型', default='1')
-    基层类型 = models.CharField('基层类型', max_length=12, null=False)
-    基层厚度 = models.FloatField('基层厚度', null=False)
-    车道数 = models.IntegerField('车道数', null=False)
-    通行方向 = models.CharField('通行方向', max_length=20, null=False)
-    机动车道宽度范围 = models.CharField('机动车道宽度范围', max_length=100, null=False)
-    左侧非机动车道宽度范围 = models.CharField('左侧非机动车道宽度范围', max_length=100, null=False)
-    右侧非机动车道宽度范围 = models.CharField('右侧非机动车道宽度范围', max_length=100, null=False)
-    车行道面积 = models.FloatField('车行道面积', null=False)
-    有无公交车专用道 = models.CharField('有无公交车专用道', max_length=4, null=False)
-    侧石类型 = models.CharField('侧石类型', max_length=12, null=False)
-    侧石长度 = models.FloatField('侧石长度', null=False)
-    平石类型 = models.CharField('平石类型', max_length=12, null=False)
-    平石长度 = models.FloatField('平石长度', null=False)
+    基层类型 = models.CharField('基层类型', max_length=12, null=True)
+    基层厚度 = models.FloatField('基层厚度', null=True)
+    车道数 = models.IntegerField('车道数', null=True)
+    通行方向 = models.CharField('通行方向', max_length=20, null=True)
+    机动车道宽度范围 = models.CharField('机动车道宽度范围', max_length=100, null=True)
+    左侧非机动车道宽度范围 = models.CharField('左侧非机动车道宽度范围', max_length=100, null=True)
+    右侧非机动车道宽度范围 = models.CharField('右侧非机动车道宽度范围', max_length=100, null=True)
+    车行道面积 = models.FloatField('车行道面积', null=True)
+    有无公交车专用道 = models.CharField('有无公交车专用道', max_length=4, null=True)
+    侧石类型 = models.CharField('侧石类型', max_length=12, null=True)
+    侧石长度 = models.FloatField('侧石长度', null=True)
+    平石类型 = models.CharField('平石类型', max_length=12, null=True)
+    平石长度 = models.FloatField('平石长度', null=True)
 
     class Meta:
         verbose_name_plural = '道路的车行道档案'
         verbose_name = '道路的车行道档案'
+
+    def __unicode__(self):
+        return '道路编号:%s 车行道编号:%s' % (self.道路编号.道路编号, self.车行道编号)
+
+    def __str__(self):
+        return '道路编号:%s 车行道编号:%s' % (self.道路编号.道路编号, self.车行道编号)
 
 
 class 职工(models.Model):
