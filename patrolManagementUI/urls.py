@@ -8,4 +8,5 @@ urlpatterns = [
     path('patrolMap/getRoadsLatlng/',views.getRoadsLatlng),
     path('patrolMap/getTodayRoadsBasicInfo/',views.getTodayRoadsBasicInfo),
     path('patrolMap/getRoadInfoPopup/',views.getRoadInfoPopup),
+    path('patrolMap/setupModalView/',views.setupModalView),
 ]

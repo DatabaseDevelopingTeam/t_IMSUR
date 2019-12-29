@@ -53,20 +53,16 @@
                         </div>
                         <div class="form-group"style="padding-right: 2% ">
                             <label for="roadId">道路编号：</label>
-                            <input type="email" class="form-control" id="roadId" placeholder="道路编号">
+                            <input type="email" class="form-control" id="roadId" placeholder="道路编号" readonly="true">
                         </div>
                         <div class="form-group"style="padding-left: 2%;padding-right: 2%;">
                             <label for="roadName">道路名称：</label>
-                            <input type="email" class="form-control" id="roadName" placeholder="道路名称">
+                            <input type="email" class="form-control" id="roadName" placeholder="道路名称" readonly="true">
                         </div>
                         <div class="form-group"style="padding-right: 2%;">
                             <label>损害类型：</label>
-                            <select name="damageType" class="form-control">
-                                <option value="xl">线裂</option>
-                                <option value="wl">网裂</option>
-                                <option value="gl">龟裂</option>
-                                <option value="yb">拥包</option>
-                                <option value="cz">车辙</option>
+                            <select id="damageType" class="form-control">
+
 				            </select>
                         </div>
                         <div class="form-group"style="padding-left: 2%;padding-right: 2%;">
@@ -84,7 +80,8 @@
                         <button type="button" class="btn btn-warning" data-dismiss="modal"> 关 闭 </button>
                     </div>
                     <div style="padding-right: 25%;">
-                        <button type="button" class="btn btn-primary"> 提 交 </button>
+                        <button type="button" class="btn btn-primary" onclick="patrolEnd()"
+                        onkeypress="patrolEnd()"> 提 交 </button>
                     </div>
                 </div>
             </div><!-- /.modal-content -->
