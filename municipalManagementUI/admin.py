@@ -17,7 +17,8 @@ class RoadTypeAdmin(admin.ModelAdmin):
 @admin.register(models.路面损坏类型)
 class RoadDamageTypeAdmin(admin.ModelAdmin):
     list_display_links = ['损坏类型']
-    list_display = ['损坏类型']
+    list_display = ['要引用的路面类型', '损坏类型']
+    list_filter = ['要引用的路面类型']
 
 
 @admin.register(models.车行道)
@@ -28,8 +29,8 @@ class RoadWayAdmin(admin.ModelAdmin):
 
 @admin.register(models.道路基本档案)
 class RoadBasicArchiveAdmin(admin.ModelAdmin):
-    list_display_links = ['道路名称']
-    list_display = ['道路名称', '道路编号', '经度', '纬度', '道路等级']
+    list_display_links = ['道路名称', '道路编号']
+    list_display = ['道路名称', '道路编号', '道路等级']
 
 
 @admin.register(models.职工)
@@ -56,4 +57,14 @@ class EmployeeAdmin(admin.ModelAdmin):
          }),
         ('高级选项',
          dict(classes='collapse', fields=('工号', '密码', '职能')))
+    )
+
+
+@admin.register(models.路面损坏单项扣分表)
+class PointsRecordTableAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None,
+         {
+             'fields': ('损坏类型', '扣分分值', '损坏密度')
+         }),
     )

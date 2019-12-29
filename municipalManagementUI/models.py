@@ -4,7 +4,7 @@ from django.forms import ModelForm
 
 
 class 路面类型(models.Model):
-    路面类型 = models.CharField('路面类型', primary_key=True, max_length=12)
+    路面类型 = models.CharField(verbose_name='路面类型', primary_key=True, max_length=12)
 
     class Meta:
         verbose_name_plural = '路面类型'
@@ -13,10 +13,13 @@ class 路面类型(models.Model):
     def __unicode__(self):
         return self.路面类型
 
+    def __str__(self):
+        return self.路面类型
+
 
 class 路面损坏类型(models.Model):
-    要引用的路面类型 = models.ForeignKey(路面类型, on_delete=models.CASCADE, related_name='rn路面类型')
-    损坏类型 = models.CharField('损坏类型', max_length=40, primary_key=True)
+    要引用的路面类型 = models.ForeignKey(路面类型, on_delete=models.CASCADE, related_name='rn路面类型',verbose_name='路面类型')
+    损坏类型 = models.CharField(verbose_name='损坏类型', max_length=40, primary_key=True)
 
     class Meta:
         verbose_name_plural = '路面损坏类型'
@@ -25,18 +28,24 @@ class 路面损坏类型(models.Model):
     def __unicode__(self):
         return u'%s %s' % (self.要引用的路面类型.路面类型, self.损坏类型)
 
+    def __str__(self):
+        return u'%s %s' % (self.要引用的路面类型.路面类型, self.损坏类型)
+
 
 class 道路等级(models.Model):
-    道路等级 = models.CharField('道路等级', primary_key=True, max_length=4, choices=(
+    道路等级 = models.CharField(verbose_name='道路等级', primary_key=True, max_length=4, choices=(
         ('1', '一级'), ('2', '二级'), ('3', '三级'), ('4', '四级')))
-    备注 = models.CharField('备注', max_length=100, null=True)
+    备注 = models.CharField(verbose_name='备注', max_length=100, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = '道路等级'
         verbose_name = '道路等级'
 
     def __unicode__(self):
-        return 'nothing'
+        return self.get_道路等级_display()
+
+    def __str__(self):
+        return self.get_道路等级_display()
 
 
 # Create your models here.
