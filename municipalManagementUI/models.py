@@ -10,6 +10,9 @@ class 路面类型(models.Model):
         verbose_name_plural = '路面类型'
         verbose_name = '路面类型'
 
+    def __unicode__(self):
+        return self.路面类型
+
 
 class 路面损坏类型(models.Model):
     要引用的路面类型 = models.ForeignKey(路面类型, on_delete=models.CASCADE, related_name='rn路面类型')
@@ -18,6 +21,9 @@ class 路面损坏类型(models.Model):
     class Meta:
         verbose_name_plural = '路面损坏类型'
         verbose_name = '路面损坏类型'
+
+    def __unicode__(self):
+        return u'%s %s' % (self.要引用的路面类型.路面类型, self.损坏类型)
 
 
 class 道路等级(models.Model):
@@ -125,3 +131,14 @@ class 职工(models.Model):
     class Meta:
         verbose_name = '职工'
         verbose_name_plural = '职工'
+
+
+class 路面损坏单项扣分表(models.Model):
+    损坏单项扣分编号 = models.AutoField('损坏单项扣分编号', primary_key=True)
+    损坏类型 = models.ForeignKey(路面损坏类型, on_delete=models.CASCADE, verbose_name='损坏类型', default='1')
+    扣分分值 = models.IntegerField('扣分分值', null=False)
+    损坏密度 = models.FloatField('损坏密度', null=False)
+
+    class Meta:
+        verbose_name = '路面损坏单项扣分表'
+        verbose_name_plural = '路面损坏单项扣分表'
