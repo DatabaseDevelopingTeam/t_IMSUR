@@ -133,7 +133,16 @@ $('#myModal').on('show.bs.modal',function(e)
                             roadId: roadId,
                         },
                         success: function (data, status) {
-                            $("#damageType").append("<option>哈哈哈</option>")
+                            $("#roadId").val(data['roadId'])
+                            $("#roadName").val(data['roadName'])
+                            $("#roadType").val(data['roadType'])
+                            var length=Number(data['length'])
+                            console.log(length)
+                            console.log(data)
+                            for(var i=1;i<length;i++)
+                            {
+                                $("#damageType").append("<option value="+data[i]+">"+data[i]+"</option>")
+                            }
                             console.log(data['employeeId'])
                             console.log(data['employeeName'])
                         },
@@ -141,6 +150,5 @@ $('#myModal').on('show.bs.modal',function(e)
                             console.log("服务器异常");
                         }
                     });
-    console.log(roadId)
 })
 
