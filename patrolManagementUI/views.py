@@ -69,11 +69,15 @@ def setupModalView(request):
     user = models.职工.objects.get(工号=employee_id)
     Info['employeeId']=user.工号
     Info['employeeName']=user.姓名
-    # CarRoad=Road
-    # Roadtype=models.路面类型.objects.get(路面类型=CarRoad.路面类型.路面类型)
-    # DamageType=Roadtype.rn路面类型.all()
-    # print(DamageType)
+    CarRoad=models.车行道.objects.get(道路编号=roadId)
+    Roadtype=models.路面类型.objects.get(路面类型=CarRoad.路面类型.路面类型)
+    DamageTypes=Roadtype.rn路面类型.all()
+    i=1;
+    for DamageType in DamageTypes:
+        Info['%s'%(i)]=DamageType.损坏类型
+        i=i+1
     Info['roadId']=Road.道路编号
     Info['roadName']=Road.道路名称
-    #Info['']=CarRoad.路面类型
+    Info['roadType']=CarRoad.路面类型.路面类型
+    Info['length']='%s' % (i)
     return JsonResponse(Info,safe=False)
