@@ -17,17 +17,27 @@ class 定期巡查(models.Model):
 
 class 定期检测记录(models.Model):
     定期检查记录编号 = models.AutoField('定期检查记录编号', primary_key=True)
+    巡查人员 = models.ForeignKey(model_municipalManagementUI.职工, related_name='定期巡查引用职工', on_delete=models.CASCADE,
+                             verbose_name='巡查人员', null=True)
     道路编号 = models.ForeignKey(model_municipalManagementUI.道路基本档案, on_delete=models.CASCADE, verbose_name='道路编号',
                              default='1')
     # 平整度检测记录编号=models.OneToOneField(路面平整度检测记录,on_delete=models.CASCADE)
     巡查日期 = models.DateField('巡查日期', null=False, auto_now_add=True)
 
+    class Meta:
+        verbose_name='定期检测记录'
+        verbose_name_plural='定期检测记录'
+
 
 class 路面平整度检测记录(models.Model):
     平整度检测记录编号 = models.AutoField('平整度检测记录编号', primary_key=True)
     定期检查记录编号 = models.OneToOneField(定期检测记录, on_delete=models.CASCADE, verbose_name='定期检查记录编号', default='1')
-    IRI = models.FloatField(null=False)
+    IRI = models.FloatField('平整度指数',null=False)
     备注 = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = '路面平整度检测记录'
+        verbose_name_plural = '路面平整度检测记录'
 
 
 class 路面定期检查损害记录(models.Model):
@@ -45,6 +55,10 @@ class 路面定期检查损害记录(models.Model):
     损坏高 = models.FloatField('损坏高', null=False)
     损坏位置及情况描述 = models.CharField('损坏位置及情况描述', max_length=100, null=False)
 
+    class Meta:
+        verbose_name = '路面定期检查损害记录'
+        verbose_name_plural = '路面定期检查损害记录'
+
 
 class 日常巡查(models.Model):
     巡查日期 = models.DateField('巡查日期')
@@ -58,6 +72,8 @@ class 日常巡查(models.Model):
 
 class 日常巡查记录(models.Model):
     日常巡查记录编号 = models.AutoField('日常巡查记录编号', primary_key=True)
+    巡查人员 = models.ForeignKey(model_municipalManagementUI.职工, related_name='日常巡查引用职工', on_delete=models.CASCADE,
+                             verbose_name='巡查人员', null=True)
     道路编号 = models.ForeignKey(model_municipalManagementUI.道路基本档案, on_delete=models.CASCADE, verbose_name='道路编号',
                              default='1')
     巡查日期 = models.DateField('巡查日期', null=False)
