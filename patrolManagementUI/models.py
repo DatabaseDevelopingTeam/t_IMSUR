@@ -14,9 +14,18 @@ class 定期巡查(models.Model):
         verbose_name = '定期巡查'
         verbose_name_plural = '定期巡查'
 
+    def roadId(self):
+        return self.巡查道路.道路编号
+
+    def roadName(self):
+        return self.巡查道路.道路名称
+
+    roadId.short_description = '道路编号'
+    roadName.short_description = '道路名称'
+
 
 class 定期检测记录(models.Model):
-    定期检查记录编号 = models.AutoField('定期检查记录编号', primary_key=True)
+    定期检查记录编号 = models.AutoField('编号', primary_key=True)
     巡查人员 = models.ForeignKey(model_municipalManagementUI.职工, related_name='定期巡查引用职工', on_delete=models.CASCADE,
                              verbose_name='巡查人员', null=True)
     道路编号 = models.ForeignKey(model_municipalManagementUI.道路基本档案, on_delete=models.CASCADE, verbose_name='道路编号',
@@ -28,12 +37,20 @@ class 定期检测记录(models.Model):
         verbose_name='定期检测记录'
         verbose_name_plural='定期检测记录'
 
+    def __str__(self):
+        return self.定期检查记录编号
+
+    def roadName(self):
+        return self.道路编号.道路名称
+
+    roadName.short_description = '道路名称'
+
 
 class 路面平整度检测记录(models.Model):
-    平整度检测记录编号 = models.AutoField('平整度检测记录编号', primary_key=True)
+    平整度检测记录编号 = models.AutoField('编号', primary_key=True)
     定期检查记录编号 = models.OneToOneField(定期检测记录, on_delete=models.CASCADE, verbose_name='定期检查记录编号', default='1')
     IRI = models.FloatField('平整度指数',null=False)
-    备注 = models.CharField(max_length=100)
+    备注 = models.CharField(max_length=100,verbose_name='备注')
 
     class Meta:
         verbose_name = '路面平整度检测记录'
@@ -41,7 +58,7 @@ class 路面平整度检测记录(models.Model):
 
 
 class 路面定期检查损害记录(models.Model):
-    定期巡察损害记录编号 = models.AutoField('定期巡察损害记录编号', primary_key=True)
+    定期巡察损害记录编号 = models.AutoField('编号', primary_key=True)
     定期检查记录编号 = models.ForeignKey(定期检测记录, on_delete=models.CASCADE, verbose_name='定期检查记录编号', default='1')
     路面类型 = models.ForeignKey(model_municipalManagementUI.路面损坏类型, on_delete=models.CASCADE, verbose_name='路面类型',
                              related_name='定期巡查损害记录引用路面类型',default='1')
@@ -69,9 +86,18 @@ class 日常巡查(models.Model):
         verbose_name = '日常巡查'
         verbose_name_plural = '日常巡查'
 
+    def roadId(self):
+        return self.巡查道路.道路编号
+
+    def roadName(self):
+        return self.巡查道路.道路名称
+
+    roadId.short_description = '道路编号'
+    roadName.short_description = '道路名称'
+
 
 class 日常巡查记录(models.Model):
-    日常巡查记录编号 = models.AutoField('日常巡查记录编号', primary_key=True)
+    日常巡查记录编号 = models.AutoField('编号', primary_key=True)
     巡查人员 = models.ForeignKey(model_municipalManagementUI.职工, related_name='日常巡查引用职工', on_delete=models.CASCADE,
                              verbose_name='巡查人员', null=True)
     道路编号 = models.ForeignKey(model_municipalManagementUI.道路基本档案, on_delete=models.CASCADE, verbose_name='道路编号',
@@ -82,12 +108,20 @@ class 日常巡查记录(models.Model):
         verbose_name = '日常巡查记录'
         verbose_name_plural = '日常巡查记录'
 
+    def __str__(self):
+        return self.日常巡查记录编号
+
+    def roadName(self):
+        return self.巡查道路.道路名称
+
+    roadName.short_description = '道路名称'
+
 
 class 日常巡查损害记录(models.Model):
-    日常巡查损害记录编号 = models.AutoField('日常巡查损害记录编号', primary_key=True)
+    日常巡查损害记录编号 = models.AutoField('编号', primary_key=True)
     日常巡查记录编号 = models.ForeignKey(日常巡查记录, on_delete=models.CASCADE, verbose_name='日常巡查记录编号', default='1')
-    路面类型 = models.ForeignKey(model_municipalManagementUI.路面损坏类型, on_delete=models.CASCADE, verbose_name='路面类型',
-                             related_name='日常巡查损坏记录引用路面类型',default='1')
+    # 路面类型 = models.ForeignKey(model_municipalManagementUI.路面损坏类型, on_delete=models.CASCADE, verbose_name='路面类型',
+    #                         related_name='日常巡查损坏记录引用路面类型',default='1')
     损坏类型 = models.ForeignKey(model_municipalManagementUI.路面损坏类型, on_delete=models.CASCADE, verbose_name='损坏类型',
                              related_name='日常巡查损坏记录引用损坏类型',default='1')
     损坏位置及情况描述 = models.CharField('损坏位置及情况描述', max_length=100)
@@ -95,3 +129,8 @@ class 日常巡查损害记录(models.Model):
     class Meta:
         verbose_name = '日常巡查损害记录'
         verbose_name_plural = '日常巡查损害记录'
+
+    def roadType(self):
+        return self.损坏类型.要引用的路面类型
+
+    roadType.short_description = '路面类型'
