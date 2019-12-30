@@ -157,3 +157,21 @@ class 路面损坏单项扣分表(models.Model):
     class Meta:
         verbose_name = '路面损坏单项扣分表'
         verbose_name_plural = '路面损坏单项扣分表'
+
+
+class 道路技术状况评价年报表(models.Model):
+    道路编号 = models.ForeignKey(道路基本档案, on_delete=models.CASCADE, verbose_name='道路编号', null=True)
+    评价日期 = models.DateField(verbose_name='评价日期',null=False)
+
+    PQI =  models.FloatField(verbose_name='PQI',null=False)
+    PQI等级 = models.CharField(verbose_name='PQI等级', max_length=2, null=False, choices=(('A','A'),('B','B'),('C','C'),('D', "D")))
+
+    RQI = models.FloatField(verbose_name='RQI', null=False)
+    RQI等级 = models.CharField(verbose_name='RQI等级', null=False, max_length=2, choices=(('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', "D")))
+
+    PCI = models.FloatField(verbose_name='PCI', null=False)
+    PCI等级 = models.CharField(verbose_name='PCI等级', null=False, max_length=2, choices=(('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', "D")))
+
+    class Meta:
+        verbose_name = '道路技术状况评价年报'
+        verbose_name_plural = '道路技术状况评价年报'
