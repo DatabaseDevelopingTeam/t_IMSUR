@@ -23,7 +23,6 @@ def patrolMap(request):
     today = datetime.date.today()
     # Tasks = model2.日常巡查.objects.filter(巡查日期=today)
     Tasks = model2.日常巡查.objects.filter(巡查日期=today,巡查状态='1')
-    employeeId=request
     return render(request, 'patrolMap.html', {"Tasks": Tasks})
 
 
@@ -66,6 +65,10 @@ def setupModalView(request):
     Info = {}
     roadId=request.POST.get('roadId')
     Road=models.道路基本档案.objects.get(道路编号=roadId)
+    employee_id=request.COOKIES.get('employee_id')
+    user = models.职工.objects.get(工号=employee_id)
+    Info['employeeId']=user.工号
+    Info['employeeName']=user.姓名
     # CarRoad=Road
     # Roadtype=models.路面类型.objects.get(路面类型=CarRoad.路面类型.路面类型)
     # DamageType=Roadtype.rn路面类型.all()

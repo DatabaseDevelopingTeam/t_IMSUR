@@ -134,6 +134,8 @@ $('#myModal').on('show.bs.modal',function(e)
                         },
                         success: function (data, status) {
                             $("#damageType").append("<option>哈哈哈</option>")
+                            console.log(data['employeeId'])
+                            console.log(data['employeeName'])
                         },
                         error: function () {
                             console.log("服务器异常");
