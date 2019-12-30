@@ -125,6 +125,7 @@ class 日常巡查损害记录(models.Model):
     损坏类型 = models.ForeignKey(model_municipalManagementUI.路面损坏类型, on_delete=models.CASCADE, verbose_name='损坏类型',
                              related_name='日常巡查损坏记录引用损坏类型',default='1')
     损坏位置及情况描述 = models.CharField('损坏位置及情况描述', max_length=100)
+    备注=models.CharField('备注',max_length=100)
 
     class Meta:
         verbose_name = '日常巡查损害记录'
