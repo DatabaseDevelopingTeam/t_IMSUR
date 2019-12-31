@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import 定期巡查
-from .models import 日常巡查
+from .models import 定期巡查任务
+from .models import 日常巡查任务
 from .models import 定期检测记录
 from .models import 路面平整度检测记录
 from .models import 路面定期检查损害记录
@@ -11,7 +11,7 @@ from .models import 日常巡查损害记录
 # Register your models here.
 
 
-@admin.register(定期巡查)
+@admin.register(定期巡查任务)
 class RegularTaskAdmin(admin.ModelAdmin):
     # 要展示的字段
     list_display = ['巡查日期', 'roadId','roadName','巡查状态']
@@ -22,7 +22,7 @@ class RegularTaskAdmin(admin.ModelAdmin):
     search_fields = ['巡查日期', 'roadId','roadName']
 
 
-@admin.register(日常巡查)
+@admin.register(日常巡查任务)
 class DailyTaskAdmin(admin.ModelAdmin):
     # 要展示的字段
     list_display = ['巡查日期', 'roadId','roadName', '巡查状态']
@@ -44,9 +44,9 @@ class DQJCJL(admin.ModelAdmin):
 
 @admin.register(路面平整度检测记录)
 class LMPZDJCJL(admin.ModelAdmin):
-    list_display = ['平整度检测记录编号', '定期检查记录编号', 'IRI', '备注']
+    list_display = ['平整度检测记录编号', '定期检查记录编号', 'IRI']
     # list_display_links = ['备注']
-    search_fields = ['平整度检测记录编号', '定期检查记录编号', 'IRI', '备注']
+    search_fields = ['平整度检测记录编号', '定期检查记录编号', 'IRI']
 
 
 @admin.register(路面定期检查损害记录)
@@ -66,7 +66,7 @@ class RCXXJL(admin.ModelAdmin):
 
 @admin.register(日常巡查损害记录)
 class RCXCSHJL(admin.ModelAdmin):
-    list_display = ['日常巡查损害记录编号','日常巡查记录编号','roadType','损坏类型','损坏位置及情况描述','备注']
+    list_display = ['日常巡查损害记录编号','日常巡查记录编号','roadType','损坏类型','损坏位置及情况描述']
     # list_display_links = ['日常巡查损害记录编号']
     list_filter = ['损坏类型']
     search_fields = ['日常巡查损害记录编号','日常巡查记录编号','roadType','损坏类型']
