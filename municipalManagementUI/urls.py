@@ -11,4 +11,6 @@ urlpatterns = [
     path('roadManagement/getAllRoadsBasicInfo/', views.getAllRoadsBasicInfo),
     path('roadManagement/getRoadAddPopupContent/', views.getRoadAddPopupContent),
     path('roadManagement/getRoadsLatlng/', views.getRoadsLatlng),
+    path('evaluation/', views.evaluation),
+    path('evaluation/evaluate/', views.evaluate),
 ]

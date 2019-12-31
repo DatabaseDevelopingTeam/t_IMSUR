@@ -293,4 +293,13 @@ def countingPQI(RQI, PCI, roadLevel):
             '3': 0.6,
         }
     }
-    return T*RQI*weightDict['RQI'][roadLevel] + PCI*weightDict['RQI'][roadLevel]
+    return T * RQI * weightDict['RQI'][roadLevel] + PCI * weightDict['RQI'][roadLevel]
+
+
+def evaluation(request):
+    roads = models.道路基本档案.objects.all()
+    return render(request, 'evaluation.html', context={'roads': roads})
+
+
+def evaluate(request):
+    return None
