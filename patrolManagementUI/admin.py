@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import 定期巡查
-from .models import 日常巡查
+from .models import 定期巡查任务
+from .models import 日常巡查任务
 from .models import 定期检测记录
 from .models import 路面平整度检测记录
 from .models import 路面定期检查损害记录
@@ -11,7 +11,7 @@ from .models import 日常巡查损害记录
 # Register your models here.
 
 
-@admin.register(定期巡查)
+@admin.register(定期巡查任务)
 class RegularTaskAdmin(admin.ModelAdmin):
     # 要展示的字段
     list_display = ['巡查日期', 'roadId','roadName','巡查状态']
@@ -22,7 +22,7 @@ class RegularTaskAdmin(admin.ModelAdmin):
     search_fields = ['巡查日期', 'roadId','roadName']
 
 
-@admin.register(日常巡查)
+@admin.register(日常巡查任务)
 class DailyTaskAdmin(admin.ModelAdmin):
     # 要展示的字段
     list_display = ['巡查日期', 'roadId','roadName', '巡查状态']

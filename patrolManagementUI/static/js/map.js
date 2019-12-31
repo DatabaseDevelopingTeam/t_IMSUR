@@ -172,7 +172,32 @@ function patrolEnd()
 	    //隐藏模态框
 		$("#myModal").modal('hide')
         //将数据写入数据库
-
+        $.ajax({
+            type: "POST",
+            url: "/patrolManagement/patrolMap/setupModalView/",
+            async: false,
+            cache: true,
+            data: {
+                roadId: roadId,
+            },
+            success: function (data, status) {
+                $("#roadId").val(data['roadId'])
+                $("#roadName").val(data['roadName'])
+                $("#roadType").val(data['roadType'])
+                var length=Number(data['length'])
+                console.log(length)
+                console.log(data)
+                for(var i=1;i<length;i++)
+                {
+                    $("#damageType").append("<option value="+data[i]+">"+data[i]+"</option>")
+                }
+                console.log(data['employeeId'])
+                console.log(data['employeeName'])
+            },
+            error: function () {
+                console.log("服务器异常");
+            }
+        });
 	}
 	else
     {

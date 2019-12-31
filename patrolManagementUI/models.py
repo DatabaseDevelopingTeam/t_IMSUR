@@ -77,7 +77,7 @@ class 路面定期检查损害记录(models.Model):
         verbose_name_plural = '路面定期检查损害记录'
 
 
-class 日常巡查(models.Model):
+class 日常巡查任务(models.Model):
     巡查日期 = models.DateField('巡查日期')
     巡查道路 = models.ForeignKey(model_municipalManagementUI.道路基本档案, related_name='no', on_delete=models.CASCADE, null=True)
     巡查状态 = models.CharField('巡查状态', max_length=20, choices=(('1', '未巡查'), ('2', '已巡查')), default='未巡查')

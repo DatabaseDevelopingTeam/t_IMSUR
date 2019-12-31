@@ -21,8 +21,7 @@ def patrolManagementUI(request):
 
 def patrolMap(request):
     today = datetime.date.today()
-    # Tasks = model2.日常巡查.objects.filter(巡查日期=today)
-    Tasks = model2.日常巡查.objects.filter(巡查日期=today,巡查状态='1')
+    Tasks = model2.日常巡查任务.objects.filter(巡查日期=today,巡查状态='1')
     return render(request, 'patrolMap.html', {"Tasks": Tasks})
 
 
@@ -31,7 +30,7 @@ def patrolMap(request):
 def getTodayRoadsBasicInfo(request):
     roads = []
     today = datetime.date.today()
-    TodayTasks = model2.日常巡查.objects.filter(巡查日期=today, 巡查状态='1')
+    TodayTasks = model2.日常巡查任务.objects.filter(巡查日期=today, 巡查状态='1')
     for TodayTask in TodayTasks:
         roads.append({'roadId': TodayTask.巡查道路.道路编号,
                       'roadName': TodayTask.巡查道路.道路名称,
@@ -44,9 +43,9 @@ def getTodayRoadsBasicInfo(request):
 @csrf_exempt
 def getRoadsLatlng(request):
     roadsLatlng = {}
-    # 在道路基本档案中取出日常巡查表今日巡查任务的道路编号对应的档案
+    # 在道路基本档案中取出日常巡查任务表今日巡查任务的道路编号对应的档案
     today = datetime.date.today()
-    TodayTasks = model2.日常巡查.objects.filter(巡查日期=today, 巡查状态='1')
+    TodayTasks = model2.日常巡查任务.objects.filter(巡查日期=today, 巡查状态='1')
     for ToadyTask in TodayTasks:
         roadsLatlng[ToadyTask.巡查道路.道路编号] = ToadyTask.巡查道路.getLatlng()
     return JsonResponse(roadsLatlng, safe=False)
@@ -81,3 +80,7 @@ def setupModalView(request):
     Info['roadType']=CarRoad.路面类型.路面类型
     Info['length']='%s' % (i)
     return JsonResponse(Info,safe=False)
+
+
+@csrf_exempt
+def AddDailyPatrolRecord(request):
