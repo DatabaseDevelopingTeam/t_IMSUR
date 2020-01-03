@@ -45,7 +45,7 @@ class 定期检测记录(models.Model):
 
     roadName.short_description = '道路名称'
 
-    def yearOfData(self):
+    def yearOfDate(self):
         return self.巡查日期.year
 
 
