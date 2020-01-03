@@ -216,12 +216,16 @@ function patrolEnd()
 }
 
 //添加巡查信息到表格
-function addPatrolInfo()
-{
+function addPatrolInfo() {
     var damageType=$("#damageType").val();
     var damageDetail=$("#damageDetail").val();
     var note=$("#note").val();
-    var tab=$("#mytab")
-
+    var newRow='<tr><td style="text-align: center;vertical-align:middle!important;">'+damageType+'</td>' +
+        '<td style="text-align: center;vertical-align:middle!important;">'+damageDetail+'</td>' +
+        '<td style="text-align: center;vertical-align:middle!important;">'+note+'</td>' +
+        '<td><a href="#" οnclick=removePatrolInfo(this)>删除</a></td></tr>';
+    $("#tabbody").append(newRow);
 }
-
+function removePatrolInfo(e){
+    $(e).parent().parent().remove();
+}
