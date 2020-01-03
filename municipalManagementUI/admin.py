@@ -17,8 +17,9 @@ class RoadTypeAdmin(admin.ModelAdmin):
 @admin.register(models.路面损坏类型)
 class RoadDamageTypeAdmin(admin.ModelAdmin):
     list_display_links = ['损坏类型']
-    list_display = ['要引用的路面类型', '损坏类型']
+    list_display = ['要引用的路面类型', '损坏类型', '损坏面积计算方法代号']
     list_filter = ['要引用的路面类型']
+    # list_editable = ['损坏面积计算方法代号']
 
 
 @admin.register(models.车行道)

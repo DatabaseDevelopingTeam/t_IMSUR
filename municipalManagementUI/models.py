@@ -20,6 +20,7 @@ class 路面类型(models.Model):
 class 路面损坏类型(models.Model):
     要引用的路面类型 = models.ForeignKey(路面类型, on_delete=models.CASCADE, related_name='rn路面类型', verbose_name='路面类型')
     损坏类型 = models.CharField(verbose_name='损坏类型', max_length=40, primary_key=True)
+    损坏面积计算方法代号 = models.PositiveSmallIntegerField(verbose_name='损坏面积计算方法代号', null=False, default=1)
 
     class Meta:
         verbose_name_plural = '路面损坏类型'
@@ -164,16 +165,19 @@ class 路面损坏单项扣分表(models.Model):
 
 class 道路技术状况评价年报表(models.Model):
     道路编号 = models.ForeignKey(道路基本档案, on_delete=models.CASCADE, verbose_name='道路编号', null=True)
-    评价日期 = models.DateField(verbose_name='评价日期',null=False)
+    评价日期 = models.DateField(verbose_name='评价日期', null=False)
 
-    PQI =  models.FloatField(verbose_name='PQI',null=False)
-    PQI等级 = models.CharField(verbose_name='PQI等级', max_length=2, null=False, choices=(('A','A'),('B','B'),('C','C'),('D', "D")))
+    PQI = models.FloatField(verbose_name='PQI', null=False)
+    PQI等级 = models.CharField(verbose_name='PQI等级', max_length=2, null=False,
+                             choices=(('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', "D")))
 
     RQI = models.FloatField(verbose_name='RQI', null=False)
-    RQI等级 = models.CharField(verbose_name='RQI等级', null=False, max_length=2, choices=(('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', "D")))
+    RQI等级 = models.CharField(verbose_name='RQI等级', null=False, max_length=2,
+                             choices=(('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', "D")))
 
     PCI = models.FloatField(verbose_name='PCI', null=False)
-    PCI等级 = models.CharField(verbose_name='PCI等级', null=False, max_length=2, choices=(('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', "D")))
+    PCI等级 = models.CharField(verbose_name='PCI等级', null=False, max_length=2,
+                             choices=(('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', "D")))
 
     class Meta:
         verbose_name = '道路技术状况评价年报'

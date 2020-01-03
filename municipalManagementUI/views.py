@@ -3,6 +3,7 @@ from django.http import response, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from municipalManagementUI import models
 from patrolManagementUI import models as pmodels
+import datetime
 
 
 def municipalManagementUI(request):
@@ -29,7 +30,7 @@ def addRoadBasicInfo(request):
     lat = request.POST.get('lat')
     lng = request.POST.get('lng')
     roadType = request.POST.get('roadType')
-
+    # 建立道路基本档案
     road = models.道路基本档案(道路名称=roadName,
                          道路等级=models.道路等级.objects.get(道路等级=roadLevel),
                          道路编号=roadId,
@@ -39,6 +40,11 @@ def addRoadBasicInfo(request):
     # 保存一对一的车行道信息
     路面类型 = models.路面类型.objects.get(路面类型=roadType)
     models.车行道(道路编号=road, 路面类型=路面类型).save()
+    # 建立今日巡查任务
+    pmodels.日常巡查任务(巡查日期=datetime.date.today(),
+                   巡查道路=road, 巡查状态=1).save()
+    pmodels.定期巡查任务(巡查日期=datetime.date.today(),
+                   巡查道路=road, 巡查状态=1).save()
     return HttpResponse('添加成功')
     # return HttpResponse('表单异常!', status=403)
 
@@ -185,8 +191,33 @@ def getLevelByPCI(PCI, roadLevel):
 
 
 # 为单条道路计算PCI
-def countingPCIForOneRoad(roadId):
-    pass
+def countingPCIForOneRoad(regularDamageRecords):
+    PCI_sum = 0
+    for singleDamageRecord in regularDamageRecords:
+        # 损坏类型
+        damageType = singleDamageRecord.损坏类型
+        # 损坏密度 = 损坏面积/检查面积
+        damageArea = countingDamageArea(damageType.损坏面积计算方法代号, singleDamageRecord.损坏长,
+                                        singleDamageRecord.损坏宽,
+                                        singleDamageRecord.损坏高)
+        detectionArea = singleDamageRecord.检查总长 * singleDamageRecord.检查总宽
+        damageDensity = damageArea / detectionArea
+        PCI_sum += countingSinglePCIForOneRecord(damageType, damageDensity)
+    PCI_average = PCI_sum / len(regularDamageRecords)
+    return 100 - PCI_average
+
+
+# 计算损坏面积
+def countingDamageArea(computingMethodCode, L, W, H):  # 长，宽，高
+    computingDict = {
+        '1': L * W,
+        '2': L,
+        '3': 4,
+        '4': L * 0.2
+    }
+    if computingMethodCode in computingDict.keys():
+        return computingDict[computingMethodCode]
+    return 0
 
 
 '''
@@ -199,28 +230,15 @@ def countingPCIForOneRoad(roadId):
 
 # 为单条道路的单次损坏记录计算PCI被减项
 def countingSinglePCIForOneRecord(损坏类型obj, 损坏密度):
-    # #n
-    # n = 4
-    # 路面类型 = 损坏类型obj.要引用的路面类型.路面类型
-    # singleRoadTypeDict = 损坏类型表[路面类型]
-    # key = ''
-    # for k, v in singleRoadTypeDict:
-    #     if 损坏类型obj.损坏类型 in v:
-    #         key = k
-    # #m
-    # m = len(singleRoadTypeDict[k])
     return countingDP(损坏类型obj, 损坏密度) * countingWij(损坏类型obj, 损坏密度)
 
 
 # 获取某种路面的某种损坏类型的对应损坏密度的扣分分值
-def countingDP(roadType, damgeType, damgeDensity):
-    损坏类型 = models.路面损坏类型.objects.get(损坏类型=damgeType, 要引用的路面类型=models.路面类型.objects.get(路面类型=roadType))
-    return models.路面损坏单项扣分表.objects.get(损坏类型=损坏类型, 损坏密度=damgeDensity).扣分分值
-
-
 # get DPij
 def countingDP(损坏类型obj, 损坏密度):
-    return models.路面损坏单项扣分表.objects.get(损坏类型=损坏类型obj, 损坏密度=损坏密度).扣分分值
+    if models.路面损坏单项扣分表.objects.filter(损坏类型=损坏类型obj, 损坏密度_gte=损坏密度).exsits():
+        return models.路面损坏单项扣分表.objects.filter(损坏类型=损坏类型obj, 损坏密度_gte=损坏密度)[0].扣分分值
+    return 1
 
 
 # counting Uij
@@ -234,8 +252,8 @@ def countingUij(损坏类型obj, 损坏密度):
 
     singlePoint = models.路面损坏单项扣分表.objects.get(损坏类型=损坏类型obj, 损坏密度=损坏密度).扣分分值
     sumPoint = 0
-    for singleDamgeType in singleRoadTypeDict[key]:
-        损坏类型 = models.路面损坏类型.objects.get(要引用的路面类型=models.路面类型.objects.get(路面类型=路面类型), 损坏类型=singleDamgeType)
+    for singleDamageType in singleRoadTypeDict[key]:
+        损坏类型 = models.路面损坏类型.objects.get(要引用的路面类型=models.路面类型.objects.get(路面类型=路面类型), 损坏类型=singleDamageType)
         sumPoint += models.路面损坏单项扣分表.objects.get(损坏类型=损坏类型, 损坏密度=损坏密度).扣分分值
     return singlePoint / sumPoint
 
@@ -297,15 +315,71 @@ def countingPQI(RQI, PCI, roadLevel):
     return T * RQI * weightDict['RQI'][roadLevel] + PCI * weightDict['RQI'][roadLevel]
 
 
+# 返回评估页面
 def evaluation(request):
     roads = models.道路基本档案.objects.all()
     return render(request, 'evaluation.html', context={'roads': roads})
 
 
+# 生成评估数据
+@csrf_exempt
 def evaluate(request):
-    return None
+    roadId = request.POST.get('roadId')
+    year = request.POST.get('year')
+    road = models.道路基本档案.objects.get(道路编号=roadId)
+    # 计算路面行驶质量评价
+    if pmodels.定期检测记录.objects.filter(道路编号=road, 巡查日期__year=year).exists():
+        # 某道路某年的所有定期巡查记录
+        regularDetectionRecords = pmodels.定期检测记录.objects.filter(道路编号=road, 巡查日期__year=year)
+
+        IRI_of_sum = 0
+        PCI_of_sum = 0
+        # 取出数据
+        for i in range(len(regularDetectionRecords)):
+            singleRecord = regularDetectionRecords[i]
+            # 取出对应的平整度记录
+            IRI = pmodels.路面平整度检测记录.objects.get(定期检查记录编号=singleRecord).IRI
+            IRI_of_sum += IRI
+            # 取出对应的定期检查损坏记录并计算单次巡查的PCI
+            regularDamageRecords = pmodels.路面定期检查损害记录.objects.filter(定期检查记录编号=singleRecord)
+            PCI_of_sum += countingPCIForOneRoad(regularDamageRecords)
+
+        # 计算RQI
+        IRI_average = IRI_of_sum / len(regularDetectionRecords)
+        RQI_average = countingRQI(IRI_average)
+        RQI_level = getLevelByRQI(RQI_average, road.道路等级)
+        # 计算PCI
+        PCI_average = PCI_of_sum / len(regularDetectionRecords)
+        PCI_level = getLevelByPCI(RQI_average, road.道路等级)
+        # 计算PQI
+        PQI_average = countingPQI(RQI_average, PCI_average, road.道路等级)
+        PQI_level = getLevelByPQI(PQI_average, road.道路等级)
+        # 评价记录写入数据库
+        evaluateRecord = models.道路技术状况评价年报表(道路编号=road,
+                                            评价日期=datetime.date.today(),
+                                            RQI=RQI_average,
+                                            RQI等级=RQI_level,
+                                            PCI=PCI_average,
+                                            PCI等级=PCI_level,
+                                            PQI=PQI_average,
+                                            PQI等级=PQI_level)
+        evaluateRecord.save()
+        evaluateRecordDict = {
+            'road': str(road),
+            'year': year,
+            'RQI': PQI_average,
+            'RQILevel': PQI_level,
+            'PCI': PCI_average,
+            'PCILevel': PCI_level,
+            'PQI': PQI_average,
+            'PQILevel': PQI_level,
+        }
+        return JsonResponse(evaluateRecordDict,safe=False)
+    else:
+        return HttpResponse("-1")  # 无记录！
 
 
+# 通过道路编号获取其已有的检测记录的年份
 def getYearByRoadId(request):
     roadId = request.GET.get('roadId')
     road = models.道路基本档案.objects.get(道路编号=roadId)
