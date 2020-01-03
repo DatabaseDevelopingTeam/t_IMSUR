@@ -202,19 +202,7 @@ function patrolEnd()
             success: function (data, status) {
                 //隐藏模态框
 		        $("#myModal").modal('hide');
-		        //去除麻点
-                L.marker(data['location']).remove();
-               // map.marker(data['location']).remove();
-                //删除表格中的内容
-                // var roadtab=document.getElementById("roadTab");
-                // for(var i=1;i<roadtab.rows.length;i++)
-                // {
-                //     if(roadtab[i][0].innerHTML==data['roadId'])
-                //     {
-                //         roadtab.deleteRow(i);
-                //         break;
-                //     }
-                // }
+		        location.reload();
             },
             error: function () {
                 console.log("服务器异常");

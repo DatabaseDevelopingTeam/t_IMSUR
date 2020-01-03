@@ -109,8 +109,8 @@ def AddDailyPatrolRecord(request):
         DailyPatrolDamageRecordObject=model2.日常巡查损害记录(日常巡查记录编号=DailyPatrolRecord,损坏类型=
                                                       damageTypeObject,损坏位置及情况描述=damageDetail,备注=note)
         DailyPatrolDamageRecordObject.save()
-    DailyTask=model2.日常巡查任务.objects.get(巡查日期=time,巡查道路=road)
+    DailyTask=model2.日常巡查任务.objects.get(巡查日期=time,巡查道路=road,巡查状态='1')
     DailyTask.巡查状态='2'
     DailyTask.save()
-    Location={'location':road.getLatlng(),'roadId':roadId}
+    Location=road.getLatlng()
     return JsonResponse(Location,safe=False)

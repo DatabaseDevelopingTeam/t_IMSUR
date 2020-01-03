@@ -113,7 +113,7 @@ class 日常巡查记录(models.Model):
         return str(self.日常巡查记录编号)+'  '+str(self.巡查日期)
 
     def roadName(self):
-        return self.巡查道路.道路名称
+        return self.道路编号.道路名称
 
     roadName.short_description = '道路名称'
 
