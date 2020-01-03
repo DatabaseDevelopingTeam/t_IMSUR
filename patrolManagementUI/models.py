@@ -38,7 +38,7 @@ class 定期检测记录(models.Model):
         verbose_name_plural='定期检测记录'
 
     def __str__(self):
-        return self.定期检查记录编号
+        return int(self.定期检查记录编号)
 
     def roadName(self):
         return self.道路编号.道路名称
@@ -109,7 +109,7 @@ class 日常巡查记录(models.Model):
         verbose_name_plural = '日常巡查记录'
 
     def __str__(self):
-        return self.日常巡查记录编号
+        return int(self.日常巡查记录编号)
 
     def roadName(self):
         return self.巡查道路.道路名称
