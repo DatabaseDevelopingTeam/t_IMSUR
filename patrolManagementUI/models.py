@@ -45,6 +45,9 @@ class 定期检测记录(models.Model):
 
     roadName.short_description = '道路名称'
 
+    def yearOfData(self):
+        return self.巡查日期.year
+
 
 class 路面平整度检测记录(models.Model):
     平整度检测记录编号 = models.AutoField('编号', primary_key=True)
@@ -107,7 +110,7 @@ class 日常巡查记录(models.Model):
         verbose_name_plural = '日常巡查记录'
 
     def __str__(self):
-        return str(self.日常巡查记录编号)
+        return str(self.日常巡查记录编号)+'  '+str(self.巡查日期)
 
     def roadName(self):
         return self.巡查道路.道路名称

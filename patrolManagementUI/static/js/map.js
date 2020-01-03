@@ -172,6 +172,13 @@ function patrolEnd()
 	    //隐藏模态框
 		$("#myModal").modal('hide');
         //将数据写入数据库
+        //获取道路编号
+        var roadId=$(roadId).value;
+        //获取路面类型
+        var roadType=$(roadType).value;
+        //获取损坏类型
+
+        v=$()
         $.ajax({
             type: "POST",
             url: "/patrolManagement/patrolMap/AddDailyPatrolRecord/",
@@ -179,6 +186,7 @@ function patrolEnd()
             cache: true,
             data: {
                 roadId: roadId,
+
             },
             success: function (data, status) {
                 $("#roadId").val(data['roadId']);
