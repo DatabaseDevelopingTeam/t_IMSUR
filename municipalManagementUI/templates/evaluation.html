@@ -20,16 +20,15 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">选择道路</label>
                 <div class="col-md-4">
-                    <select class="form-control">
+                    <select onchange="updateYearSelector(this);" id="roadSelector" class="form-control">
                         {% for road in roads %}
-                            <option>{{ road.道路编号 }} {{ road.道路名称 }}</option>
+                            <option value="{{ road.道路编号 }}">{{ road.道路编号 }} {{ road.道路名称 }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <label class="col-md-2 control-label">选择年份</label>
                 <div class="col-md-4">
-                    <select class="form-control">
-
+                    <select id="yearSelector" class="form-control">
                     </select>
                 </div>
             </div>
@@ -69,6 +68,8 @@
 
 
 {% block privatejs %}
+    <script src={% static "js/evaluation.js" %}></script>
 {% endblock %}
+
 </body>
 </html>

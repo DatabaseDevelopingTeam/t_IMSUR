@@ -13,4 +13,5 @@ urlpatterns = [
     path('roadManagement/getRoadsLatlng/', views.getRoadsLatlng),
     path('evaluation/', views.evaluation),
     path('evaluation/evaluate/', views.evaluate),
+    path('evaluation/getYearsByRoadId/', views.getYearByRoadId),
 ]

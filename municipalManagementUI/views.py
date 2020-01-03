@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import response, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from municipalManagementUI import models
+from patrolManagementUI import models as pmodels
 
 
 def municipalManagementUI(request):
@@ -303,3 +304,19 @@ def evaluation(request):
 
 def evaluate(request):
     return None
+
+
+def getYearByRoadId(request):
+    roadId = request.GET.get('roadId')
+    road = models.道路基本档案.objects.get(道路编号=roadId)
+    if pmodels.定期检测记录.objects.filter(道路编号=road).exists():
+        regularDetectionRecords = pmodels.定期检测记录.objects.filter(道路编号=road)
+        years = []
+        for i in range(len(regularDetectionRecords)):
+            record = regularDetectionRecords[i]
+            year = record.yearOfDate()
+            if year not in years:
+                years.append(year)
+        return JsonResponse(years, safe=False)
+    else:
+        return JsonResponse(['没有查询到数据'], safe=False)
