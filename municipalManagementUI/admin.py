@@ -63,9 +63,6 @@ class EmployeeAdmin(admin.ModelAdmin):
 
 @admin.register(models.路面损坏单项扣分表)
 class PointsRecordTableAdmin(admin.ModelAdmin):
-    fieldsets = (
-        (None,
-         {
-             'fields': ('损坏类型', '扣分分值', '损坏密度')
-         }),
-    )
+    list_display = ['损坏类型', '损坏密度', '扣分分值']
+    # list_display_links = ['损坏密度']
+    list_editable = ['损坏密度']
