@@ -51,10 +51,10 @@ class LMPZDJCJL(admin.ModelAdmin):
 
 @admin.register(路面定期检查损害记录)
 class LMDQJCSHJL(admin.ModelAdmin):
-    list_display = ['定期巡察损害记录编号', '定期检查记录编号', '路面类型', '损坏类型']
-    list_filter = ['路面类型','损坏类型','定期检查记录编号']
+    list_display = ['定期巡察损害记录编号', '定期检查记录编号', '损坏类型']
+    list_filter = ['损坏类型','定期检查记录编号']
     # list_display_links = ['定期巡察损害记录编号']
-    search_fields = ['定期巡察损害记录编号', '定期检查记录编号', '路面类型', '损坏类型']
+    search_fields = ['定期巡察损害记录编号', '定期检查记录编号', '损坏类型']
 
 
 @admin.register(日常巡查记录)

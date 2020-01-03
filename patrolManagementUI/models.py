@@ -60,8 +60,6 @@ class 路面平整度检测记录(models.Model):
 class 路面定期检查损害记录(models.Model):
     定期巡察损害记录编号 = models.AutoField('编号', primary_key=True)
     定期检查记录编号 = models.ForeignKey(定期检测记录, on_delete=models.CASCADE, verbose_name='定期检查记录编号', default='1')
-    路面类型 = models.ForeignKey(model_municipalManagementUI.路面损坏类型, on_delete=models.CASCADE, verbose_name='路面类型',
-                             related_name='定期巡查损害记录引用路面类型',default='1')
     损坏类型 = models.ForeignKey(model_municipalManagementUI.路面损坏类型, on_delete=models.CASCADE, verbose_name='损坏类型',
                              related_name='定期巡查损害记录引用损坏类型',default='1')
     起止位置 = models.CharField('起止位置', null=False, max_length=100)
