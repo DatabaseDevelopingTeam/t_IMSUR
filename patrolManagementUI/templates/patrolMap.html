@@ -13,7 +13,7 @@
 <body>
     {% block bodycontent %}
     <div class="leftroad">
-        <table class="table table-bordered table table-hover" style="width: 100%;float: left;">
+        <table class="table table-bordered table table-hover" style="width: 100%;float: left;" id="roadTab">
             <thead>
                 <tr style="width: 100%;">
                     <th style="text-align:center; vertical-align:middle!important;">道路编号</th>
@@ -78,12 +78,8 @@
                         	<label for="damageDetail" style="width: 75px;height: 100%;float:left;">备&#12288注：</label>
                             <textarea type="email" id="note" class="form-control" id="damageDetail" placeholder="备注" style="width: 85%;height: 100%;float: left;"></textarea>
                         </div>
-                        <div style="float: left;width: 50%;text-align: center;">
-                        <button type="button" class="btn btn-warning" style="width: 35%;margin-right: 20%;float:right;" onclick="addPatrolInfo()">&#12288增&#12288加&#12288</button>
-                         </div>
-                        <div style="width: 50%;float:left;">
-                            <button type="button" class="btn btn-primary" onclick="removePatrolInfo()"
-                                    style="width: 35%;float:left;margin-left: 20%">&#12288删&#12288除&#12288</button>
+                        <div style="float: left;width: 100%;text-align: center;">
+                            <button type="button" class="btn btn-warning" style="margin-top: 0.2%" onclick="addPatrolInfo()">&#12288增&#12288加&#12288</button>
                         </div>
                     </div>
                     <div class="container" style="width: 100%;">
@@ -97,11 +93,6 @@
                                 </tr>
                             </thead>
                             <tbody id="tabbody">
-                                <tr>
-                                    <td>测试</td>
-                                    <td>测试</td>
-                                    <td>测试</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>

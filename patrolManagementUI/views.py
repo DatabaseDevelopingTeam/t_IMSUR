@@ -1,3 +1,5 @@
+import json
+
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -87,6 +89,7 @@ def AddDailyPatrolRecord(request):
     employeeId=request.COOKIES.get('employee_id')
     user=models.职工.objects.get(工号=employeeId)
     roadId=request.POST.get('roadId')
+    print('roadId:'+str(roadId))
     road=models.道路基本档案.objects.get(道路编号=roadId)
     time=datetime.date.today()
     #建立日常巡查记录档案
@@ -95,15 +98,19 @@ def AddDailyPatrolRecord(request):
     roadType=request.POST.get('roadType')
     #获取路面类型表的对象
     roadTypeObject=models.路面类型.objects.get(路面类型=roadType)
-    #获取损坏类型表的对象
-    damageType=request.POST.get('damageType')
-    damageTypeObject=models.路面损坏类型.objects.get(要引用的路面类型=roadTypeObject,损坏类型=damageType)
     #建立日常巡查损坏记录档案
-    damageDetail=request.POST.get('damageDetail')
-    note=request.POST.get('note')
-    DailyPatrolDamageType=model2.日常巡查损害记录(日常巡查损害记录编号=DailyPatrolRecord,损坏类型=damageTypeObject,
-                                          损坏位置及情况描述=damageDetail,备注=note)
-    DailyPatrolDamageType.save()
-    Info={}
-    Info['']
-    pass
+    # infos = request.POST.get('infos')
+    infos=json.loads(request.POST.get('infos'))
+    for v in infos.values():
+        damageType=v['damageType']
+        damageDetail=v['damageDetail']
+        note=v['note']
+        damageTypeObject=models.路面损坏类型.objects.get(要引用的路面类型=roadTypeObject,损坏类型=damageType)
+        DailyPatrolDamageRecordObject=model2.日常巡查损害记录(日常巡查记录编号=DailyPatrolRecord,损坏类型=
+                                                      damageTypeObject,损坏位置及情况描述=damageDetail,备注=note)
+        DailyPatrolDamageRecordObject.save()
+    DailyTask=model2.日常巡查任务.objects.get(巡查日期=time,巡查道路=road)
+    DailyTask.巡查状态='2'
+    DailyTask.save()
+    Location={'location':road.getLatlng(),'roadId':roadId}
+    return JsonResponse(Location,safe=False)

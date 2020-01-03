@@ -9,5 +9,5 @@ urlpatterns = [
     path('patrolMap/getTodayRoadsBasicInfo/',views.getTodayRoadsBasicInfo),
     path('patrolMap/getRoadInfoPopup/',views.getRoadInfoPopup),
     path('patrolMap/setupModalView/',views.setupModalView),
-    path('patroalMap/AddDailyPatrolRecord',views.AddDailyPatrolRecord),
+    path('patrolMap/AddDailyPatrolRecord/',views.AddDailyPatrolRecord),
 ]
