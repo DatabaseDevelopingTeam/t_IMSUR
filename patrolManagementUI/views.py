@@ -84,4 +84,5 @@ def setupModalView(request):
 
 @csrf_exempt
 def AddDailyPatrolRecord(request):
+
     pass

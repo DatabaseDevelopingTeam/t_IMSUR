@@ -157,7 +157,7 @@ $('#myModal').on('show.bs.modal',function(e)
 //提交函数
 function patrolEnd()
 {
-	var con
+	var con;
     //取消回车绑定事件
     document.onkeydown=function(event){
         var e=event||window.event;
@@ -165,34 +165,34 @@ function patrolEnd()
         {
             event.prevent();
         }
-    }
+    };
 	con=confirm("是否提交？"); //在页面上弹出对话框
 	if(con==true)
 	{
 	    //隐藏模态框
-		$("#myModal").modal('hide')
+		$("#myModal").modal('hide');
         //将数据写入数据库
         $.ajax({
             type: "POST",
-            url: "/patrolManagement/patrolMap/setupModalView/",
+            url: "/patrolManagement/patrolMap/AddDailyPatrolRecord/",
             async: false,
             cache: true,
             data: {
                 roadId: roadId,
             },
             success: function (data, status) {
-                $("#roadId").val(data['roadId'])
-                $("#roadName").val(data['roadName'])
-                $("#roadType").val(data['roadType'])
-                var length=Number(data['length'])
-                console.log(length)
-                console.log(data)
+                $("#roadId").val(data['roadId']);
+                $("#roadName").val(data['roadName']);
+                $("#roadType").val(data['roadType']);
+                var length=Number(data['length']);
+                console.log(length);
+                console.log(data);
                 for(var i=1;i<length;i++)
                 {
-                    $("#damageType").append("<option value="+data[i]+">"+data[i]+"</option>")
+                    $("#damageType").append("<option value="+data[i]+">"+data[i]+"</option>");
                 }
-                console.log(data['employeeId'])
-                console.log(data['employeeName'])
+                console.log(data['employeeId']);
+                console.log(data['employeeName']);
             },
             error: function () {
                 console.log("服务器异常");
