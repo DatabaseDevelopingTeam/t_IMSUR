@@ -84,5 +84,5 @@ def setupModalView(request):
 
 @csrf_exempt
 def AddDailyPatrolRecord(request):
-
+    employeeId=request.POST.get('employeeId')
     pass
