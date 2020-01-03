@@ -169,15 +169,18 @@ function patrolEnd()
 	con=confirm("是否提交？"); //在页面上弹出对话框
 	if(con==true)
 	{
-	    //隐藏模态框
-		$("#myModal").modal('hide');
         //将数据写入数据库
-        //获取道路编号
-        var roadId=$(roadId).value;
-        //获取路面类型
-        var roadType=$(roadType).value;
-        //获取损坏类型
 
+        //获取道路编号
+        var roadId=$("#roadId").val();
+        //获取路面类型
+        var roadType=$("#roadType").val();
+        //获取损坏类型
+        var damageType=$("#damageType").val();
+        //损坏描述
+        var damageDetail=$("#damageDetail").val();
+        //备注
+        var note=$("#note").val();
         v=$()
         $.ajax({
             type: "POST",
@@ -186,21 +189,14 @@ function patrolEnd()
             cache: true,
             data: {
                 roadId: roadId,
-
+                roadType:roadType,
+                damageType:damageType,
+                damageDetail:damageDetail,
+                note:note,
             },
             success: function (data, status) {
-                $("#roadId").val(data['roadId']);
-                $("#roadName").val(data['roadName']);
-                $("#roadType").val(data['roadType']);
-                var length=Number(data['length']);
-                console.log(length);
-                console.log(data);
-                for(var i=1;i<length;i++)
-                {
-                    $("#damageType").append("<option value="+data[i]+">"+data[i]+"</option>");
-                }
-                console.log(data['employeeId']);
-                console.log(data['employeeName']);
+                //隐藏模态框
+		        $("#myModal").modal('hide');
             },
             error: function () {
                 console.log("服务器异常");
@@ -217,5 +213,15 @@ function patrolEnd()
             }
         }
     }
+}
+
+//添加巡查信息到表格
+function addPatrolInfo()
+{
+    var damageType=$("#damageType").val();
+    var damageDetail=$("#damageDetail").val();
+    var note=$("#note").val();
+    var tab=$("#mytab")
+
 }
 
