@@ -141,7 +141,10 @@ class 职工(models.Model):
     ticket = models.CharField('ticket', max_length=30, null=True, blank=True)  # 令牌
 
     def __unicode__(self):
-        return self.姓名
+        return self.姓名 + ' ' + self.工号
+
+    def __str__(self):
+        return self.姓名 + ' ' + self.工号
 
     class Meta:
         verbose_name = '职工'
