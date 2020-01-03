@@ -66,8 +66,8 @@ class 路面定期检查损害记录(models.Model):
     损坏类型 = models.ForeignKey(model_municipalManagementUI.路面损坏类型, on_delete=models.CASCADE, verbose_name='损坏类型',
                              related_name='定期巡查损害记录引用损坏类型',default='1')
     起止位置 = models.CharField('起止位置', null=False, max_length=100)
-    检查总长 = models.FloatField('检查总长', null=False,default=1)
-    检查总宽 = models.FloatField('检查总宽', null=False,default=1)
+    检查总长 = models.FloatField('检查总长', null=False,default=0)
+    检查总宽 = models.FloatField('检查总宽', null=False,default=0)
     损坏长 = models.FloatField('损坏长', null=False,default=1)
     损坏宽 = models.FloatField('损坏宽', null=False,default=1)
     损坏高 = models.FloatField('损坏高', null=False,default=1)
