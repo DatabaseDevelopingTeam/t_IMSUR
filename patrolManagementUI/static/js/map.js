@@ -1,4 +1,4 @@
-var cachedRoadsLatlng={}        //缓存的道路位置信息字典
+var cachedRoadsLatlng={};    //缓存的道路位置信息字典
 
 //oms地图
 var oms = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -170,18 +170,25 @@ function patrolEnd()
 	if(con==true)
 	{
         //将数据写入数据库
-
+        var tab=document.getElementById("mytab");
         //获取道路编号
         var roadId=$("#roadId").val();
         //获取路面类型
         var roadType=$("#roadType").val();
-        //获取损坏类型
-        var damageType=$("#damageType").val();
-        //损坏描述
-        var damageDetail=$("#damageDetail").val();
-        //备注
-        var note=$("#note").val();
-        v=$()
+        var length =tab.rows.length;
+        console.log(length);
+        var info={};
+        for(let i=1; i<length; i++)
+        {
+            let j = i - 1;
+            info[j.toString()] = {
+                'damageType': tab.rows[i].cells[0].innerHTML,
+                'damageDetail' : tab.rows[i].cells[1].innerHTML,
+                'note' : tab.rows[i].cells[2].innerHTML,
+            };
+        }
+        info = JSON.stringify(info);
+        console.log(info);
         $.ajax({
             type: "POST",
             url: "/patrolManagement/patrolMap/AddDailyPatrolRecord/",
@@ -190,13 +197,24 @@ function patrolEnd()
             data: {
                 roadId: roadId,
                 roadType:roadType,
-                damageType:damageType,
-                damageDetail:damageDetail,
-                note:note,
+                infos:info,
             },
             success: function (data, status) {
                 //隐藏模态框
 		        $("#myModal").modal('hide');
+		        //去除麻点
+                L.marker(data['location']).remove();
+               // map.marker(data['location']).remove();
+                //删除表格中的内容
+                // var roadtab=document.getElementById("roadTab");
+                // for(var i=1;i<roadtab.rows.length;i++)
+                // {
+                //     if(roadtab[i][0].innerHTML==data['roadId'])
+                //     {
+                //         roadtab.deleteRow(i);
+                //         break;
+                //     }
+                // }
             },
             error: function () {
                 console.log("服务器异常");
@@ -220,12 +238,15 @@ function addPatrolInfo() {
     var damageType=$("#damageType").val();
     var damageDetail=$("#damageDetail").val();
     var note=$("#note").val();
-    var newRow='<tr><td style="text-align: center;vertical-align:middle!important;">'+damageType+'</td>' +
+    var newRow=$('<tr><td style="text-align: center;vertical-align:middle!important;">'+damageType+'</td>' +
         '<td style="text-align: center;vertical-align:middle!important;">'+damageDetail+'</td>' +
         '<td style="text-align: center;vertical-align:middle!important;">'+note+'</td>' +
-        '<td><a href="#" οnclick=removePatrolInfo(this)>删除</a></td></tr>';
+        '<td  style="text-align: center;vertical-align:middle!important;">' +
+        '<input type="button" value="删除" onclick="removePatrolInfo(this)"></td></tr>');
     $("#tabbody").append(newRow);
-}
+};
+
 function removePatrolInfo(e){
-    $(e).parent().parent().remove();
+    if(confirm("是否删除"))
+        $(e).parent("td").parent("tr").remove();
 }
