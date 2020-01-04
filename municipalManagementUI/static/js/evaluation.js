@@ -48,6 +48,26 @@ const evaluate = function(){
         },
         success:function (data) {
             console.log(data);
+            /**
+             * <tr>
+                    <td>001 胜利路</td>
+                    <td>2017</td>
+                    <td>78</td>
+                    <td>B</td>
+                    <td>88</td>
+                    <td>A</td>
+                    <td>83</td>
+                    <td>B</td>
+                </tr>
+             */
+            let roadTable = document.getElementById("evaluateTable");
+            let newRow = roadTable.insertRow();
+            // newRow.setAttribute("onclick","onRoadRowClick(this);");
+            for(let i = 0;i<8;i++){
+                let newCell = newRow.insertCell();
+                newCell.innerHTML="<th>"+data[i]+"</th>";
+        }
+
         },
         error:function () {
 

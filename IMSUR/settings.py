@@ -63,9 +63,9 @@ WSGI_APPLICATION = 'IMSUR.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'imsur',
-        'USER': 'imsur',
-        'PASSWORD': 'sjkksmysqldbmm.',
+        'NAME': 'imsur2',
+        'USER': 'imsur2',
+        'PASSWORD': 'DrWDi5CZdCZLsjm2',
         'HOST': '149.129.62.232',
         'PORT': '3306',
     }

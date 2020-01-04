@@ -65,4 +65,4 @@ class EmployeeAdmin(admin.ModelAdmin):
 class PointsRecordTableAdmin(admin.ModelAdmin):
     list_display = ['损坏类型', '损坏密度', '扣分分值']
     # list_display_links = ['损坏密度']
-    list_editable = ['损坏密度']
+    # list_editable = ['损坏密度']

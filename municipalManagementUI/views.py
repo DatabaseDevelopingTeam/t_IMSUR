@@ -135,9 +135,9 @@ def inRange(Index, rangeTuple):
 
 
 def findIndexRangeByIndex(Index, dic):
-    for key in dic.keys:
-        if inRange(Index, key):
-            return key
+    for k, v in dic.items():
+        if inRange(Index, k):
+            return k
     return 0, 0
 
 
@@ -148,16 +148,16 @@ def findIndexRangeByIndex(Index, dic):
 
 损坏类型表 = {
     '沥青路面': {
-        '裂缝类': ['线裂', '网裂', '龟裂'],
-        '变形类': ['拥包', '车辙', '沉陷', '翻浆'],
+        '裂缝类': ['沥青线裂', '网裂', '龟裂'],
+        '变形类': ['拥包', '车辙', '沥青沉陷', '翻浆'],
         '松散类': ['剥落', '坑槽', '啃边'],
-        '其他类': ['路框差', '唧浆', '泛油'],
+        '其他类': ['沥青路框差', '沥青唧浆', '泛油'],
     },
     '混凝土路面': {
-        '裂缝类': ['线裂', '板角断裂', '边角裂缝', '交叉裂缝和破碎板'],
+        '裂缝类': ['混凝土线裂', '板角断裂', '边角裂缝', '交叉裂缝和破碎板'],
         '接缝破坏类': ['接缝料损坏', '边角剥落'],
         '表面破坏类': ['坑洞', '表面纹裂', '层状剥落'],
-        '其他类': ['错台', '拱胀', '唧浆', '路框差', '沉陷'],
+        '其他类': ['错台', '拱胀', '混凝土唧浆', '混凝土路框差', '混凝土沉陷'],
     },
 }
 
@@ -186,8 +186,8 @@ def getLevelByPCI(PCI, roadLevel):
         },
     }
 
-    key = findIndexRangeByIndex(PCI, evaluationCriteria[roadLevel])
-    return evaluationCriteria[roadLevel][key]
+    key = findIndexRangeByIndex(PCI, evaluationCriteria[roadLevel.道路等级])
+    return evaluationCriteria[roadLevel.道路等级][key]
 
 
 # 为单条道路计算PCI
@@ -201,7 +201,8 @@ def countingPCIForOneRoad(regularDamageRecords):
                                         singleDamageRecord.损坏宽,
                                         singleDamageRecord.损坏高)
         detectionArea = singleDamageRecord.检查总长 * singleDamageRecord.检查总宽
-        damageDensity = damageArea / detectionArea
+        damageDensity = (damageArea / detectionArea) * 100
+
         PCI_sum += countingSinglePCIForOneRecord(damageType, damageDensity)
     PCI_average = PCI_sum / len(regularDamageRecords)
     return 100 - PCI_average
@@ -210,10 +211,10 @@ def countingPCIForOneRoad(regularDamageRecords):
 # 计算损坏面积
 def countingDamageArea(computingMethodCode, L, W, H):  # 长，宽，高
     computingDict = {
-        '1': L * W,
-        '2': L,
-        '3': 4,
-        '4': L * 0.2
+        1: L * W,
+        2: L,
+        3: 4,
+        4: L * 0.2
     }
     if computingMethodCode in computingDict.keys():
         return computingDict[computingMethodCode]
@@ -236,8 +237,13 @@ def countingSinglePCIForOneRecord(损坏类型obj, 损坏密度):
 # 获取某种路面的某种损坏类型的对应损坏密度的扣分分值
 # get DPij
 def countingDP(损坏类型obj, 损坏密度):
-    if models.路面损坏单项扣分表.objects.filter(损坏类型=损坏类型obj, 损坏密度_gte=损坏密度).exsits():
-        return models.路面损坏单项扣分表.objects.filter(损坏类型=损坏类型obj, 损坏密度_gte=损坏密度)[0].扣分分值
+    if models.路面损坏单项扣分表.objects.filter(损坏类型=损坏类型obj).exists():
+        try:
+            score = models.路面损坏单项扣分表.objects.filter(损坏密度__gte=损坏密度, 损坏类型=损坏类型obj).order_by('损坏密度').first().扣分分值
+            return score
+        except Exception:
+            print("wrong")
+            return 1
     return 1
 
 
@@ -246,15 +252,17 @@ def countingUij(损坏类型obj, 损坏密度):
     路面类型 = 损坏类型obj.要引用的路面类型.路面类型
     singleRoadTypeDict = 损坏类型表[路面类型]
     key = ''
-    for k, v in singleRoadTypeDict:
+    # print(singleRoadTypeDict)
+    for k, v in singleRoadTypeDict.items():
         if 损坏类型obj.损坏类型 in v:
             key = k
+            break
 
-    singlePoint = models.路面损坏单项扣分表.objects.get(损坏类型=损坏类型obj, 损坏密度=损坏密度).扣分分值
+    singlePoint = models.路面损坏单项扣分表.objects.filter(损坏类型=损坏类型obj, 损坏密度__gte=损坏密度).order_by('损坏密度').first().扣分分值
     sumPoint = 0
     for singleDamageType in singleRoadTypeDict[key]:
         损坏类型 = models.路面损坏类型.objects.get(要引用的路面类型=models.路面类型.objects.get(路面类型=路面类型), 损坏类型=singleDamageType)
-        sumPoint += models.路面损坏单项扣分表.objects.get(损坏类型=损坏类型, 损坏密度=损坏密度).扣分分值
+        sumPoint += models.路面损坏单项扣分表.objects.filter(损坏类型=损坏类型obj, 损坏密度__gte=损坏密度).order_by('损坏密度').first().扣分分值
     return singlePoint / sumPoint
 
 
@@ -293,8 +301,8 @@ def getLevelByPQI(PQI, roadLevel):
         },
     }
 
-    key = findIndexRangeByIndex(PQI, evaluationCriteria[roadLevel])
-    return evaluationCriteria[roadLevel][key]
+    key = findIndexRangeByIndex(PQI, evaluationCriteria[roadLevel.道路等级])
+    return evaluationCriteria[roadLevel.道路等级][key]
 
 
 def countingPQI(RQI, PCI, roadLevel):
@@ -312,7 +320,7 @@ def countingPQI(RQI, PCI, roadLevel):
             '3': 0.6,
         }
     }
-    return T * RQI * weightDict['RQI'][roadLevel] + PCI * weightDict['RQI'][roadLevel]
+    return T * RQI * weightDict['RQI'][roadLevel.道路等级] + PCI * weightDict['RQI'][roadLevel.道路等级]
 
 
 # 返回评估页面
@@ -347,10 +355,10 @@ def evaluate(request):
         # 计算RQI
         IRI_average = IRI_of_sum / len(regularDetectionRecords)
         RQI_average = countingRQI(IRI_average)
-        RQI_level = getLevelByRQI(RQI_average, road.道路等级)
+        RQI_level = getLevelByRQI(RQI_average, road.道路等级.道路等级)
         # 计算PCI
         PCI_average = PCI_of_sum / len(regularDetectionRecords)
-        PCI_level = getLevelByPCI(RQI_average, road.道路等级)
+        PCI_level = getLevelByPCI(PCI_average, road.道路等级)
         # 计算PQI
         PQI_average = countingPQI(RQI_average, PCI_average, road.道路等级)
         PQI_level = getLevelByPQI(PQI_average, road.道路等级)
@@ -365,16 +373,16 @@ def evaluate(request):
                                             PQI等级=PQI_level)
         evaluateRecord.save()
         evaluateRecordDict = {
-            'road': str(road),
-            'year': year,
-            'RQI': PQI_average,
-            'RQILevel': PQI_level,
-            'PCI': PCI_average,
-            'PCILevel': PCI_level,
-            'PQI': PQI_average,
-            'PQILevel': PQI_level,
+            0: str(road),
+            1: year,
+            2: PQI_average,
+            3: PQI_level,
+            4: PCI_average,
+            5: PCI_level,
+            6: PQI_average,
+            7: PQI_level,
         }
-        return JsonResponse(evaluateRecordDict,safe=False)
+        return JsonResponse(evaluateRecordDict, safe=False)
     else:
         return HttpResponse("-1")  # 无记录！
 
