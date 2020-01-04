@@ -275,9 +275,8 @@ def countingWij(损坏类型obj, 损坏密度):
 ####################################
 #############计算PQI################
 ####################################
-# 根据PCI和道路等级给出路面损坏状况等级
 
-
+# 根据PQI和道路等级给出路面损坏状况等级
 def getLevelByPQI(PQI, roadLevel):
     # (roadLevel,(PQIRange,level))
     evaluationCriteria = {
@@ -379,8 +378,8 @@ def evaluate(request):
         evaluateRecordDict = {
             0: str(road),
             1: year,
-            2: PQI_average,
-            3: PQI_level,
+            2: RQI_average,
+            3: RQI_level,
             4: PCI_average,
             5: PCI_level,
             6: PQI_average,

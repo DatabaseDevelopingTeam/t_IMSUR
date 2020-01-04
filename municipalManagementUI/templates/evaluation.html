@@ -46,11 +46,11 @@
                 <tr>
                     <td>道路</td>
                     <td style="font-size: 1.1em; font-weight: bold">年份</td>
-                    <td>PQI</td>
-                    <td>等级</td>
                     <td>RQI</td>
                     <td>等级</td>
                     <td>PCI</td>
+                    <td>等级</td>
+                    <td>PQI</td>
                     <td>等级</td>
                 </tr>
             </thead>
@@ -59,12 +59,12 @@
                     <tr>
                       <td>{{ evaluation.道路编号 }}</td>
                         <td>{{ evaluation.评价日期 }}</td>
-                        <td>{{ evaluation.PQI }}</td>
-                        <td>{{ evaluation.PQI等级 }}</td>
                         <td>{{ evaluation.RQI }}</td>
                         <td>{{ evaluation.RQI等级 }}</td>
                         <td>{{ evaluation.PCI }}</td>
                         <td>{{ evaluation.PCI等级 }}</td>
+                        <td>{{ evaluation.PQI }}</td>
+                        <td>{{ evaluation.PQI等级 }}</td>
                     </tr>
                 {% endfor %}
 

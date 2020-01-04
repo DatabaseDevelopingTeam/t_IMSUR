@@ -70,5 +70,5 @@ class PointsRecordTableAdmin(admin.ModelAdmin):
 
 @admin.register(models.道路技术状况评价年报表)
 class evaluationTableAdmin(admin.ModelAdmin):
-    list_display = ['道路编号', '评价日期', 'PQI', 'PQI等级', 'RQI', 'RQI等级', 'PCI', 'PCI等级']
+    list_display = ['道路编号', '评价日期', 'RQI', 'RQI等级', 'PCI', 'PCI等级', 'PQI', 'PQI等级']
     list_display_links = ['道路编号']
