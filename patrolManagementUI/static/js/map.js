@@ -120,6 +120,7 @@ $('#myModal').on('show.bs.modal',function(e)
     var button=$(e.relatedTarget);
     var roadId=button.data('roadid');
     $("#damageType").empty();
+    $("#tabbody").empty();
     $("#describe").val("");
     $("#note").val("");
     $.ajax({
@@ -226,7 +227,8 @@ function addPatrolInfo() {
         '<td style="text-align: center;vertical-align:middle!important;">'+damageDetail+'</td>' +
         '<td style="text-align: center;vertical-align:middle!important;">'+note+'</td>' +
         '<td  style="text-align: center;vertical-align:middle!important;">' +
-        '<input type="button" value="删除" onclick="removePatrolInfo(this)"></td></tr>');
+        '<input type="button" value="删除" class="btn btn-primary" onclick="removePatrolInfo(this)" ' +
+        ' style="width:100%;" "></td></tr>');
     $("#tabbody").append(newRow);
 };
 
