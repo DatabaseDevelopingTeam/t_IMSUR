@@ -250,8 +250,9 @@ function addPatrolInfo() {
         '<td style="text-align: center;vertical-align:middle!important;">'+damageDetail+'</td>' +
         '<td style="text-align: center;vertical-align:middle!important;">'+damageNote+'</td>' +
         '<td  style="text-align: center;vertical-align:middle!important;">' +
-        '<input type="button" value="删除" onclick="removePatrolInfo(this)" class="btn btn-primary" ' +
-        'onclick="removePatrolInfo(this)" ' + ' style="width:100%;" ></td></tr>');
+        '<td  style="text-align: center;vertical-align:middle!important;">' +
+        '<input type="button" value="删除" class="btn btn-primary" onclick="removePatrolInfo(this)" ' +
+        ' style="width:100%;" "></td></tr>');
     $("#tabbody").append(newRow);
 };
 
