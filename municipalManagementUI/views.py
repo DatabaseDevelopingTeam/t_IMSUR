@@ -326,7 +326,8 @@ def countingPQI(RQI, PCI, roadLevel):
 # 返回评估页面
 def evaluation(request):
     roads = models.道路基本档案.objects.all()
-    return render(request, 'evaluation.html', context={'roads': roads})
+    evaluations = models.道路技术状况评价年报表.objects.all()
+    return render(request, 'evaluation.html', context={'roads': roads, 'evaluations': evaluations})
 
 
 # 生成评估数据
@@ -335,6 +336,9 @@ def evaluate(request):
     roadId = request.POST.get('roadId')
     year = request.POST.get('year')
     road = models.道路基本档案.objects.get(道路编号=roadId)
+    if models.道路技术状况评价年报表.objects.filter(道路编号=road, 评价日期__year=year).exists():
+        return HttpResponse('1')
+
     # 计算路面行驶质量评价
     if pmodels.定期检测记录.objects.filter(道路编号=road, 巡查日期__year=year).exists():
         # 某道路某年的所有定期巡查记录

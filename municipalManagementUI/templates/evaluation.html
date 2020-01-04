@@ -29,7 +29,7 @@
                 </div>
                 <label class="col-md-2 control-label">选择年份</label>
                 <div class="col-md-4">
-                    <select id="yearSelector" class="form-control">
+                    <select onchange="checkIfYearsExists(this);" id="yearSelector" class="form-control">
                     </select>
                 </div>
             </div>
@@ -55,6 +55,18 @@
                 </tr>
             </thead>
             <tbody>
+                {% for evaluation in evaluations %}
+                    <tr>
+                      <td>{{ evaluation.道路编号 }}</td>
+                        <td>{{ evaluation.评价日期 }}</td>
+                        <td>{{ evaluation.PQI }}</td>
+                        <td>{{ evaluation.PQI等级 }}</td>
+                        <td>{{ evaluation.RQI }}</td>
+                        <td>{{ evaluation.RQI等级 }}</td>
+                        <td>{{ evaluation.PCI }}</td>
+                        <td>{{ evaluation.PCI等级 }}</td>
+                    </tr>
+                {% endfor %}
 
             </tbody>
         </table>
