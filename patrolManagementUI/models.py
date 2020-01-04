@@ -69,7 +69,7 @@ class 路面定期检查损害记录(models.Model):
     检查总长 = models.FloatField('检查总长', null=False,default=0)
     检查总宽 = models.FloatField('检查总宽', null=False,default=0)
     损坏长 = models.FloatField('损坏长', null=False,default=1)
-    损坏宽 = models.FloatField('损坏宽', null=False,default=1)
+    损坏宽 = models.FloatField('损坏宽', null=False,  default=1)
     损坏高 = models.FloatField('损坏高', null=False,default=1)
     损坏位置及情况描述 = models.TextField('损坏位置及情况描述', max_length=100, null=False)
 
