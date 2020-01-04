@@ -63,9 +63,12 @@ class EmployeeAdmin(admin.ModelAdmin):
 
 @admin.register(models.路面损坏单项扣分表)
 class PointsRecordTableAdmin(admin.ModelAdmin):
-    fieldsets = (
-        (None,
-         {
-             'fields': ('损坏类型', '扣分分值', '损坏密度')
-         }),
-    )
+    list_display = ['损坏类型', '损坏密度', '扣分分值']
+    # list_display_links = ['损坏密度']
+    # list_editable = ['损坏密度']
+
+
+@admin.register(models.道路技术状况评价年报表)
+class evaluationTableAdmin(admin.ModelAdmin):
+    list_display = ['道路编号', '评价日期', 'PQI', 'PQI等级', 'RQI', 'RQI等级', 'PCI', 'PCI等级']
+    list_display_links = ['道路编号']

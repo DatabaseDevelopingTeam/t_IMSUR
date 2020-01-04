@@ -20,12 +20,23 @@ const updateYearSelector = function (roadSelector) {
                 year = years[i];
                 $("#yearSelector").append("<option value=" +"'" + year + "'" + ">" + year.toString() + "</option>");
             }
+            $("#yearSelector").trigger("change");
         },
         error:function (xmlHttpRequest,data,status) {
             console.log("服务器错误!");
         }
     });
 };
+
+const checkIfYearsExists = function (yearSelector) {
+    let currentYear = yearSelector.options[yearSelector.selectedIndex].value;
+    if(currentYear === "没有查询到数据"){
+        document.getElementById('evaluateButton').disabled = true;
+    }else{
+        document.getElementById('evaluateButton').disabled = false;
+    }
+};
+
 //生成评估
 const evaluate = function(){
     let roadSelector = $("#roadSelector")[0];
@@ -47,7 +58,22 @@ const evaluate = function(){
             year:year,
         },
         success:function (data) {
-            console.log(data);
+            if (data === '1'){
+                alert("评估已存在!");
+                return;
+            }else if(data === '-1'){
+                alert("无记录!");
+                return;
+            }
+
+            let roadTable = document.getElementById("evaluateTable");
+            let newRow = roadTable.insertRow();
+            // newRow.setAttribute("onclick","onRoadRowClick(this);");
+            for(let i = 0;i<8;i++){
+                let newCell = newRow.insertCell();
+                newCell.innerHTML="<th>"+data[i]+"</th>";
+        }
+
         },
         error:function () {
 

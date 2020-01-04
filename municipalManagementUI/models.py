@@ -156,7 +156,7 @@ class 路面损坏单项扣分表(models.Model):
     损坏单项扣分编号 = models.AutoField('损坏单项扣分编号', primary_key=True)
     损坏类型 = models.ForeignKey(路面损坏类型, on_delete=models.CASCADE, verbose_name='损坏类型', default='1')
     扣分分值 = models.IntegerField('扣分分值', null=False)
-    损坏密度 = models.FloatField('损坏密度', null=False)
+    损坏密度 = models.IntegerField('损坏密度', default=0, null=False)
 
     class Meta:
         verbose_name = '路面损坏单项扣分表'
