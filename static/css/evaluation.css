@@ -1,0 +1,15 @@
+div[class="container table-bordered"]{
+    width: 60%;
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+div[class="container table-bordered"] form{
+    width: 60%;
+    margin-top: 10px;
+}
+
+div[class="container"]{
+    width: 60%;
+    /*border: solid 2px pink;*/
+}
