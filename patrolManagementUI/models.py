@@ -30,7 +30,6 @@ class 定期检测记录(models.Model):
                              verbose_name='巡查人员', null=True)
     道路编号 = models.ForeignKey(model_municipalManagementUI.道路基本档案, on_delete=models.CASCADE, verbose_name='道路编号',
                              default='1')
-    # 平整度检测记录编号=models.OneToOneField(路面平整度检测记录,on_delete=models.CASCADE)
     巡查日期 = models.DateField('巡查日期', null=False, auto_now_add=True)
 
     class Meta:
@@ -71,7 +70,8 @@ class 路面定期检查损害记录(models.Model):
     损坏长 = models.FloatField('损坏长', null=False,default=1)
     损坏宽 = models.FloatField('损坏宽', null=False,  default=1)
     损坏高 = models.FloatField('损坏高', null=False,default=1)
-    损坏位置及情况描述 = models.TextField('损坏位置及情况描述', max_length=100, null=False)
+    损坏位置及情况描述 = models.TextField('损坏位置及情况描述', max_length=100, null=True)
+    备注=models.TextField('备注',max_length=100,null=True)
 
     class Meta:
         verbose_name = '路面定期检查损害记录'

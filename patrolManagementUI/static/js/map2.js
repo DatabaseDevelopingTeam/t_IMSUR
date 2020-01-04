@@ -25,7 +25,7 @@ var map = L.map("rightmap", {
 //缓存今日巡查任务的道路经纬度信息
 var cacheRoadsLatlng = function () {
         $.ajax({
-            url:"/patrolManagement/patrolMap/getRoadsLatlng/",
+            url:"/patrolManagement/patrolMap2/getRoadsLatlng2/",
             type:"POST",
             async:true,
             cache:true,
@@ -46,7 +46,6 @@ var cacheRoadsLatlng = function () {
         resetCenterCoordinate(latlng);
     };
 
-
     //重设中心点
     var resetCenterCoordinate = function (latlngCoordinate) {
         map.flyTo(latlngCoordinate);
@@ -57,7 +56,7 @@ var cacheRoadsLatlng = function () {
         //得到经纬度与道路编号
         $.ajax({
             type: "POST",
-            url: "/patrolManagement/patrolMap/getTodayRoadsBasicInfo/",
+            url: "/patrolManagement/patrolMap2/getTodayRoadsBasicInfo2/",
             async: true,
             cache: true,
             data: {},
@@ -72,7 +71,7 @@ var cacheRoadsLatlng = function () {
                     ////绑定popup信息框
                     $.ajax({
                         type: "POST",
-                        url: "/patrolManagement/patrolMap/getRoadInfoPopup/",
+                        url: "/patrolManagement/patrolMap2/getRoadInfoPopup2/",
                         async: false,
                         cache: true,
                         data: {
@@ -124,7 +123,7 @@ $('#myModal').on('show.bs.modal',function(e)
     $("#note").val("");
     $.ajax({
         type: "POST",
-        url: "/patrolManagement/patrolMap/setupModalView/",
+        url: "/patrolManagement/patrolMap2/setupModalView2/",
         async: false,
         cache: true,
         data: {
@@ -166,11 +165,16 @@ function patrolEnd()
 	if(con==true)
 	{
         //将数据写入数据库
-        var tab=document.getElementById("mytab");
+        let tab=document.getElementById("tab");
         //获取道路编号
         var roadId=$("#roadId").val();
         //获取路面类型
         var roadType=$("#roadType").val();
+        //获取IRI
+        let IRI=$("#IRI").val();
+        //获取IRI备注
+        let IRINote=$("#IRINote").val();
+        //表格行数
         var length =tab.rows.length;
         console.log(length);
         var info={};
@@ -179,20 +183,28 @@ function patrolEnd()
             let j = i - 1;
             info[j.toString()] = {
                 'damageType': tab.rows[i].cells[0].innerHTML,
-                'damageDetail' : tab.rows[i].cells[1].innerHTML,
-                'note' : tab.rows[i].cells[2].innerHTML,
+                'beginLocation':tab.rows[i].cells[1].innerHTML,
+                'TotalLength':tab.rows[i].cells[2].innerHTML,
+                'TotalWidth':tab.rows[i].cells[3].innerHTML,
+                'damageLength':tab.rows[i].cells[4].innerHTML,
+                'damageWidth':tab.rows[i].cells[5].innerHTML,
+                'damageHeight':tab.rows[i].cells[6].innerHTML,
+                'damageDetail' : tab.rows[i].cells[7].innerHTML,
+                'damageNote' : tab.rows[i].cells[8].innerHTML,
             };
         }
         info = JSON.stringify(info);
         console.log(info);
         $.ajax({
             type: "POST",
-            url: "/patrolManagement/patrolMap/AddDailyPatrolRecord/",
+            url: "/patrolManagement/patrolMap2/AddDailyPatrolRecord2/",
             async: false,
             cache: true,
             data: {
                 roadId: roadId,
                 roadType:roadType,
+                IRI:IRI,
+                IRINote:IRINote,
                 infos:info,
             },
             success: function (data, status) {
@@ -219,12 +231,24 @@ function patrolEnd()
 
 //添加巡查信息到表格
 function addPatrolInfo() {
-    var damageType=$("#damageType").val();
-    var damageDetail=$("#damageDetail").val();
-    var note=$("#note").val();
+    let damageType=$("#damageType").val();
+    let beginLocation=$("#beginLocation").val();
+    let TotalLength=$("#TotalLength").val();
+    let TotalWidth=$("#TotalWidth").val();
+    let damageLength=$("#damageLength").val();
+    let damageWidth=$("#damageWidth").val();
+    let damageHeight=$("#damageHeight").val();
+    let damageDetail=$("#damageDetail").val();
+    let damageNote=$("#damageNote").val();
     var newRow=$('<tr><td style="text-align: center;vertical-align:middle!important;">'+damageType+'</td>' +
+        '<td style="text-align: center;vertical-align:middle!important;">'+beginLocation+'</td>' +
+        '<td style="text-align: center;vertical-align:middle!important;">'+TotalLength+'</td>' +
+        '<td style="text-align: center;vertical-align:middle!important;">'+TotalWidth+'</td>' +
+        '<td style="text-align: center;vertical-align:middle!important;">'+damageLength+'</td>' +
+        '<td style="text-align: center;vertical-align:middle!important;">'+damageWidth+'</td>' +
+        '<td style="text-align: center;vertical-align:middle!important;">'+damageHeight+'</td>' +
         '<td style="text-align: center;vertical-align:middle!important;">'+damageDetail+'</td>' +
-        '<td style="text-align: center;vertical-align:middle!important;">'+note+'</td>' +
+        '<td style="text-align: center;vertical-align:middle!important;">'+damageNote+'</td>' +
         '<td  style="text-align: center;vertical-align:middle!important;">' +
         '<input type="button" value="删除" onclick="removePatrolInfo(this)"></td></tr>');
     $("#tabbody").append(newRow);
