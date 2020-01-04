@@ -4,7 +4,7 @@
 {% load static %}
 <head>
     <meta charset="UTF-8">
-    <title>可视化巡查管理</title>
+    <title>日常巡查</title>
 
     {% block privatecss %}
         <link href={% static "css/map.css" %} rel="stylesheet" type="text/css">
@@ -102,13 +102,13 @@
                         <button type="button" class="btn btn-warning" data-dismiss="modal" style="width: 35%;margin-right: 20%;float:right;">&#12288关&#12288闭&#12288</button>
                     </div>
                     <div style="width: 50%;float:left;">
-                        <button type="button" class="btn btn-primary" onclick="patrolEnd()"
-                        onkeypress="patrolEnd()" style="width: 35%;float:left;margin-left: 20%">&#12288提&#12288交&#12288</button>
+                        <button type="button" class="btn btn-primary" onclick="patrolEnd()" style="width: 35%;float:left;margin-left: 20%">&#12288提&#12288交&#12288</button>
                     </div>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
+
     {% endblock %}
 
     {% block privatejs %}

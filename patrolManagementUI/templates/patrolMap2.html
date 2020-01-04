@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+{% extends "common/base.html" %}
+<html lang="zh">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>定期巡查</title>
+
+    {% block privatecss %}
+        <link href={% static "css/map.css" %} rel="stylesheet" type="text/css">
+    {% endblock %}
+</head>
+<body>
+    {% block bodycontent %}
+    <div class="leftroad">
+        <table class="table table-bordered table table-hover" style="width: 100%;float: left;" id="roadTab">
+            <thead>
+                <tr style="width: 100%;">
+                    <th style="text-align:center; vertical-align:middle!important;">道路编号</th>
+                    <th style="text-align: center;vertical-align:middle!important;">道路名称</th>
+                    <th style="text-align: center;vertical-align:middle!important;">道路等级</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in Tasks %}
+                    <tr onclick="LocateRoad(this);">
+                        <td align="center">{{task.巡查道路.道路编号}}</td>
+                        <td align="center">{{task.巡查道路.道路名称}}</td>
+                        <td align="center">{{task.巡查道路.道路等级.道路等级}}</td>
+                    </tr>
+                {%  endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div id="rightmap"></div>
+        <!-- 模态框 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 60%;margin-left: 20%;height: 90%;margin-top: 0.5%;overflow-y: hidden;">
+        <div class="modal-dialog" style="width: 100%;height: 100%">
+            <div class="modal-content" style="width: 100%;height: 100%;">
+                <div class="modal-header" style="width: 100%;height: 6%;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="headLable" align="center">
+                        道路巡查损害记录
+                    </h4>
+                </div>
+                <div class="modal-body" style="height:80%;width: 100%;">
+                    <div class="form-inline" style="height:100%;width: 100%;">
+                        <div style="width: 100%;height: 6%;"> <!-- 第一行-->
+
+                            <div class="form-group" style="width: 32%;height: 100%;float: left;">
+                                <label for="roadId" style="width: 30%;height: 100%;float:left;text-align: center;margin-top: 2%;">道路编号：</label>
+                                <input type="text" class="form-control" id="roadId" placeholder="道路编号" readonly="true" style="width: 70%;height: 100%;float: right;">
+                            </div>
+
+                            <div class="form-group"style="width: 32%;height: 100%;float:left;margin-left: 2%;">
+                                <label for="roadName" style="height:100%;width:30%;float:left;margin-top: 2%;text-align: center;">道路名称：</label>
+                                <input type="email" class="form-control" id="roadName" placeholder="道路名称" readonly="true"
+                                style="height: 100%;width: 70%;float: right;">
+                            </div>
+
+                            <div class="form-group"style="width: 32%;height: 100%;float:right;">
+                                <label for="roadType "style="height:100%;width:30%;float:left;margin-top: 2%;text-align: center;">路面类型：</label>
+                                <input type="email" class="form-control" id="roadType" placeholder="路面类型" readonly="true" style="height: 100%;width: 70%;float: right;">
+                            </div>
+
+                        </div>
+
+                        <div style="width: 100%;height: 6%;margin-top:1%;"> <!-- 第二行 用于记录平整度-->
+
+                            <div class="form-group" style="width: 32%;height: 100%;float: left;">
+                                <label for="IRI" style="height:100%;width:30%;float:left;margin-top: 2%;text-align: center;">&#12288I&#12288R&#12288I：</label>
+                                <input type="text" class="form-control" id="IRI" placeholder="路面平整度"style="width: 70%;height: 100%;float: right;">
+                            </div>
+
+                            <div class="form-group"style="width: 32%;height: 100%;float:left;margin-left: 2%;">
+                                <label for="IRINote "style="height:100%;width:30%;float:left;margin-top: 2%;text-align: center;">备&#12288注：</label>
+                                <input type="email" class="form-control" id="IRINote" placeholder="备注" style="height: 100%;width: 70%;float: right;">
+                            </div>
+
+                            <div class="form-group"style="width: 32%;height: 100%;float:right;">
+                                <label for="damageType" style="height:100%;width:30%;float:left;margin-top: 2%;text-align: center;">损坏类型：</label>
+                                <select ype="email" class="form-control" id="damageType" style="height: 100%;width: 70%;float: right;"></select>
+                            </div>
+
+                        </div>
+
+                        <div style="width: 100%;height: 6%;margin-top:1%;">  <!-- 第三行 记录损坏情况 -->
+
+                            <div class="form-group" style="width: 32%;height: 100%;float: left;">
+                                <label for="beginLocation" style="height:100%;width:30%;float:left;margin-top: 2%;text-align: center;">起止位置：</label>
+                                <input type="text" class="form-control" id="beginLocation" placeholder="起始位置"style="width: 70%;height: 100%;float: right;">
+                            </div>
+
+                            <div class="form-group"style="width: 32%;height: 100%;float:left;margin-left: 2%;">
+                                <label for="TotalLength "style="height:100%;width:30%;float:left;margin-top: 2%;text-align: center;">检查总长：</label>
+                                <input type="email" class="form-control" id="TotalLength" placeholder="检查总长" style="height: 100%;width: 70%;float: right;">
+                            </div>
+
+                            <div class="form-group"style="width: 32%;height: 100%;float:right;">
+                                <label for="TotalWidth" style="height:100%;width:30%;float:left;margin-top: 2%;text-align: center;">检查总宽：</label>
+                                <input type="email" class="form-control" id="TotalWidth" placeholder="检查总宽" style="height: 100%;width: 70%;float: right;">
+                            </div>
+
+                        </div>
+
+                        <div style="width: 100%;height: 6%;margin-top:1%;">  <!-- 第四行 -->
+
+                            <div class="form-group" style="width: 32%;height: 100%;float: left;">
+                                <label for="damageLength" style="height:100%;width:30%;float:left;margin-top: 2%;text-align: center;">损坏长：</label>
+                                <input type="text" class="form-control" id="damageLength" placeholder="损坏长"style="width: 70%;height: 100%;float: right;">
+                            </div>
+
+                            <div class="form-group"style="width: 32%;height: 100%;float:left;margin-left: 2%;">
+                                <label for="damageWidth "style="height:100%;width:30%;float:left;margin-top: 2%;text-align: center;">损坏宽：</label>
+                                <input type="email" class="form-control" id="damageWidth" placeholder="损坏宽" style="height: 100%;width: 70%;float: right;">
+                            </div>
+
+                            <div class="form-group"style="width: 32%;height: 100%;float:right;">
+                                <label for="damageHeight" style="height:100%;width:30%;float:left;margin-top: 2%;text-align: center;">损坏高：</label>
+                                <input type="email" class="form-control" id="damageHeight" placeholder="损坏高" style="height: 100%;width: 70%;float: right;">
+                            </div>
+
+                        </div>
+
+                        <div style="width: 100%;height: 10%;margin-top:1%;">   <!-- 第五行 -->
+                            <label for="damageDetail" style="height:100%;width:8.6%;float:left;text-align: center;margin-right:1%;margin-top: 0.5%;">损坏位置及情况描述：</label>
+                            <textarea type="email" class="form-control" id="damageDetail" placeholder="损坏位置及情况描述" style="height: 100%;width: 90.4%;float: left;"></textarea>
+                        </div>
+
+                        <div style="width: 100%;height: 10%;margin-top:1%;">    <!-- 第六行 -->
+                            <label for="damageNote" style="height:100%;width:8.6%;float:left;text-align: center;margin-right:1%;margin-top: 1%;">备注</label>
+                            <textarea type="email" class="form-control" id="damageNote" placeholder="备注" style="height: 100%;width: 80.4%;float: left;"></textarea>
+                            <button type="button" onclick="addPatrolInfo()" class="btn btn-warning" style="width: 9%;height: 100%;text-align:center;float: right;margin-left:1%;margin-top:0">添&#12288加</button>
+                        </div>
+
+                        <div style="width: 100%;height: 50%;margin-top:1%;">   <!-- 第七行 表格-->
+                            <table class="table table-bordered table-hover" id="tab" style="width: 100%;height: 100%;margin-bottom:0;">
+                                <thead style="width: 100%;height: 10%;">
+                                    <tr>
+                                        <th style="text-align:center; vertical-align:middle!important;">损坏类型</th>
+                                        <th style="text-align: center;vertical-align:middle!important;">起止位置</th>
+                                        <th style="text-align: center;vertical-align:middle!important;">检查总长</th>
+                                        <th style="text-align:center; vertical-align:middle!important;">检查总宽</th>
+                                        <th style="text-align: center;vertical-align:middle!important;">损坏长</th>
+                                        <th style="text-align: center;vertical-align:middle!important;">损坏宽</th>
+                                        <th style="text-align: center;vertical-align:middle!important;">损坏高</th>
+                                        <th style="text-align: center;vertical-align:middle!important;">损坏描述</th>
+                                        <th style="text-align: center;vertical-align:middle!important;">备注</th>
+                                        <th style="text-align: center;vertical-align:middle!important;">&#12288&#12288</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="width: 100%;height: 90%;" id="tabbody"> </tbody>
+                            </table>
+                         </div>
+
+                    </div>
+                </div>
+                <div style="width: 100%;height: 12%;margin-top:2%;">
+
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" style="width: 20%;margin-left:20%;float:left;text-align: center;margin-top:0.5%;height: 50%;">&#12288关&#12288闭&#12288</button>
+
+                    <button type="button" class="btn btn-primary" onclick="patrolEnd()"style="width: 20%;float:right;margin-right: 20%;text-align: center;margin-top:0.5%;height: 50%;" id="sure">&#12288提&#12288交&#12288</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal --right -->
+    </div>
+
+    {% endblock %}
+
+    {% block privatejs %}
+        <script src={% static "js/map2.js" %}></script>
+    {% endblock %}
+</body>
+</html>
