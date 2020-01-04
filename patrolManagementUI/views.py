@@ -67,7 +67,7 @@ def patrolManagementUI(request):
                     RegularTask.巡查状态 = '1'
                     RegularTask.save()
                 else:
-                    if RegularTask.巡查日期 < datetime.date.today():
+                    if RegularTask.巡查日期 + datetime.timedelta(days=1460) < datetime.date.today():
                         time = datetime.date.today()
                         RegularTask.巡查日期 = time
                         RegularTask.save()
