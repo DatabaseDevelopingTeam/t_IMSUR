@@ -39,7 +39,13 @@ def patrolManagementUI(request):
                     Task.巡查状态 = '1'
                     Task.save()
                 else:
-                    if Task.巡查日期 < datetime.date.today():
+                    if Task.巡查道路.道路等级.道路等级 == '1':
+                        dayss = 1
+                    if Task.巡查道路.道路等级.道路等级 == '2':
+                        dayss = 2
+                    if Task.巡查道路.道路等级.道路等级 == '3':
+                        dayss = 3
+                    if Task.巡查日期 + datetime.timedelta(days=dayss) < datetime.date.today():
                         time = datetime.date.today()
                         Task.巡查日期 = time
                         Task.save()
@@ -67,7 +73,13 @@ def patrolManagementUI(request):
                     RegularTask.巡查状态 = '1'
                     RegularTask.save()
                 else:
-                    if RegularTask.巡查日期 + datetime.timedelta(days=1460) < datetime.date.today():
+                    if Task.巡查道路.道路等级.道路等级 == '1':
+                        dayss = 2 * 365
+                    if Task.巡查道路.道路等级.道路等级 == '2':
+                        dayss = 3 * 365
+                    if Task.巡查道路.道路等级.道路等级 == '3':
+                        dayss = 4 * 365
+                    if RegularTask.巡查日期 + datetime.timedelta(days=dayss) < datetime.date.today():
                         time = datetime.date.today()
                         RegularTask.巡查日期 = time
                         RegularTask.save()
@@ -81,7 +93,7 @@ def patrolManagementUI(request):
 
 def patrolMap(request):
     today = datetime.date.today()
-    Tasks = model2.日常巡查任务.objects.filter(巡查日期=today, 巡查状态='1')
+    Tasks = model2.日常巡查任务.objects.filter(巡查日期__lte=today, 巡查状态='1')
     return render(request, 'patrolMap.html', {"Tasks": Tasks})
 
 
@@ -90,7 +102,7 @@ def patrolMap(request):
 def getTodayRoadsBasicInfo(request):
     roads = []
     today = datetime.date.today()
-    TodayTasks = model2.日常巡查任务.objects.filter(巡查日期=today, 巡查状态='1')
+    TodayTasks = model2.日常巡查任务.objects.filter(巡查日期__lte=today, 巡查状态='1')
     for TodayTask in TodayTasks:
         roads.append({'roadId': TodayTask.巡查道路.道路编号,
                       'roadName': TodayTask.巡查道路.道路名称,
@@ -105,7 +117,7 @@ def getRoadsLatlng(request):
     roadsLatlng = {}
     # 在道路基本档案中取出日常巡查任务表今日巡查任务的道路编号对应的档案
     today = datetime.date.today()
-    TodayTasks = model2.日常巡查任务.objects.filter(巡查日期=today, 巡查状态='1')
+    TodayTasks = model2.日常巡查任务.objects.filter(巡查日期__lte=today, 巡查状态='1')
     for ToadyTask in TodayTasks:
         roadsLatlng[ToadyTask.巡查道路.道路编号] = ToadyTask.巡查道路.getLatlng()
     return JsonResponse(roadsLatlng, safe=False)
@@ -166,7 +178,7 @@ def AddDailyPatrolRecord(request):
         DailyPatrolDamageRecordObject = model2.日常巡查损害记录(日常巡查记录编号=DailyPatrolRecord, 损坏类型=
         damageTypeObject, 损坏位置及情况描述=damageDetail, 备注=note)
         DailyPatrolDamageRecordObject.save()
-    DailyTask = model2.日常巡查任务.objects.get(巡查日期=time, 巡查道路=road, 巡查状态='1')
+    DailyTask = model2.日常巡查任务.objects.get(巡查日期__lte=time, 巡查道路=road, 巡查状态='1')
     DailyTask.巡查状态 = '2'
     DailyTask.save()
     Location = road.getLatlng()
@@ -176,7 +188,7 @@ def AddDailyPatrolRecord(request):
 # 定期巡查
 def patrolMap2(request):
     today = datetime.date.today()
-    Tasks = model2.定期巡查任务.objects.filter(巡查日期<=today, 巡查状态='1')
+    Tasks = model2.定期巡查任务.objects.filter(巡查日期__lte=today, 巡查状态='1')
     return render(request, 'patrolMap2.html', {"Tasks": Tasks})
 
 
@@ -185,7 +197,7 @@ def patrolMap2(request):
 def getTodayRoadsBasicInfo2(request):
     roads = []
     today = datetime.date.today()
-    TodayTasks = model2.定期巡查任务.objects.filter(巡查日期=today, 巡查状态='1')
+    TodayTasks = model2.定期巡查任务.objects.filter(巡查日期__lte=today, 巡查状态='1')
     for TodayTask in TodayTasks:
         roads.append({'roadId': TodayTask.巡查道路.道路编号,
                       'roadName': TodayTask.巡查道路.道路名称,
@@ -200,7 +212,7 @@ def getRoadsLatlng2(request):
     roadsLatlng = {}
     # 在道路基本档案中取出日常巡查任务表今日巡查任务的道路编号对应的档案
     today = datetime.date.today()
-    TodayTasks = model2.定期巡查任务.objects.filter(巡查日期=today, 巡查状态='1')
+    TodayTasks = model2.定期巡查任务.objects.filter(巡查日期_lte=today, 巡查状态='1')
     for ToadyTask in TodayTasks:
         roadsLatlng[ToadyTask.巡查道路.道路编号] = ToadyTask.巡查道路.getLatlng()
     return JsonResponse(roadsLatlng, safe=False)
@@ -265,7 +277,7 @@ def AddDailyPatrolRecord2(request):
                                                             损坏宽=damageWidth, 损坏高=damageHeight, 损坏位置及情况描述=damageDetail,
                                                             备注=damageNote)
         RegularPatrolDamageRecordObject.save()
-    RegularTask = model2.定期巡查任务.objects.get(巡查日期=time, 巡查道路=road, 巡查状态='1')
+    RegularTask = model2.定期巡查任务.objects.get(巡查日期_lte=time, 巡查道路=road, 巡查状态='1')
     RegularTask.巡查状态 = '2'
     RegularTask.save()
     Location = road.getLatlng()
