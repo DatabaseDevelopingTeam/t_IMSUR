@@ -176,7 +176,7 @@ def AddDailyPatrolRecord(request):
 # 定期巡查
 def patrolMap2(request):
     today = datetime.date.today()
-    Tasks = model2.定期巡查任务.objects.filter(巡查日期=today, 巡查状态='1')
+    Tasks = model2.定期巡查任务.objects.filter(巡查日期<=today, 巡查状态='1')
     return render(request, 'patrolMap2.html', {"Tasks": Tasks})
 
 
