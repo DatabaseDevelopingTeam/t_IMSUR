@@ -96,3 +96,7 @@ def logout(request):
     response.delete_cookie('employee_id')
     response.delete_cookie('ticket')
     return response
+
+
+def page_not_found(request, exception):
+    return render(request, 'HandleException/404.html')

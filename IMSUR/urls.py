@@ -8,6 +8,8 @@ from django.urls import path, include
 from login import views as loginViews
 from django.views.generic.base import RedirectView
 
+from django.conf.urls import handler404, handler500
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', loginViews.forwardToLogin),  # 重定向到登录页面
@@ -20,3 +22,5 @@ urlpatterns = [
     path('patrolManagement/', include('patrolManagementUI.urls')),  # 巡查管理主页面
     path('favicon.ico/', RedirectView.as_view(url='/static/favicon.ico'))  # 网站图标
 ]
+
+handler404 = loginViews.page_not_found
