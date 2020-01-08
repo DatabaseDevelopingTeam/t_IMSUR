@@ -192,6 +192,9 @@ def getLevelByPCI(PCI, roadLevel):
 
 # 为单条道路计算PCI
 def countingPCIForOneRoad(regularDamageRecords):
+    #无损坏记录
+    if len(regularDamageRecords) == 0:
+        return 100
     PCI_sum = 0
     for singleDamageRecord in regularDamageRecords:
         # 损坏类型
@@ -204,6 +207,7 @@ def countingPCIForOneRoad(regularDamageRecords):
         damageDensity = (damageArea / detectionArea) * 100
 
         PCI_sum += countingSinglePCIForOneRecord(damageType, damageDensity)
+
     PCI_average = PCI_sum / len(regularDamageRecords)
     return 100 - PCI_average
 
